@@ -3,6 +3,15 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const propTypes = {
+  title: PropTypes.string,
+  date: PropTypes.string,
+  media: PropTypes.array,
+  dimensions: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number,
+    depth: PropTypes.number,
+    units: PropTypes.string,
+  }),
   style: PropTypes.object,
   className: PropTypes.string,
 }
@@ -54,7 +63,7 @@ function Details (props) {
   }
 
   return (
-    <figcaption
+    <div
       className={className}
       style={style}
     >
@@ -67,7 +76,7 @@ function Details (props) {
       {height && width && (
         <Fragment small >{`${height} × ${width}${depth ? ` × ${depth}` : ''} ${units}`}</Fragment>
       )}
-    </figcaption>
+    </div>
   )
 }
 

@@ -56,6 +56,10 @@ injectGlobal`
     color: white;
   }
 
+  a {
+    color: blue;
+  }
+
   *:focus {
     outline: blue auto 5px;
   }
@@ -65,6 +69,7 @@ injectGlobal`
     font-family: 'Inter UI';
     font-weight: 400;
     line-height: 1.5;
+    // background-color: #f5ede3;
     color: #444;
     -webkit-overflow-scrolling: touch;
   }

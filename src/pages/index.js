@@ -4,11 +4,14 @@ import Link from 'gatsby-link'
 import Gallery from 'components/Gallery'
 import ArtPiece from 'components/ArtPiece'
 
-const IndexPage = ({data}) => {
+const IndexPage = ({data, location}) => {
 
   return (
     <div>
-      <Gallery edges={data.selectedArtwork.edges} />
+      <Gallery
+        edges={data.selectedArtwork.edges}
+        location={location}
+      />
     </div>
   )
 }
@@ -16,7 +19,7 @@ const IndexPage = ({data}) => {
 export default IndexPage
 
 export const pageQuery = graphql`
-  query IndexPage {
+  query GalleryPage {
     selectedArtwork: allContentfulArtPiece (
       sort: {fields: [date], order: DESC }
     ) {

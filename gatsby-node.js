@@ -9,7 +9,7 @@ const path = require('path');
 
 const makeArtPieceSlug = ({title, date, media, id}) => {
   let str = `${title}-${date}-${media.join('-')}-${id}`
-  return str.replace(/\s+/g, '-').toLowerCase()
+  return str.replace(/[\s|#]+/g, '-').toLowerCase()
 }
 
 exports.createPages = ({ graphql, boundActionCreators }) => {
@@ -20,7 +20,9 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
     resolve(
       graphql(`
         {
-          artwork: allContentfulArtPiece {
+          artwork: allContentfulArtPiece (
+            sort: {fields: [date], order: DESC }
+          ) {
             edges {
               node {
                 id
@@ -38,12 +40,18 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
           reject(result.errors)
         }
 
-        result.data.artwork.edges.forEach(({node}, index) => {
+        const artwork = result.data.artwork.edges
+
+        artwork.forEach(({node}, index) => {
+          const next = index + 1 < artwork.length ? artwork[index + 1].node : null
+          const prev = index - 1 >= 0 ? artwork[index - 1].node : null
           createPage({
             path: `/artwork/${makeArtPieceSlug(node)}/`,
             component: artPieceTemplate,
             context: {
-              id: node.id
+              id: node.id,
+              next: next,
+              previous: prev,
             },
           })
         })
