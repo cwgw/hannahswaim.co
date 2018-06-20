@@ -3,46 +3,51 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { observer, inject } from 'mobx-react'
 
+import Page from 'components/Page'
 import Modal from 'components/Modal'
 import Wrap from 'components/Wrap'
-import Header from 'components/Header'
+import Navigation from 'components/Header/components/Navigation'
 
 import globalStyle from 'utils/globalStyle'
 import breakpoints from 'utils/breakpoints'
 
 const propTypes = {
   children: PropTypes.func,
-  breakpoint: PropTypes.number,
 }
 
-const defaultProps = {
-  breakpoint: breakpoints.md,
-}
+const defaultProps = {}
 
 const Layout = (props) => {
 
   const {
     children,
     location,
-    data,
-    breakpoint,
+    data: {
+      site: {
+        siteMetadata,
+      },
+      menu,
+    },
     UIStore
   } = props
 
-  const modalEnabled = (
+  const modalEnabled = !!(
     location.state &&
     location.state.enableModal &&
-    UIStore.viewportWidth >= breakpoint
+    UIStore.viewportWidth >= breakpoints.modal
   )
 
   return (
-    <Wrap>
-      <Header siteTitle={data.site.siteMetadata.title} />
+    <Page
+      siteMetadata={siteMetadata}
+      menu={menu}
+    >
       {modalEnabled ?
         (
           children({
             ...props,
-            location: { pathname: '/' },
+            location: { pathname: location.state.origin },
+            modalEnabled: modalEnabled,
           })
         ) : (
           children()
@@ -51,13 +56,16 @@ const Layout = (props) => {
       {modalEnabled && (
         <Modal
           isOpen
-          posts={data.selectedArtwork.edges}
           location={location}
         >
-          {children}
+          {children({
+            ...props,
+            location: location,
+            modalEnabled: modalEnabled,
+          })}
         </Modal>
       )}
-    </Wrap>
+    </Page>
   )
 }
 
@@ -74,14 +82,8 @@ export const query = graphql`
         title
       }
     }
-    selectedArtwork: allContentfulArtPiece (
-      sort: {fields: [date], order: DESC }
-    ) {
-      edges {
-        node {
-          ...ArtPieceFragment
-        }
-      }
+    menu: contentfulMenu {
+      ...NavigationItems
     }
   }
 `

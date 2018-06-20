@@ -1,2 +1,2 @@
-import FlexWall from './FlexWall'
-export default FlexWall
+import Columns from './Columns'
+export default Columns

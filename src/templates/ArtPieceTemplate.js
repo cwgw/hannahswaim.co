@@ -1,23 +1,88 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
+
+import breakpoints from 'utils/breakpoints'
 
 import ArtPieceDetails from 'components/ArtPieceDetails'
+import Container from 'components/Container'
+import FlexContainer from 'components/FlexContainer'
+import Navigation from 'components/PostNavigation'
+
+const propTypes = {
+  location: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
+  pathContext: PropTypes.shape({
+    next: PropTypes.object,
+    previous: PropTypes.object,
+  }).isRequired,
+  data: PropTypes.shape({
+    artPiece: PropTypes.object,
+  }).isRequired,
+  UIStore: PropTypes.object,
+}
+
+const FixedFlexContainer = FlexContainer.extend`
+  position: fixed;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  transform: translate(0,-50%);
+`
 
 function ArtPieceTemplate (props) {
 
-  console.log(props)
+  const {
+    location,
+    pathContext: {
+      next,
+      previous,
+    },
+    data: {
+      artPiece
+    },
+    modalEnabled,
+    UIStore,
+  } = props
 
-  return (
-    <ArtPieceDetails
-      modalEnabled={props.location.state && props.location.state.enableModal}
-      previous={props.pathContext.previous}
-      next={props.pathContext.next}
-      {...props.data.artPiece}
-    />
-  )
+
+  const formatLocation = (node) => node
+    ? {
+      pathname: node.fields.slug,
+      state: location.state,
+    }
+    : null
+
+  return modalEnabled
+    ? (
+      <Navigation
+        next={formatLocation(next)}
+        previous={formatLocation(previous)}
+        variant={modalEnabled ? 'dark' : 'light'}
+        fixed={modalEnabled}
+      >
+        <ArtPieceDetails
+          modalEnabled={modalEnabled}
+          {...artPiece}
+        />
+      </Navigation>
+    ) : (
+      <div>
+        <Navigation
+          next={formatLocation(next)}
+          previous={formatLocation(previous)}
+          fixed={UIStore.viewportWidth >= breakpoints.modal}
+        />
+        <ArtPieceDetails {...artPiece} />
+      </div>
+    )
 }
 
-export default ArtPieceTemplate
+ArtPieceTemplate.propTypes = propTypes
+
+export default inject('UIStore')(observer(ArtPieceTemplate))
 
 export const pageQuery = graphql`
   query singleArtPiece($id: String!) {

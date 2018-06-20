@@ -4,14 +4,11 @@ import styled from 'styled-components'
 import mousetrap from "mousetrap"
 
 import GatsbyImage from 'gatsby-image'
-import { navigateTo } from "gatsby-link"
 
-import { artPieceSlug } from 'utils/slugify'
 import media from 'utils/media'
 
-import Wrap from 'components/Wrap'
+import Container from 'components/Container'
 import ArtPieceMeta from 'components/ArtPieceMeta'
-import Icon from 'components/Icon'
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -32,212 +29,113 @@ const defaultProps = {
   modalEnabled: false,
 }
 
-const Outer = styled.div`
-
-  ${({modalEnabled}) => modalEnabled && `
-    height: 100vh;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: stretch;
-  `}
-`
-
-const Inner = styled.div`
+const Row = styled.div`
   display: flex;
-  width: 980px;
-  max-width: 100%;
-  max-height: 100%;
+  flex-flow: column nowrap;
   margin: 1.5rem auto;
-  padding: 0;
-  background-color: #fff;
   overflow: hidden;
-  overflow-y: scroll;
-
-  ${media.min.md`
-    max-width: calc(100% - 4.5rem);
-  `}
-`
-
-const Navigation = styled.nav`
-  display: flex;
-  flex-flow: row nowrap;
-  width: 100%;
-
-  ${media.min.md`
-    width: calc(100% - 1.5rem);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-  `}
-
-  ${media.min.lg`
-    width: calc(100% - 3rem);
-  `}
-
-  ${({modalEnabled}) => modalEnabled && `
-    color: #fff;
-    max-width: 1196px;
-  `}
-`
-
-const Button = styled.button`
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-  color: inherit;
-
-  ${({variant}) => {
-    switch (variant) {
-      case 'previous':
-        return `margin-right: auto;`
-        break;
-      case 'next':
-        return `margin-left: auto;`
-        break;
-    }
-  }}
-`
-
-const Caret = styled(Icon)`
-  width: 1.5rem;
-  height: 3rem;
-
-  ${media.min.lg`
-    width: 2.25rem;
-    height: 4.5rem;
-  `}
 `
 
 const PieceImages = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  flex: 1;
-  background: #fff;
+  width: 100%;
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+`
+
+const Overflow = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+
+  ${({aspectRatio}) => `
+    /** width = height * aspect-ratio */
+    min-width: ${75 * aspectRatio}vh;
+    // height: 85vh;
+  `}
+`
+
+const Figure = styled.figure`
+  margin: 0;
+
+  ${({flex}) => flex && `
+    flex: ${flex};
+
+    &:only-child {
+      flex: 1;
+    }
+  `}
 `
 
 const PieceDetails = styled.div`
-  min-width: 224px;
+  width: 100%;
   padding: 1.5rem;
   background: #fff;
   align-self: flex-start;
   top: 1.5rem;
 `
 
-class ArtPieceDetails extends React.Component {
+function ArtPieceDetails (props) {
 
-  constructor (props) {
-    super(props)
+  const {
+    id,
+    title,
+    date,
+    media,
+    images,
+    modalEnabled,
+    childContentfulArtPieceDimensionsJsonNode: dimensions,
+  } = props
 
-    this.next = this.next.bind(this)
-    this.previous = this.previous.bind(this)
-  }
+  const aspectRatio = images.reduce((acc, {sizes}) => acc = acc + sizes.aspectRatio, 0)
 
-  componentDidMount() {
-    mousetrap.bind(`left`, () => this.previous())
-    mousetrap.bind(`right`, () => this.next())
-    if (this.props.modalEnabled) {
-      mousetrap.bind(`spacebar`, () => this.next())
-    }
-  }
-
-  componentWillUnmount() {
-    mousetrap.unbind(`left`)
-    mousetrap.unbind(`right`)
-    mousetrap.unbind(`spacebar`)
-  }
-
-  next(e) {
-    if (e) {
-      e.stopPropagation()
-    }
-
-    if (this.props.next) {
-      navigateTo({
-        pathname: artPieceSlug(this.props.next),
-        state: {
-          enableModal: this.props.modalEnabled,
-        }
-      })
-    }
-  }
-
-  previous(e) {
-    if (e) {
-      e.stopPropagation()
-    }
-
-    if (this.props.previous) {
-      navigateTo({
-        pathname: artPieceSlug(this.props.previous),
-        state: {
-          enableModal: this.props.modalEnabled,
-        }
-      })
-    }
-  }
-
-  render () {
-
-    const {
-      id,
-      title,
-      date,
-      media,
-      images,
-      onClick,
-      modalEnabled,
-      previous,
-      next,
-      childContentfulArtPieceDimensionsJsonNode: dimensions,
-    } = this.props
-
-    const renderButton = (variant) => this.props[variant] ?
-      (
-        <Button
-          variant={variant}
-          onClick={this[variant]}
-          modalEnabled={modalEnabled}
-        >
-          <Caret type={variant} />
-        </Button>
-      ) : (
-        null
-      )
-
-    return (
-      <Outer modalEnabled={modalEnabled} >
-        <Navigation modalEnabled={modalEnabled} >
-          {['previous','next'].map(renderButton)}
-        </Navigation>
-        <Inner onClick={(e) => {e.stopPropagation()}} >
-          <PieceImages>
-            {images.map(({sizes, id}) => (
-              <GatsbyImage
+  return modalEnabled
+    ? (
+      <Row onClick={(e) => {e.stopPropagation()}} >
+        <PieceImages>
+          <Overflow aspectRatio={aspectRatio} >
+            {images.map(({id, sizes}) => (
+              <Figure
                 key={id}
-                sizes={sizes}
-                style={{
-                  marginBottom: modalEnabled ? null : '1.5rem',
-                }}
-              />
+                flex={sizes.aspectRatio}
+              >
+                <GatsbyImage sizes={sizes} />
+              </Figure>
             ))}
-          </PieceImages>
-          <PieceDetails>
-            <ArtPieceMeta
-              title={title}
-              date={date}
-              media={media}
-              dimensions={dimensions}
-            />
-          </PieceDetails>
-        </Inner>
-      </Outer>
+          </Overflow>
+        </PieceImages>
+        <PieceDetails>
+          <ArtPieceMeta
+            title={title}
+            date={date}
+            media={media}
+            dimensions={dimensions}
+          />
+        </PieceDetails>
+      </Row>
+    ) : (
+      <Container>
+        {[images[0]].map(({id, sizes}) => (
+          <GatsbyImage
+            key={id}
+            sizes={sizes}
+          />
+        ))}
+        <ArtPieceMeta
+          title={title}
+          date={date}
+          media={media}
+          dimensions={dimensions}
+        />
+        {images.slice(1).map(({id, sizes}) => (
+          <GatsbyImage
+            key={id}
+            sizes={sizes}
+          />
+        ))}
+      </Container>
     )
-  }
 }
+
 
 ArtPieceDetails.propTypes = propTypes
 

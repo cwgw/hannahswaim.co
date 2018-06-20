@@ -2,6 +2,10 @@ import { injectGlobal } from 'styled-components'
 import { normalize } from 'polished'
 
 import * as fonts from 'utils/fonts'
+import colors from 'utils/colors'
+import media from 'utils/media'
+
+import background from 'images/background.svg'
 
 injectGlobal`
   ${normalize()}
@@ -43,6 +47,10 @@ injectGlobal`
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-overflow-scrolling: touch;
+
+    ${media.max.xs`
+      font-size: 18px;
+    `}
   }
 
   *,
@@ -56,12 +64,8 @@ injectGlobal`
     color: white;
   }
 
-  a {
-    color: blue;
-  }
-
   *:focus {
-    outline: blue auto 5px;
+    outline: ${colors.link} auto 5px;
   }
 
   body {
@@ -70,8 +74,18 @@ injectGlobal`
     font-weight: 400;
     line-height: 1.5;
     // background-color: #f5ede3;
-    color: #444;
+    background-color: white;
+    background-image: url(${background});
+    background-size: 100vw 100vw;
+    background-repeat: no-repeat;
+    background-position: -33vw -60vw;
+    // color: #444;
+    color: ${colors.body};
     -webkit-overflow-scrolling: touch;
+  }
+
+  a {
+    color: ${colors.link};
   }
 
   address,
@@ -111,4 +125,10 @@ injectGlobal`
     font-weight: 900;
     font-size: 24px;
   }
+
+  ${media.max.md`
+    h1 {
+      font-size: 40px;
+    }
+  `}
 `

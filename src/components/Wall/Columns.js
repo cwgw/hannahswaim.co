@@ -18,9 +18,13 @@ const Default = styled.div`
   ${media.min.lg`
     columns: 3 auto;
   `}
+
+  ${media.min.xl`
+    column-gap: 3rem;
+  `}
 `
 
-function FlexWall (props) {
+function Columns (props) {
   const {
     children
   } = props
@@ -40,8 +44,8 @@ function FlexWall (props) {
   )
 }
 
-FlexWall.propTypes = propTypes
+Columns.propTypes = propTypes
 
-FlexWall.defaultProps = defaultProps
+Columns.defaultProps = defaultProps
 
-export default FlexWall
+export default Columns

@@ -5,13 +5,19 @@ import { transparentize } from 'polished'
 import { observer, inject } from 'mobx-react'
 
 import GatsbyImage from 'gatsby-image'
+import GatsbyLink from 'gatsby-link'
 
 import media from 'utils/media'
+import colors from 'utils/colors'
 import { breakpoints } from 'utils/breakpoints'
 
 import Meta from 'components/ArtPieceMeta'
 
 const propTypes = {
+  location: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
@@ -22,21 +28,45 @@ const propTypes = {
     depth: PropTypes.number,
     units: PropTypes.string,
   }).isRequired,
-  style: PropTypes.object,
   className: PropTypes.string,
-  breakpoint: PropTypes.number,
+  captionBreakpoint: PropTypes.number,
 }
 
 const defaultProps = {
-  style: {},
   className: null,
-  breakpoint: breakpoints.lg,
+  captionBreakpoint: breakpoints.lg,
 }
 
-const Default = styled.figure`
+const Link = styled(GatsbyLink)`
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+
+  ${media.min.xl`
+    margin-bottom: 3rem;
+  `}
+
+  &:focus {
+    outline: none;
+  }
+`
+
+const Figure = styled.figure`
   width: 100%;
   position: relative;
   overflow: hidden;
+  margin: 0;
+
+  ${Link}:focus & {
+    background-color: ${colors.link};
+  }
+`
+
+const Image = styled(GatsbyImage)`
+
+  ${Link}:focus & {
+    opacity: 0.75;
+  }
 `
 
 const Caption = styled.figcaption`
@@ -51,7 +81,7 @@ const Caption = styled.figcaption`
   transition: transform 175ms cubic-bezier(0.4, 0.0, 0.2, 1), opacity 350ms cubic-bezier(0.4, 0.0, 0.2, 1);
   transition-delay: 100ms, 0ms;
 
-  ${Default}:hover & {
+  ${Figure}:hover & {
     opacity: 1;
     transform: translate3d(0,0,0);
     transition-delay: 0ms;
@@ -61,35 +91,45 @@ const Caption = styled.figcaption`
 function ArtPiece (props) {
 
   const  {
+    location,
     id,
     title,
     date,
     media,
     images,
-    style,
+    fields: {
+      slug,
+    },
     UIStore,
-    breakpoint,
+    captionBreakpoint,
     childContentfulArtPieceDimensionsJsonNode: dimensions,
   } = props
 
   return (
-    <Default
-      style={style}
-    >
-      <GatsbyImage
-        sizes={images[0].sizes}
-      />
-      {UIStore.viewportWidth >= breakpoint && (
-        <Caption>
-          <Meta
-            title={title}
-            date={date}
-            media={media}
-            dimensions={dimensions}
-          />
-        </Caption>
-      )}
-    </Default>
+    <Link
+      key={id}
+      to={{
+        pathname: slug,
+        state: {
+          enableModal: UIStore.viewportWidth >= breakpoints.modal,
+          origin: location.pathname,
+        }
+      }}
+      >
+      <Figure>
+        <Image sizes={images[0].sizes} />
+        {UIStore.viewportWidth >= captionBreakpoint && (
+          <Caption>
+            <Meta
+              title={title}
+              date={date}
+              media={media}
+              dimensions={dimensions}
+            />
+          </Caption>
+        )}
+      </Figure>
+    </Link>
   )
 }
 
@@ -102,15 +142,18 @@ export default inject('UIStore')(observer(ArtPiece))
 export const artPieceFragments = graphql`
   fragment ArtPieceFragment on ContentfulArtPiece {
     id
+    fields {
+      slug
+    }
+    title
+    date(formatString: "YYYY")
+    media
     childContentfulArtPieceDimensionsJsonNode {
       height
       width
       depth
       units
     }
-    title
-    date(formatString: "YYYY")
-    media
     images {
       id
       sizes(maxWidth: 480, quality: 90) {

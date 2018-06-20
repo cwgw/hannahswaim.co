@@ -7,7 +7,8 @@ export const breakpointKeys = [
   'md',
   'lg',
   'xl',
-  'nav'
+  'nav',
+  'modal',
 ]
 
 export const breakpointValues = [
@@ -16,8 +17,9 @@ export const breakpointValues = [
   576,
   768,
   992,
-  1120,
-  576
+  1200,
+  576,
+  768,
 ]
 
 export const breakpoints = _zipObject(breakpointKeys,breakpointValues)

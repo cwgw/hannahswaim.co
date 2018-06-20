@@ -2,9 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 
-import GatsbyLink from 'gatsby-link'
-
-import { artPieceSlug } from 'utils/slugify'
 import breakpoints from 'utils/breakpoints'
 
 import Wall from 'components/Wall'
@@ -12,32 +9,25 @@ import Modal from 'components/Modal'
 import ArtPiece from 'components/ArtPiece'
 
 const propTypes = {
-  location: PropTypes.object.isRequired,
   edges: PropTypes.array,
-  breakpoint: PropTypes.number,
+  location: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ])
 }
 
 const defaultProps = {
   edges: [],
-  breakpoint: breakpoints.md,
 }
 
-function Gallery ({edges, location, breakpoint, UIStore}) {
-
-  const modalEnabled = UIStore.viewportWidth >= breakpoint
+function Gallery ({edges, location}) {
 
   const renderArtPieces = ({node}) => (
-    <GatsbyLink
+    <ArtPiece
       key={node.id}
-      to={{
-        pathname: `/artwork/${artPieceSlug(node)}`,
-        state: {
-          enableModal: modalEnabled
-        }
-      }}
-    >
-      <ArtPiece {...node} key={node.id} />
-    </GatsbyLink>
+      location={location}
+      {...node}
+    />
   )
 
   return (
@@ -51,4 +41,4 @@ Gallery.propTypes = propTypes
 
 Gallery.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Gallery))
+export default Gallery
