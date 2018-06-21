@@ -1,12 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
+import Layout from 'components/Layout'
+import Container from 'components/Container'
 import Gallery from 'components/Gallery'
-import ArtPiece from 'components/ArtPiece'
-import PageHeading from 'components/PageHeading'
 
-const propTypes = {}
+const propTypes = {
+  location: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  data: PropTypes.object,
+}
 
 const defaultProps = {}
 
@@ -17,18 +22,18 @@ function PageTemplate (props) {
     data: {
       page: {
         content,
-        title,
       },
     },
   } = props
 
+  // console.log(location)
+
   const renderContent = (content) => {
-    console.log(content)
-    if (content.artwork) {
+    if (content.artworkGallery) {
       return (
         <Gallery
           key={content.id}
-          edges={content.artwork
+          edges={content.artworkGallery
             .slice()
             .sort((a,b) => {
               return b.date - a.date
@@ -46,21 +51,24 @@ function PageTemplate (props) {
         />
       )
     }
-    if (content.text) {
-      console.log(content)
-    }
-    if (content.text) {
-      console.log(content)
+    if (content.childContentfulPageContentPageContentTextNode) {
+      return (
+        <Container
+          key={content.id}
+        >
+          <div dangerouslySetInnerHTML={{__html: content.childContentfulPageContentPageContentTextNode.childMarkdownRemark.html}} />
+        </Container>
+      )
     }
   }
 
   return (
-    <div>
-      {title && title !== 'home' && (
-        <PageHeading>{title}</PageHeading>
-      )}
+    <Layout
+      location={location}
+      enableModal={location.state && location.state.enableModal}
+    >
       {content && content.map(renderContent)}
-    </div>
+    </Layout>
   )
 }
 
@@ -77,30 +85,41 @@ export const pageQuery = graphql`
       title
       slug
       content {
-        artwork: artworkGallery {
+        ... on ContentfulPageArtworkGallery {
           id
-          fields {
-            slug
-          }
-          title
-          date(formatString: "YYYYMMDD")
-          media
-          childContentfulArtPieceDimensionsJsonNode {
-            height
-            width
-            depth
-            units
-          }
-          images {
+          artworkGallery {
             id
-            sizes(maxWidth: 480, quality: 90) {
-              base64
-              aspectRatio
-              src
-              srcSet
-              srcWebp
-              srcSetWebp
-              sizes
+            fields {
+              slug
+            }
+            title
+            date(formatString: "YYYYMMDD")
+            media
+            childContentfulArtPieceDimensionsJsonNode {
+              height
+              width
+              depth
+              units
+            }
+            images {
+              id
+              sizes(maxWidth: 480, quality: 90) {
+                base64
+                aspectRatio
+                src
+                srcSet
+                srcWebp
+                srcSetWebp
+                sizes
+              }
+            }
+          }
+        }
+        ... on ContentfulPageContent {
+          id
+          childContentfulPageContentPageContentTextNode {
+            childMarkdownRemark {
+              html
             }
           }
         }

@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { transparentize } from 'polished'
 import { observer, inject } from 'mobx-react'
 
 import GatsbyImage from 'gatsby-image'
-import GatsbyLink from 'gatsby-link'
+import { Link as GatsbyLink } from 'gatsby'
 
 import media from 'utils/media'
 import colors from 'utils/colors'

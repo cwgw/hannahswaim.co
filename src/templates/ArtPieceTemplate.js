@@ -4,17 +4,16 @@ import { inject, observer } from 'mobx-react'
 
 import breakpoints from 'utils/breakpoints'
 
+import Layout from 'components/Layout'
 import ArtPieceDetails from 'components/ArtPieceDetails'
-import Container from 'components/Container'
-import FlexContainer from 'components/FlexContainer'
-import Navigation from 'components/PostNavigation'
+import PostNavigation from 'components/PostNavigation'
 
 const propTypes = {
   location: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,
   ]).isRequired,
-  pathContext: PropTypes.shape({
+  pageContext: PropTypes.shape({
     next: PropTypes.object,
     previous: PropTypes.object,
   }).isRequired,
@@ -24,29 +23,25 @@ const propTypes = {
   UIStore: PropTypes.object,
 }
 
-const FixedFlexContainer = FlexContainer.extend`
-  position: fixed;
-  width: 100%;
-  top: 50%;
-  left: 0;
-  transform: translate(0,-50%);
-`
-
 function ArtPieceTemplate (props) {
 
   const {
     location,
-    pathContext: {
+    pageContext: {
       next,
       previous,
     },
     data: {
       artPiece
     },
-    modalEnabled,
     UIStore,
   } = props
 
+  const modalEnabled = !!(
+    location.state &&
+    location.state.enableModal &&
+    UIStore.viewportWidth >= breakpoints.modal
+  )
 
   const formatLocation = (node) => node
     ? {
@@ -57,26 +52,29 @@ function ArtPieceTemplate (props) {
 
   return modalEnabled
     ? (
-      <Navigation
-        next={formatLocation(next)}
-        previous={formatLocation(previous)}
-        variant={modalEnabled ? 'dark' : 'light'}
-        fixed={modalEnabled}
-      >
-        <ArtPieceDetails
-          modalEnabled={modalEnabled}
-          {...artPiece}
-        />
-      </Navigation>
+      <Layout location={location} >
+        <PostNavigation
+          next={formatLocation(next)}
+          previous={formatLocation(previous)}
+          variant="dark"
+          fullHeight
+          fixed
+        >
+          <ArtPieceDetails
+            modalEnabled={modalEnabled}
+            {...artPiece}
+          />
+        </PostNavigation>
+      </Layout>
     ) : (
-      <div>
-        <Navigation
+      <Layout location={location} >
+        <PostNavigation
           next={formatLocation(next)}
           previous={formatLocation(previous)}
           fixed={UIStore.viewportWidth >= breakpoints.modal}
         />
         <ArtPieceDetails {...artPiece} />
-      </div>
+      </Layout>
     )
 }
 

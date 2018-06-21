@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import has from 'utils/has'
 
@@ -90,7 +89,6 @@ function Icon ({type, style, className}) {
   if (has(icons, type)) {
     const {
       atts,
-      paths
     } = icons[type]
 
     return (

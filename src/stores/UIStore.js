@@ -1,7 +1,10 @@
-import { observable, action, computed, decorate } from 'mobx';
-import _debounce from 'lodash/debounce'
+// import { observable, action, decorate } from 'mobx';
+// import _debounce from 'lodash/debounce'
 
-import breakpoints from 'utils/breakpoints'
+const observable = require('mobx').observable
+const action = require('mobx').action
+const decorate = require('mobx').decorate
+const _debounce = require('lodash/debounce')
 
 class UIStore {
 
@@ -24,7 +27,7 @@ class UIStore {
     this.viewportWidth = window.innerWidth
     this.viewportHeight = window.innerHeight
 
-    if (this.isNavOpen && this.viewportWidth >= breakpoints.nav) {
+    if (this.isNavOpen && this.viewportWidth >= 576) {
       this.closeNav()
     }
   }
@@ -55,4 +58,4 @@ decorate(UIStore, {
   closeNav: action.bound,
 })
 
-export default new UIStore()
+module.exports = new UIStore()

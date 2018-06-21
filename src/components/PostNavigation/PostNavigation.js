@@ -1,10 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import mousetrap from "mousetrap"
-import { navigateTo } from 'gatsby-link'
-
-import media from 'utils/media'
 
 import FlexContainer from 'components/FlexContainer'
 
@@ -22,16 +17,19 @@ const propTypes = {
     'dark',
   ]),
   fixed: PropTypes.bool,
+  fullHeight: PropTypes.bool,
 }
 
 const defaultProps = {
-  variant: 'light',
+  children: null,
   next: null,
   previous: null,
+  variant: 'light',
   fixed: false,
+  fullHeight: false,
 }
 
-const Container = FlexContainer.extend`
+const NavContainer = FlexContainer.extend`
 
   ${({fixed}) => fixed && `
     position: fixed;
@@ -47,17 +45,17 @@ function PostNavigation (props) {
   const {
     next,
     previous,
-    location,
     variant,
     children,
     fixed,
+    fullHeight,
   } = props
 
   return (
-    <Container
+    <NavContainer
       noWrap
       breakpoint="none"
-      stretch={fixed}
+      stretch={fullHeight}
       fixed={fixed}
       alignItems="center"
     >
@@ -72,7 +70,7 @@ function PostNavigation (props) {
         location={next}
         variant={variant}
       />
-    </Container>
+    </NavContainer>
   )
 }
 

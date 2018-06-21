@@ -1,11 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import mousetrap from "mousetrap"
 
 import GatsbyImage from 'gatsby-image'
-
-import media from 'utils/media'
 
 import Container from 'components/Container'
 import ArtPieceMeta from 'components/ArtPieceMeta'
@@ -77,7 +74,6 @@ const PieceDetails = styled.div`
 function ArtPieceDetails (props) {
 
   const {
-    id,
     title,
     date,
     media,

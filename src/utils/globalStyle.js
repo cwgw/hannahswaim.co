@@ -1,7 +1,7 @@
 import { injectGlobal } from 'styled-components'
 import { normalize } from 'polished'
 
-import * as fonts from 'utils/fonts'
+import fonts from 'utils/fonts'
 import colors from 'utils/colors'
 import media from 'utils/media'
 
@@ -70,11 +70,11 @@ injectGlobal`
 
   body {
     font-size: 1rem;
-    font-family: 'Inter UI';
+    font-family: 'Inter UI', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     font-weight: 400;
     line-height: 1.5;
     // background-color: #f5ede3;
-    background-color: white;
+    background-color: ${colors.white};
     background-image: url(${background});
     background-size: 100vw 100vw;
     background-repeat: no-repeat;

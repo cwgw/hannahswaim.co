@@ -1,13 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import GatsbyLink from 'gatsby-link'
+import { Link as GatsbyLink } from 'gatsby'
 
 import media from 'utils/media'
 
 import Icon from 'components/Icon'
 
-const propTypes = {}
+const propTypes = {
+  pages: PropTypes.array,
+}
 
 const defaultProps = {}
 
@@ -55,6 +57,7 @@ function Navigation ({pages}) {
       <a
         href="https://www.instagram.com/hannahswaimco/"
         target="_blank"
+        rel="noopener noreferrer"
       >
         <Icon type="instagram" />
       </a>

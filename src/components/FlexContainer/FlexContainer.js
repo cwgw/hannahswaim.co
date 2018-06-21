@@ -1,11 +1,7 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import media from 'utils/media'
-import breakpoints from 'utils/breakpoints'
-
-import Container from 'components/Container'
 
 const propTypes = {
   noWrap: PropTypes.bool,
@@ -22,10 +18,6 @@ const defaultProps = {
   stretch: false,
   breakpoint: 'sm',
 }
-
-    // ${Container} > & {
-    //   margin: 0 -1.5rem;
-    // }
 
 const FlexContainer = styled.div`
 

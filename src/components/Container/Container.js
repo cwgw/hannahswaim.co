@@ -1,9 +1,6 @@
-import React from 'react'
+// import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-
-import media from 'utils/media'
-import breakpoints from 'utils/breakpoints'
 
 const propTypes = {
   breakpoint: PropTypes.string,

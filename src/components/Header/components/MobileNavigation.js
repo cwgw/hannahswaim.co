@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import GatsbyLink from 'gatsby-link'
-import { transparentize } from 'polished'
+import { Link as GatsbyLink } from 'gatsby'
 import { inject, observer } from 'mobx-react'
-
-import colors from 'utils/colors'
-import media from 'utils/media'
 
 import Icon from 'components/Icon'
 
-const propTypes = {}
+const propTypes = {
+  pages: PropTypes.array,
+  transitionState: PropTypes.string,
+  UIStore: PropTypes.object,
+}
 
 const defaultProps = {}
 
@@ -64,7 +64,6 @@ const Nav = styled.nav`
             opacity: 0;
           }
         `
-        break;
       case 'entered':
         return `
           transform: translate(0px,0px);
@@ -75,7 +74,8 @@ const Nav = styled.nav`
             opacity: 1;
           }
         `
-        break;
+      default:
+        return ''
     }
   }}
 
@@ -115,6 +115,7 @@ function Navigation ({pages, transitionState, UIStore}) {
       <a
         href="https://www.instagram.com/hannahswaimco/"
         target="_blank"
+        rel="noopener noreferrer"
       >
         <Icon type="instagram" />
       </a>

@@ -1,8 +1,14 @@
-import React from 'react';
-import { Router } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+const React = require('react');
+const Router = require('react-router-dom').Router
+const Provider = require('mobx-react').Provider
 
-import UIStore from 'stores/UIStore';
+// import React from 'react'
+// import { Router } from 'react-router-dom';
+// import { Provider } from 'mobx-react';
+
+const UIStore = require('stores/UIStore')
+
+// import UIStore from 'stores/UIStore';
 
 exports.replaceRouterComponent = ({ history }) => {
   const ConnectedRouterWrapper = ({ children }) => (

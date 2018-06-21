@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 import { Transition } from 'react-transition-group'
 
-import GatsbyLink from 'gatsby-link'
+import { Link as GatsbyLink } from 'gatsby'
 
 import media from 'utils/media'
 import colors from 'utils/colors'

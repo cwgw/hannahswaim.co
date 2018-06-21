@@ -12,9 +12,17 @@ const makeArtPieceSlug = ({title, date, media, id}) => {
   return str.replace(/[\s|#]+/g, '-').toLowerCase()
 }
 
+exports.onCreateWebpackConfig = ({ stage, actions }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      modules: [path.resolve(__dirname, "src"), "node_modules"],
+    },
+  })
+}
+
 exports.onCreateNode = (args) => {
-  const { node, boundActionCreators, getNode } = args
-  const { createNodeField } = boundActionCreators
+  const { node, actions, getNode } = args
+  const { createNodeField } = actions
 
   if (/ContentfulArtPiece/.test(node.internal.type) && typeof node.slug === `undefined` ) {
     // This is pretty fragile.
@@ -30,8 +38,8 @@ exports.onCreateNode = (args) => {
   }
 }
 
-exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage } = boundActionCreators
+exports.createPages = ({ graphql, actions }) => {
+  const { createPage } = actions
   const artPieceTemplate = path.resolve('./src/templates/ArtPieceTemplate.js')
   const pageTemplate = path.resolve('./src/templates/PageTemplate.js')
 

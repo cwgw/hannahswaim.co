@@ -4,7 +4,12 @@ import styled from 'styled-components'
 
 import media from 'utils/media'
 
-const propTypes = {}
+const propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.arrayOf(PropTypes.node),
+  ]),
+}
 
 const defaultProps = {}
 

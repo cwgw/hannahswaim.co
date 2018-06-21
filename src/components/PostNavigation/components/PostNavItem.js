@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import mousetrap from "mousetrap"
-import { navigateTo } from 'gatsby-link'
+import { push } from 'gatsby'
 
 import media from 'utils/media'
 
@@ -92,7 +92,7 @@ class PostNavigation extends React.Component {
     }
 
     if (this.props.location) {
-      navigateTo(this.props.location)
+      push(this.props.location)
     }
   }
 

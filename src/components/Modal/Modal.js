@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import ReactModal from 'react-modal'
 import { transparentize } from 'polished'
-import { navigateTo } from "gatsby-link"
+import { push } from "gatsby"
 
 import colors from 'utils/colors'
 
@@ -18,6 +17,8 @@ const propTypes = {
 
 const defaultProps = {}
 
+ReactModal.setAppElement(`#___gatsby`)
+
 function Modal (props) {
 
   const { children, location, isOpen } = props
@@ -25,7 +26,7 @@ function Modal (props) {
   return (
     <ReactModal
       isOpen={isOpen}
-      onRequestClose={() => navigateTo(location.state.origin)}
+      onRequestClose={() => push(location.state.origin)}
       style={{
         overlay: {
           position: `fixed`,
@@ -33,7 +34,6 @@ function Modal (props) {
           left: 0,
           right: 0,
           bottom: 0,
-          // backgroundImage: `linear-gradient(${transparentize(0.075,colors.black)},${transparentize(0.25,colors.black)})`,
           backgroundColor: transparentize(0.075,colors.coolBlack),
         },
         content: {
@@ -51,7 +51,7 @@ function Modal (props) {
       }}
       contentLabel="Modal"
     >
-      <div onClick={() => navigateTo(location.state.origin)} >
+      <div onClick={() => push(location.state.origin)} >
         {children}
       </div>
     </ReactModal>
