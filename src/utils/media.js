@@ -1,7 +1,7 @@
 import { css } from 'styled-components'
 import { em } from 'polished'
 
-import breakpoints, { breakpointKeys } from 'utils/breakpoints'
+import { breakpoints, breakpointKeys } from 'utils/constants'
 
 export const media = breakpointKeys.reduce((acc, label) => {
   acc.min[label] = (...args) => css`

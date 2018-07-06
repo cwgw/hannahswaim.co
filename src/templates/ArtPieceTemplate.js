@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
+import { graphql } from 'gatsby'
 
 import breakpoints from 'utils/breakpoints'
 
@@ -84,7 +85,7 @@ export default inject('UIStore')(observer(ArtPieceTemplate))
 
 export const pageQuery = graphql`
   query singleArtPiece($id: String!) {
-    artPiece: contentfulArtPiece(id: {eq: $id}) {
+    artPiece: contentfulArtPiece(contentful_id: {eq: $id}) {
       ...ArtPieceDetailsFragment
     }
   }

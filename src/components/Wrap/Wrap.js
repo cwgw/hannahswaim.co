@@ -1,20 +1,31 @@
 import styled from 'styled-components'
 
 import media from 'utils/media'
+import spacing from 'utils/spacing'
 
 const Wrap = styled.div`
-  margin: 0 0.375rem;
+  margin: ${spacing(-3)};
 
-  ${media.min.xs`
-    margin: 0 0.75rem;
+  ${media.min.sm`
+    margin: 0 ${spacing(2)};
   `}
 
   ${media.min.md`
-    margin: 2.25rem 0.75rem;
+    margin: ${spacing(4)} ${spacing(2)};
   `}
 
   ${media.min.lg`
-    margin: 2.25rem 3rem;
+    margin: ${spacing(4)};
+  `}
+
+  ${media.min.xl`
+    margin: ${spacing(4)} ${spacing(8)};
+    margin: ${spacing(4)};
+  `}
+
+  ${({noScroll}) => noScroll && `
+    max-height: calc(100vh - ${spacing(-3)} * 2);
+    overflow: hidden;
   `}
 `
 

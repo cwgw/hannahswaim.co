@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import spacing from 'utils/spacing'
 import media from 'utils/media'
 
 const propTypes = {
@@ -17,15 +18,11 @@ const Default = styled.div`
 
   ${media.min.sm`
     columns: 2 auto;
-    column-gap: 1.5rem;
+    column-gap: ${spacing(2)};
   `}
 
   ${media.min.lg`
     columns: 3 auto;
-  `}
-
-  ${media.min.xl`
-    column-gap: 3rem;
   `}
 `
 

@@ -1,56 +1,26 @@
 import { injectGlobal } from 'styled-components'
 import { normalize } from 'polished'
 
-import fonts from 'utils/fonts'
+import { fontSizeRoot } from 'utils/constants'
+import fonts, { fontfaceDeclarations } from 'utils/fonts'
 import colors from 'utils/colors'
 import media from 'utils/media'
+import spacing from 'utils/spacing'
 
 import background from 'images/background.svg'
 
 injectGlobal`
   ${normalize()}
-
-  @font-face {
-    font-family: 'Inter UI';
-    font-style:  normal;
-    font-weight: 400;
-    src: url(${fonts.interUi.regular}) format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Inter UI';
-    font-style:  italic;
-    font-weight: 400;
-    src: url(${fonts.interUi.italic}) format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Inter UI';
-    font-style:  normal;
-    font-weight: 900;
-    src: url(${fonts.interUi.black}) format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Tinos';
-    font-style: normal;
-    font-weight: 700;
-    src: local('Tinos-Bold'), url(${fonts.tinos.bold}) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
+  ${fontfaceDeclarations()}
 
   html {
     height: auto;
     min-height: auto;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: ${fontSizeRoot};
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-overflow-scrolling: touch;
-
-    ${media.max.xs`
-      font-size: 18px;
-    `}
   }
 
   *,
@@ -70,16 +40,15 @@ injectGlobal`
 
   body {
     font-size: 1rem;
-    font-family: 'Inter UI', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-family: ${fonts.serif};
     font-weight: 400;
     line-height: 1.5;
-    // background-color: #f5ede3;
-    background-color: ${colors.white};
     background-image: url(${background});
-    background-size: 100vw 100vw;
+    // background-size: calc(360px + 75vw) calc(360px + 75vw);
+    background-size: calc(180px + 85vw) calc(180px + 85vw);
+    // background-size: 100vw 100vw;
     background-repeat: no-repeat;
     background-position: -33vw -60vw;
-    // color: #444;
     color: ${colors.body};
     -webkit-overflow-scrolling: touch;
   }
@@ -107,28 +76,37 @@ injectGlobal`
   pre,
   table,
   ul {
-    margin: 0 0 1.5rem;
+    margin: 0 0 ${spacing(2)};
   }
 
   h1 {
-    font-family: 'Tinos';
+    font-family: ${fonts.sansSerif};
     font-weight: 700;
-    font-size: 56px;
+    font-size: ${spacing(5)};
   }
 
   h2 {
     font-weight: 400;
-    font-size: 36px;
+    font-size: ${spacing(3)};
   }
 
-  h3 {
-    font-weight: 900;
-    font-size: 24px;
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    font-size: ${spacing(2)};
   }
 
   ${media.max.md`
     h1 {
-      font-size: 40px;
+      font-size: ${spacing(4)};
+    }
+  `}
+
+  ${media.max.sm`
+    h1 {
+      font-size: ${spacing(3)};
     }
   `}
 `

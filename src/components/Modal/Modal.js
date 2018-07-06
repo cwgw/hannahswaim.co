@@ -5,6 +5,7 @@ import { transparentize } from 'polished'
 import { push } from "gatsby"
 
 import colors from 'utils/colors'
+import { zIndex } from 'utils/constants'
 
 const propTypes = {
   isOpen: PropTypes.bool,
@@ -34,6 +35,7 @@ function Modal (props) {
           left: 0,
           right: 0,
           bottom: 0,
+          zIndex: zIndex.modal,
           backgroundColor: transparentize(0.075,colors.coolBlack),
         },
         content: {

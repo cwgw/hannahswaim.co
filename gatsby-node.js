@@ -7,8 +7,9 @@
 const Promise = require('bluebird')
 const path = require('path');
 
-const makeArtPieceSlug = ({title, date, media, id}) => {
-  let str = `${title}-${date}-${media.join('-')}-${id}`
+const makeArtPieceSlug = ({title, date, media, contentful_id}) => {
+  let str = [title, date, ...media, contentful_id].join('-')
+  // let str = `${title}-${date}-${media.join('-')}-${contentful_id}`
   return str.replace(/[\s|#]+/g, '-').toLowerCase()
 }
 
@@ -52,7 +53,7 @@ exports.createPages = ({ graphql, actions }) => {
           ) {
             edges {
               node {
-                id
+                contentful_id
                 fields {
                   slug
                 }
@@ -63,7 +64,7 @@ exports.createPages = ({ graphql, actions }) => {
             edges {
               node {
                 slug
-                id
+                contentful_id
               }
             }
           }
@@ -75,12 +76,12 @@ exports.createPages = ({ graphql, actions }) => {
           reject(result.errors)
         }
 
-        result.data.pages.edges.forEach(({node: {slug, id}}, index) => {
+        result.data.pages.edges.forEach(({node: {slug, contentful_id}}, index) => {
           createPage({
             path: `/${slug ? slug : ''}`,
             component: pageTemplate,
             context: {
-              id: id,
+              id: contentful_id,
             },
           })
         })
@@ -96,7 +97,7 @@ exports.createPages = ({ graphql, actions }) => {
             path: node.fields.slug,
             component: artPieceTemplate,
             context: {
-              id: node.id,
+              id: node.contentful_id,
               next: next,
               previous: prev,
             },

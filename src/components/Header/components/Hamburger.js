@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
 import colors from 'utils/colors'
+import spacing from 'utils/spacing'
+import { ease } from 'utils/constants'
 
 const propTypes = {
   UIStore: PropTypes.object,
@@ -17,16 +19,17 @@ const Button = styled.button`
   position: relative;
   display: block;
   padding: 0.75rem;
+  padding: ${spacing(-1)};
   color: inherit;
   background-color: transparent;
-  border: 1px solid currentColor;
+  border: none;
   border-radius: 0;
   line-height: 0;
   cursor: pointer;
-  z-index: 1000;
 
   &:focus {
     background-color: ${colors.link};
+    outline: none;
     color: white;
   }
 `
@@ -41,7 +44,7 @@ const Line = styled.line`
   fill: transparent;
   stroke: currentColor;
   stroke-width: 1px;
-  transition: transform 600ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 600ms ${ease};
   transform-origin: 50% 50%;
   transform-box: fill-box;
 

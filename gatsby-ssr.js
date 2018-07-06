@@ -5,7 +5,7 @@ import { ServerStyleSheet, StyleSheetManager } from 'styled-components'
 
 import UIStore from 'stores/UIStore';
 
-exports.replaceRenderer = ({ bodyComponent, replaceBodyHTMLString, setHeadComponents }) => {
+export const replaceRenderer = ({ bodyComponent, replaceBodyHTMLString, setHeadComponents }) => {
 
   useStaticRendering(true)
 

@@ -1,10 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link as GatsbyLink } from 'gatsby'
-import { inject, observer } from 'mobx-react'
 
 import Icon from 'components/Icon'
+import Link from './NavItem'
+
+import spacing from 'utils/spacing'
+import fonts from 'utils/fonts'
+import { ease } from 'utils/constants'
 
 const propTypes = {
   pages: PropTypes.array,
@@ -24,7 +27,7 @@ const Nav = styled.nav`
   width: 100%;
 
   padding-top: 6rem;
-  z-index: 999;
+  z-index: -1;
 
   overflow: hidden;
   overflow-y: scroll;
@@ -32,8 +35,8 @@ const Nav = styled.nav`
 
   &,
   &:before {
-    transition: transform 600ms cubic-bezier(0.4, 0.0, 0.2, 1),
-                opacity 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: transform 600ms ${ease},
+                opacity 300ms ${ease};
   }
 
   &:before {
@@ -52,18 +55,6 @@ const Nav = styled.nav`
 
   ${({transitionState}) => {
     switch (transitionState) {
-      case 'exited':
-      case 'exiting':
-      case 'entering':
-        return `
-          transform: translate(0, 1.5rem);
-          opacity: 0;
-
-          &:before {
-            transform: rotate(90deg);
-            opacity: 0;
-          }
-        `
       case 'entered':
         return `
           transform: translate(0px,0px);
@@ -75,50 +66,54 @@ const Nav = styled.nav`
           }
         `
       default:
-        return ''
+        return `
+          transform: translate(0, 1.5rem);
+          opacity: 0;
+
+          &:before {
+            transform: rotate(90deg);
+            opacity: 0;
+          }
+        `
     }
   }}
-
-  & > a {
-    text-decoration: none;
-    display: block;
-    padding: 0.75rem;
-
-    svg {
-      display: inline-blcok;
-      vertical-align: -.125em;
-    }
-  }
 `
 
-const NavItem = styled(GatsbyLink)`
-  text-decoration: none;
-  display: block;
-  padding: 0.75rem;
+const NavItem = Link.extend`
+  font-family: ${fonts.sansSerif};
+  padding: ${spacing(-3)};
+
+  ${({icon}) => icon && `
+    font-size: ${spacing(1)};
+  `}
 `
 
-function Navigation ({pages, transitionState, UIStore}) {
+function Navigation ({pages, transitionState}) {
 
   const renderNavItems = ({title, slug}) => (
     <NavItem
       key={slug}
       to={`/${slug ? slug : ''}`}
-      onClick={UIStore.closeNav}
     >
       {title}
     </NavItem>
   )
 
   return (
-    <Nav transitionState={transitionState} >
+    <Nav
+      transitionState={transitionState}
+      role="navigation"
+    >
       {pages.map(renderNavItems)}
-      <a
+      <NavItem
         href="https://www.instagram.com/hannahswaimco/"
-        target="_blank"
-        rel="noopener noreferrer"
+        external
       >
-        <Icon type="instagram" />
-      </a>
+        <Icon
+          type="instagram"
+          inline
+        />
+      </NavItem>
     </Nav>
   )
 }
@@ -127,4 +122,4 @@ Navigation.propTypes = propTypes
 
 Navigation.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Navigation))
+export default Navigation

@@ -9,6 +9,8 @@ import { Link as GatsbyLink } from 'gatsby'
 import media from 'utils/media'
 import colors from 'utils/colors'
 import breakpoints from 'utils/breakpoints'
+import spacing from 'utils/spacing'
+import { zIndex } from 'utils/constants'
 
 import Container from 'components/Container'
 import FlexContainer from 'components/FlexContainer'
@@ -18,46 +20,67 @@ import Hamburger from './components/Hamburger'
 
 const propTypes = {
   siteTitle: PropTypes.string.isRequired,
+  absolutePositioning: PropTypes.bool,
 }
 
-const defaultProps = {}
+const defaultProps = {
+  absolutePositioning: false
+}
 
 const Default = styled.header`
-  padding: 0.75rem 0;
+  position: relative;
+  z-index: ${zIndex.banner};
+  margin: 0 0 ${spacing(1)};
 
   ${media.min.sm`
-    margin-bottom: 1.75rem;
-    padding: 1.5rem 0;
+    margin: ${spacing(2)} 0 ${spacing(4)};
   `}
 
   ${media.min.md`
-    margin-bottom: 5.125rem;
-    padding: 0;
+    margin: 0 0 5.125rem;
+    margin: 0 0 ${spacing(8)};
+  `}
+`
+
+const Absolute = Default.extend`
+  ${media.min.lg`
+    position: absolute;
+    top: ${spacing(4)};
+    left: ${spacing(4)};
+    width: calc(100% - ${spacing(4)} * 2);
+    padding: 0 ${spacing(1)};
+    color: ${colors.white};
   `}
 `
 
 const Brand = styled(GatsbyLink)`
   font-family: 'Tinos';
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: ${spacing(2)};
+  margin-left: -${spacing(0)};
+  padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
   text-decoration: none;
-  color: ${colors.body};
-
-  ${media.max.modal`
-    position: relative;
-    z-index: 1000;
-  `}
+  color: inherit;
 `
 
-function Header ({siteTitle, pages, UIStore}) {
+function Header (props) {
+
+  const {
+    siteTitle,
+    pages,
+    UIStore,
+    absolutePositioning,
+  } = props
+
+  const Element = absolutePositioning ? Absolute : Default
 
   return (
-    <Default>
+    <Element role="banner" >
       <Container>
         <FlexContainer
           breakpoint="none"
           justifyContent={UIStore.viewportWidth >= breakpoints.nav ? 'flex-start' : 'space-between'}
-          alignItems={'baseline'}
+          alignItems="baseline"
         >
           <Brand to={'/'} >{siteTitle}</Brand>
           {UIStore.viewportWidth >= breakpoints.nav
@@ -84,7 +107,7 @@ function Header ({siteTitle, pages, UIStore}) {
           </Transition>
         )}
       </Container>
-    </Default>
+    </Element>
   )
 }
 

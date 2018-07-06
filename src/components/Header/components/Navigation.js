@@ -1,11 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link as GatsbyLink } from 'gatsby'
-
-import media from 'utils/media'
+import { graphql } from 'gatsby'
 
 import Icon from 'components/Icon'
+import Link from './NavItem'
+
+import media from 'utils/media'
+import colors from 'utils/colors'
+import spacing from 'utils/spacing'
+import { ease } from 'utils/constants'
 
 const propTypes = {
   pages: PropTypes.array,
@@ -21,23 +25,44 @@ const Nav = styled.nav`
     flex-flow: row wrap;
     padding: 0 0.75rem;
   `}
-
-  & > a {
-    text-decoration: none;
-    display: block;
-    padding: 0.75rem;
-
-    svg {
-      display: inline-blcok;
-      vertical-align: -.125em;
-    }
-  }
 `
 
-const NavItem = styled(GatsbyLink)`
-  text-decoration: none;
-  display: block;
-  padding: 0.75rem;
+const NavItem = Link.extend`
+  position: relative;
+  padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
+  color: inherit;
+  transition: color 175ms ${ease},
+
+  &:before {
+    content: '1';
+  }
+
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: ${colors.body};
+    content: '';
+    transform: translate(0,-20%);
+    opacity: 0;
+    transition: transform 350ms cubic-bezier(0.4, 0.0, 0.2, 1),
+                opacity 350ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: ${colors.white};
+
+    &:before {
+      transform: translate(0,0);
+      transition-duration: 175ms;
+      opacity: 1;
+    }
+  }
 `
 
 function Navigation ({pages}) {
@@ -52,15 +77,17 @@ function Navigation ({pages}) {
   )
 
   return (
-    <Nav>
+    <Nav role="navigation" >
       {pages.map(renderNavItems)}
-      <a
+      <NavItem
         href="https://www.instagram.com/hannahswaimco/"
-        target="_blank"
-        rel="noopener noreferrer"
+        external
       >
-        <Icon type="instagram" />
-      </a>
+        <Icon
+          type="instagram"
+          inline
+        />
+      </NavItem>
     </Nav>
   )
 }

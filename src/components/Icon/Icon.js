@@ -14,6 +14,7 @@ const propTypes = {
     fill: PropTypes.string,
     stroke: PropTypes.string,
   }),
+  inline: PropTypes.bool,
 }
 
 const defaultProps = {
@@ -21,6 +22,7 @@ const defaultProps = {
   style: {},
   className: null,
   atts: {},
+  inline: false,
 }
 
 const icons = {
@@ -67,7 +69,7 @@ const icons = {
   },
 }
 
-function Icon ({type, style, className}) {
+function Icon ({type, style, className, inline}) {
 
   const renderPaths = (paths) => paths.map(([Element, atts], index) => (
     <Element
@@ -84,7 +86,14 @@ function Icon ({type, style, className}) {
     fill: 'none',
     stroke: 'currentColor',
     preserveAspectRatio: 'none',
+    color: 'inherit',
   }
+
+  const additionalStyle = inline
+    ? {
+    display: 'inline-block',
+    verticalAlign: '-.125em',
+    } : {}
 
   if (has(icons, type)) {
     const {
@@ -93,7 +102,10 @@ function Icon ({type, style, className}) {
 
     return (
       <svg
-        style={style}
+        style={{
+          ...additionalStyle,
+          ...style,
+        }}
         className={className}
         {...defaultAtts}
         {...atts}

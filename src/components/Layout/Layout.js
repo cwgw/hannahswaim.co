@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
-import { PageRenderer, StaticQuery } from 'gatsby'
+import { PageRenderer, StaticQuery, graphql } from 'gatsby'
 
 import Wrap from 'components/Wrap'
 import Header from 'components/Header'
@@ -20,9 +20,12 @@ const propTypes = {
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
   ]),
+  overlayHeader: PropTypes.bool,
 }
 
-const defaultProps = {}
+const defaultProps = {
+  overlayHeader: false,
+}
 
 const Layout = (props) => {
 
@@ -30,7 +33,7 @@ const Layout = (props) => {
     children,
     location,
     UIStore,
-    enableModal,
+    overlayHeader,
   } = props
 
   const modalEnabled = !!(
@@ -38,6 +41,8 @@ const Layout = (props) => {
     location.state.enableModal &&
     UIStore.viewportWidth >= breakpoints.modal
   )
+
+  // console.log(UIStore.isNavOpen)
 
   const renderLayout = (data) => {
     return modalEnabled ?
@@ -53,12 +58,15 @@ const Layout = (props) => {
         )}
       </React.Fragment>
     ) : (
-      <Wrap>
+      <Wrap
+        noScroll={UIStore.isNavOpen ? true : false}
+      >
         <Header
           siteTitle={data.site.siteMetadata.title}
           pages={data.menu.menuItems}
+          absolutePositioning={overlayHeader}
         />
-        <main>
+        <main role="main" >
           {children}
         </main>
         <Footer

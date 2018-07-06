@@ -1,10 +1,5 @@
-// import { observable, action, decorate } from 'mobx';
-// import _debounce from 'lodash/debounce'
-
-const observable = require('mobx').observable
-const action = require('mobx').action
-const decorate = require('mobx').decorate
-const _debounce = require('lodash/debounce')
+import { observable, action, decorate } from 'mobx';
+import _debounce from 'lodash/debounce'
 
 class UIStore {
 
@@ -58,4 +53,4 @@ decorate(UIStore, {
   closeNav: action.bound,
 })
 
-module.exports = new UIStore()
+export default new UIStore()

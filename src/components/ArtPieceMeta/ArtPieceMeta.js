@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import fonts from 'utils/fonts'
+
 const propTypes = {
   title: PropTypes.string,
   date: PropTypes.string,
@@ -21,10 +23,11 @@ const defaultProps = {
   className: null,
 }
 
-const Fragment = styled.p`
+const TextFragment = styled.p`
   margin: 0;
 
   ${({small}) => small && `
+    font-family: ${fonts.sansSerif};
     font-size: 75%;
   `}
 
@@ -68,13 +71,13 @@ function Details (props) {
       style={style}
     >
       {title && (
-        <Fragment>{date ? `${title}, ${date}` : title}</Fragment>
+        <TextFragment>{date ? `${title}, ${date}` : title}</TextFragment>
       )}
       {media && (
-        <Fragment small emphasis >{media}</Fragment>
+        <TextFragment small emphasis >{media}</TextFragment>
       )}
       {height && width && (
-        <Fragment small >{`${height} × ${width}${depth ? ` × ${depth}` : ''} ${units}`}</Fragment>
+        <TextFragment small >{`${height} × ${width}${depth ? ` × ${depth}` : ''} ${units}`}</TextFragment>
       )}
     </div>
   )

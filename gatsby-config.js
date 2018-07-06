@@ -22,15 +22,17 @@ module.exports = {
     title: 'hannah m. swaim',
   },
   plugins: [
-    'gatsby-transformer-remark',
     'gatsby-plugin-sharp',
-    'gatsby-image',
     'gatsby-plugin-react-helmet',
+    'gatsby-plugin-sitemap',
     'gatsby-plugin-styled-components',
+    'gatsby-transformer-remark',
+    'gatsby-transformer-sharp',
+    'gatsby-transformer-sqip',
+    'gatsby-image',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
-    },
-    'gatsby-plugin-resolve-src',
+    }
   ],
 }

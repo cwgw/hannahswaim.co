@@ -1,52 +1,30 @@
-import queryWidth from 'dom-helpers/query/width'
-import queryHeight from 'dom-helpers/query/height'
-import getComputedStyle from 'dom-helpers/style/getComputedStyle'
+/**
+ * Cached Object.prototype.hasOwnProperty method.
+ * See {@link https://github.com/airbnb/javascript#objects--prototype-builtins AirBnB}
+ *
+ * @param  {object} obj The Object to test
+ * @param  {string} key The String name or symbol of the property to test
+ * @return {boolean}    The result of Object.hasOwnProperty
+ */
+export const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key)
 
-export const normalUnits = (stringVal) => {
-  if (typeof stringVal !== 'string') {
-    return stringVal
+/**
+ * Quick test against undefined and null
+ * @param  {mixed} variable The binding to test
+ * @return {boolean}         True if `variable` is not `null` or `undefined`, otherwise false
+ */
+export const isSet = (variable) => 'undefined' !== typeof variable && null !== variable
+
+/**
+ * Round a float to n decimal places
+ * @param  {Number} number    The value to round
+ * @param  {Number} precision Maximum number of decimal places for return value
+ * @return {Number}           Rounded number
+ */
+export const round = (number, precision = 1) => {
+  if (isNaN(parseFloat(number))) {
+    return number
   }
-
-  const [num, unit] = stringVal.split(/(\D+)$/).map((val) => parseFloat(val) || val)
-
-  let returnVal = num
-
-  switch (unit) {
-    case 'rem': {
-      const baseFontSize = 16
-      returnVal = baseFontSize * num
-      break
-    }
-    case 'px':
-    default: {
-      // return returnVal
-    }
-  }
-
-  return parseFloat(returnVal)
-}
-
-
-export const innerWidth = (element) => {
-  const width = queryWidth(element)
-  const style = getComputedStyle(element)
-  return width - (normalUnits(style.paddingLeft) + normalUnits(style.paddingRight))
-}
-
-export const outerWidth = (element) => {
-  const width = queryWidth(element)
-  const style = getComputedStyle(element)
-  return width + (normalUnits(style.marginLeft) + normalUnits(style.marginRight))
-}
-
-export const innerHeight = (element) => {
-  const height = queryHeight(element)
-  const style = getComputedStyle(element)
-  return height - (normalUnits(style.paddingTop) + normalUnits(style.paddingBottom))
-}
-
-export const outerHeight = (element) => {
-  const height = queryHeight(element)
-  const style = getComputedStyle(element)
-  return height + (normalUnits(style.marginTop) + normalUnits(style.marginBottom))
+  const factor = Math.pow(10, precision)
+  return (Math.round(number * factor) / factor)
 }

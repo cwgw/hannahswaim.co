@@ -4,11 +4,10 @@ import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
 
 import GatsbyImage from 'gatsby-image'
-import { Link as GatsbyLink } from 'gatsby'
+import { Link as GatsbyLink, graphql } from 'gatsby'
 
-import media from 'utils/media'
-import colors from 'utils/colors'
-import { breakpoints } from 'utils/breakpoints'
+import spacing from 'utils/spacing'
+import { breakpoints, ease, colors } from 'utils/constants'
 
 import Meta from 'components/ArtPieceMeta'
 
@@ -39,11 +38,7 @@ const defaultProps = {
 const Link = styled(GatsbyLink)`
   display: block;
   break-inside: avoid;
-  margin-bottom: 1.5rem;
-
-  ${media.min.xl`
-    margin-bottom: 3rem;
-  `}
+  margin-bottom: ${spacing(2)};
 
   &:focus {
     outline: none;
@@ -51,14 +46,10 @@ const Link = styled(GatsbyLink)`
 `
 
 const Figure = styled.figure`
-  width: 100%;
   position: relative;
-  overflow: hidden;
   margin: 0;
-
-  ${Link}:focus & {
-    background-color: ${colors.link};
-  }
+  background-color: ${colors.coolBlack};
+  background-color: transparent;
 `
 
 const Image = styled(GatsbyImage)`
@@ -73,16 +64,15 @@ const Caption = styled.figcaption`
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 1.5rem 0.75rem 0.75rem;
-
+  padding: ${spacing(-1)};
   opacity: 0;
-  transform: translate3d(0,-3rem,0);
-  transition: transform 175ms cubic-bezier(0.4, 0.0, 0.2, 1), opacity 350ms cubic-bezier(0.4, 0.0, 0.2, 1);
-  transition-delay: 100ms, 0ms;
+  transform: translate(0,-${spacing(2)});
+  transition: transform 175ms ${ease} 100ms,
+              opacity 350ms ${ease} 0ms;
 
   ${Figure}:hover & {
     opacity: 1;
-    transform: translate3d(0,0,0);
+    transform: translate(0,0);
     transition-delay: 0ms;
   }
 `
@@ -99,10 +89,14 @@ function ArtPiece (props) {
     fields: {
       slug,
     },
+    next,
+    previous,
     UIStore,
     captionBreakpoint,
     childContentfulArtPieceDimensionsJsonNode: dimensions,
   } = props
+
+  // console.log(location.pathname)
 
   return (
     <Link
@@ -112,11 +106,18 @@ function ArtPiece (props) {
         state: {
           enableModal: UIStore.viewportWidth >= breakpoints.modal,
           origin: location.pathname,
+          next: next,
+          previous: previous,
         }
       }}
       >
       <Figure>
-        <Image sizes={images[0].sizes} />
+        <Image
+          fluid={{
+            ...images[0].fluid,
+            base64: images[0].sqip.dataURI
+          }}
+        />
         {UIStore.viewportWidth >= captionBreakpoint && (
           <Caption>
             <Meta
@@ -155,8 +156,10 @@ export const artPieceFragments = graphql`
     }
     images {
       id
-      sizes(maxWidth: 480, quality: 90) {
-        base64
+      sqip(numberOfPrimitives: 10, mode: 4, blur: 10) {
+        dataURI
+      }
+      fluid(maxWidth: 480, quality: 90) {
         aspectRatio
         src
         srcSet

@@ -30,14 +30,21 @@ const defaultProps = {
 
 const Button = styled.button`
   display: block;
-  flex: 0 0 ${1.5 + 0.75 * 2}rem;
-  height: ${3 + 0.75 * 2}rem;
+  flex: 0 0 ${1 + 0.75 * 2}rem;
+  height: ${2 + 0.75 * 2}rem;
   padding: 0.75rem;
+  margin-bottom: 0.75rem;
 
-  border: none;
+  border: 1px solid transparent;
   background: none;
 
   cursor: pointer;
+
+  ${media.min.md`
+    flex: 0 0 ${1.5 + 0.75 * 2}rem;
+    height: ${3 + 0.75 * 2}rem;
+    padding: 0.75rem;
+  `}
 
   ${media.min.lg`
     flex: 0 0 ${2.25 + 1.5 * 2}rem;
