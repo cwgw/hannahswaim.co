@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import mousetrap from "mousetrap"
 import { push } from 'gatsby'
 
-import media from 'utils/media'
+import { capitalizeFirstLetter } from 'utils/helpers'
 
+import { Control } from 'components/Button'
 import Icon from 'components/Icon'
 
 const propTypes = {
@@ -13,10 +13,10 @@ const propTypes = {
     'next',
     'previous'
   ]).isRequired,
-  location: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ]),
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+    state: PropTypes.object,
+  }),
   variant: PropTypes.oneOf([
     'light',
     'dark',
@@ -28,54 +28,11 @@ const defaultProps = {
   location: null,
 }
 
-const Button = styled.button`
-  display: block;
-  flex: 0 0 ${1 + 0.75 * 2}rem;
-  height: ${2 + 0.75 * 2}rem;
-  padding: 0.75rem;
-  margin-bottom: 0.75rem;
-
-  border: 1px solid transparent;
-  background: none;
-
-  cursor: pointer;
-
-  ${media.min.md`
-    flex: 0 0 ${1.5 + 0.75 * 2}rem;
-    height: ${3 + 0.75 * 2}rem;
-    padding: 0.75rem;
-  `}
-
-  ${media.min.lg`
-    flex: 0 0 ${2.25 + 1.5 * 2}rem;
-    height: ${4.5 + 1.5 * 2}rem;
-    padding: 1.5rem;
-  `}
-
-  ${({disabled}) => disabled && `
-    opacity: 0;
-  `}
-
-  ${({variant}) => {
-    if (variant === 'dark') {
-      return `color: white;`
-    } else {
-      return `color: inherit;`
-    }
-  }}
-`
-
-const Caret = styled(Icon)`
-  width: 100%;
-  height: 100%;
-  display: block;
-`
-
 class PostNavigation extends React.Component {
 
   constructor (props) {
     super(props)
-    this.to = this.to.bind(this)
+    this.handleClick = this.handleClick.bind(this)
 
     const DirectionEnum = {
       previous: 'left',
@@ -86,19 +43,19 @@ class PostNavigation extends React.Component {
   }
 
   componentDidMount() {
-    mousetrap.bind(this.key, () => this.to())
+    mousetrap.bind(this.key, () => this.handleClick())
   }
 
   componentWillUnmount() {
     mousetrap.unbind(this.key)
   }
 
-  to (e) {
+  handleClick (e) {
     if (e) {
       e.stopPropagation()
     }
 
-    if (this.props.location) {
+    if (this.props.location.pathname) {
       push(this.props.location)
     }
   }
@@ -111,13 +68,15 @@ class PostNavigation extends React.Component {
     } = this.props
 
     return (
-      <Button
+      <Control
+        aria-label={capitalizeFirstLetter(direction)}
+        title={capitalizeFirstLetter(direction)}
         variant={variant}
-        onClick={this.to}
-        disabled={!location}
+        onClick={this.handleClick}
+        disabled={!location.pathname}
       >
-        <Caret type={direction} />
-      </Button>
+        <Icon type={direction} />
+      </Control>
     )
   }
 }

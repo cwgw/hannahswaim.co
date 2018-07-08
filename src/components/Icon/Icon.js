@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import _find from 'lodash/find'
 
 import has from 'utils/has'
 
@@ -8,8 +9,6 @@ const propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
   atts: PropTypes.shape({
-    width: PropTypes.string,
-    height: PropTypes.string,
     viewBox: PropTypes.string,
     fill: PropTypes.string,
     stroke: PropTypes.string,
@@ -31,31 +30,26 @@ const icons = {
       ['line', {x1: 0, y1: 0, x2: 100, y2: 100}],
       ['line', {x1: 100, y1: 0, x2: 0, y2: 100}],
     ],
-  },
-  left: {
-    paths: [
-      ['polyline', {points: '100,0 0,50 100,100'}],
-    ],
-  },
-  prev: {
-    paths: [
-      ['polyline', {points: '100,0 0,50 100,100'}],
-    ],
+    aliases: [
+      'x',
+    ]
   },
   previous: {
     paths: [
-      ['polyline', {points: '100,0 0,50 100,100'}],
+      ['polyline', {points: '50,0 0,50 50,100', transform: 'translate(25,0)'}],
     ],
-  },
-  right: {
-    paths: [
-      ['polyline', {points: '0,0 100,50 0,100'}],
-    ],
+    aliases: [
+      'left',
+      'prev',
+    ]
   },
   next: {
     paths: [
-      ['polyline', {points: '0,0 100,50 0,100'}],
+      ['polyline', {points: '0,0 50,50 0,100', transform: 'translate(25,0)'}],
     ],
+    aliases: [
+      'right',
+    ]
   },
   instagram: {
     atts: {
@@ -80,8 +74,6 @@ function Icon ({type, style, className, inline}) {
   ))
 
   const defaultAtts = {
-    width: '1em',
-    height: '1em',
     viewBox: '0 0 100 100',
     fill: 'none',
     stroke: 'currentColor',
@@ -91,11 +83,17 @@ function Icon ({type, style, className, inline}) {
 
   const additionalStyle = inline
     ? {
-    display: 'inline-block',
-    verticalAlign: '-.125em',
-    } : {}
+      display: 'inline-block',
+      verticalAlign: '-.125em',
+      width: '1em',
+      height: '1em',
+    } : {
+      display: 'block',
+      width: '100%',
+      height: '100%',
+    }
 
-  if (has(icons, type)) {
+  if (has(icons, type) || _find(icons, (o) => Array.isArray(o.aliases) && o.aliases.includes(type))) {
     const {
       atts,
     } = icons[type]

@@ -48,6 +48,8 @@ function FeatureRow (props) {
     location,
   } = props
 
+  const siblings = edges.map(({node}) => node.fields.slug)
+
   const renderArtwork = ({node}, index, arr) => {
     return (
       <Figure
@@ -56,6 +58,8 @@ function FeatureRow (props) {
       >
         <ArtPiece
           location={location}
+          siblings={siblings}
+          index={index}
           {...node}
         />
       </Figure>

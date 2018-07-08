@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import fonts from 'utils/fonts'
+import { capitalizeFirstLetterOnly } from 'utils/helpers'
 
 const propTypes = {
   title: PropTypes.string,
@@ -52,7 +53,7 @@ function Details (props) {
     className,
   } = props
 
-  let media = null
+  let media
 
   if (Array.isArray(mediaArray)) {
     media = mediaArray.slice().sort().reduce((acc, val, index, arr) => {
@@ -62,7 +63,7 @@ function Details (props) {
         return acc = acc + (index === arr.length - 1 ? ` and ${val}.` : index > 0 ? `, ${val}` : val)
       }
     }, '')
-    media = media.charAt(0).toUpperCase() + media.slice(1).toLowerCase()
+    media = capitalizeFirstLetterOnly(media)
   }
 
   return (

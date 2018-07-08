@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
+import { transparentize } from 'polished'
 
 import GatsbyImage from 'gatsby-image'
 import { Link as GatsbyLink, graphql } from 'gatsby'
 
 import spacing from 'utils/spacing'
-import { breakpoints, ease, colors } from 'utils/constants'
+import { breakpoints, ease, colors, gray } from 'utils/constants'
 
 import Meta from 'components/ArtPieceMeta'
 
@@ -28,11 +29,15 @@ const propTypes = {
   }).isRequired,
   className: PropTypes.string,
   captionBreakpoint: PropTypes.number,
+  siblings: PropTypes.array,
+  index: PropTypes.number,
 }
 
 const defaultProps = {
   className: null,
   captionBreakpoint: breakpoints.lg,
+  siblings: [],
+  index: 0,
 }
 
 const Link = styled(GatsbyLink)`
@@ -42,21 +47,22 @@ const Link = styled(GatsbyLink)`
 
   &:focus {
     outline: none;
+    background-color: ${colors.coolBlack};
+  }
+
+  & .gatsby-image-wrapper {
+    transition: opacity 175ms ${ease};
+  }
+
+  &:focus .gatsby-image-wrapper {
+    opacity: 0.5;
   }
 `
 
 const Figure = styled.figure`
   position: relative;
   margin: 0;
-  background-color: ${colors.coolBlack};
-  background-color: transparent;
-`
-
-const Image = styled(GatsbyImage)`
-
-  ${Link}:focus & {
-    opacity: 0.75;
-  }
+  overflow: hidden;
 `
 
 const Caption = styled.figcaption`
@@ -65,15 +71,24 @@ const Caption = styled.figcaption`
   bottom: 0;
   left: 0;
   padding: ${spacing(-1)};
+  margin: ${spacing(-3)};
   opacity: 0;
-  transform: translate(0,-${spacing(2)});
+  transform: translate(0,${spacing(2)});
   transition: transform 175ms ${ease} 100ms,
               opacity 350ms ${ease} 0ms;
 
-  ${Figure}:hover & {
+  background-color: ${transparentize(0.5,gray[1])};
+  color: ${colors.white};
+
+  ${Link}:hover &,
+  ${Link}:focus & {
     opacity: 1;
     transform: translate(0,0);
     transition-delay: 0ms;
+  }
+
+  ${Link}:focus & {
+    background-color: ${transparentize(1,gray[1])};
   }
 `
 
@@ -81,6 +96,8 @@ function ArtPiece (props) {
 
   const  {
     location,
+    siblings,
+    index,
     id,
     title,
     date,
@@ -89,14 +106,10 @@ function ArtPiece (props) {
     fields: {
       slug,
     },
-    next,
-    previous,
     UIStore,
     captionBreakpoint,
     childContentfulArtPieceDimensionsJsonNode: dimensions,
   } = props
-
-  // console.log(location.pathname)
 
   return (
     <Link
@@ -106,13 +119,13 @@ function ArtPiece (props) {
         state: {
           enableModal: UIStore.viewportWidth >= breakpoints.modal,
           origin: location.pathname,
-          next: next,
-          previous: previous,
+          siblings: siblings,
+          index: index,
         }
       }}
       >
       <Figure>
-        <Image
+        <GatsbyImage
           fluid={{
             ...images[0].fluid,
             base64: images[0].sqip.dataURI
@@ -156,7 +169,7 @@ export const artPieceFragments = graphql`
     }
     images {
       id
-      sqip(numberOfPrimitives: 10, mode: 4, blur: 10) {
+      sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
         dataURI
       }
       fluid(maxWidth: 480, quality: 90) {

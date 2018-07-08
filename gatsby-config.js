@@ -20,19 +20,33 @@ try {
 module.exports = {
   siteMetadata: {
     title: 'hannah m. swaim',
+    siteUrl: 'https://hannahswaim.co',
   },
   plugins: [
     'gatsby-plugin-sharp',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-styled-components',
-    'gatsby-transformer-remark',
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        plugins: [
+          {
+            resolve: 'gatsby-remark-images-contentful',
+            options: {
+              maxWidth: 832,
+              linkImagesToOriginal: false,
+            },
+          },
+        ],
+      },
+    },
     'gatsby-transformer-sharp',
     'gatsby-transformer-sqip',
     'gatsby-image',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
-    }
+    },
   ],
 }

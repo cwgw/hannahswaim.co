@@ -7,10 +7,8 @@ import { Transition } from 'react-transition-group'
 import { Link as GatsbyLink } from 'gatsby'
 
 import media from 'utils/media'
-import colors from 'utils/colors'
-import breakpoints from 'utils/breakpoints'
 import spacing from 'utils/spacing'
-import { zIndex } from 'utils/constants'
+import { colors, breakpoints, ease, zIndex } from 'utils/constants'
 
 import Container from 'components/Container'
 import FlexContainer from 'components/FlexContainer'
@@ -31,6 +29,7 @@ const Default = styled.header`
   position: relative;
   z-index: ${zIndex.banner};
   margin: 0 0 ${spacing(1)};
+  color: ${colors.link};
 
   ${media.min.sm`
     margin: ${spacing(2)} 0 ${spacing(4)};
@@ -61,6 +60,18 @@ const Brand = styled(GatsbyLink)`
   padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
   text-decoration: none;
   color: inherit;
+  transition: color 175ms ${ease},
+              background-color 175ms ${ease};
+
+  &:focus {
+    outline: none;
+    background-color: ${colors.link};
+    color: ${colors.white};
+  }
+
+  ${media.min.nav`
+    border-bottom: 1px solid currentColor;
+  `}
 `
 
 function Header (props) {

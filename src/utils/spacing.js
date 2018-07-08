@@ -1,7 +1,7 @@
 import { fontSizeRoot, scale } from 'utils/constants'
 import { round } from 'utils/helpers'
 
-export const scaleValue = (i, {f, r, n}) => f * Math.pow(r, i / n)
+export const scaleValue = (i, {f, r, n} = scale) => f * Math.pow(r, i / n)
 
 const spacing = (i, units = 'rem') => {
 

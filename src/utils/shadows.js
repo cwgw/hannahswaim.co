@@ -1,4 +1,4 @@
-import colors from 'utils/colors'
+import { colors } from 'utils/constants'
 
 const shadows = [
   'none',                                                                   // depth 0

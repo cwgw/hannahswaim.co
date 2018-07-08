@@ -4,23 +4,26 @@ import media from 'utils/media'
 import spacing from 'utils/spacing'
 
 const Wrap = styled.div`
-  margin: ${spacing(-3)};
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
+  padding: ${spacing(-3)};
 
   ${media.min.sm`
-    margin: 0 ${spacing(2)};
+    padding: 0 ${spacing(2)};
   `}
 
   ${media.min.md`
-    margin: ${spacing(4)} ${spacing(2)};
+    padding: ${spacing(4)} ${spacing(2)};
   `}
 
   ${media.min.lg`
-    margin: ${spacing(4)};
+    padding: ${spacing(4)};
   `}
 
   ${media.min.xl`
-    margin: ${spacing(4)} ${spacing(8)};
-    margin: ${spacing(4)};
+    padding: ${spacing(4)} ${spacing(8)};
+    padding: ${spacing(4)};
   `}
 
   ${({noScroll}) => noScroll && `

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import spacing from 'utils/spacing'
+import { ease } from 'utils/constants'
 
 const propTypes = {
   children: PropTypes.arrayOf(PropTypes.node).isRequired,
@@ -10,6 +11,7 @@ const propTypes = {
   aspectRatio: PropTypes.number,
   itemHeight: PropTypes.string,
   gutter: PropTypes.string,
+  style: PropTypes.object,
 }
 
 const defaultProps = {
@@ -17,6 +19,7 @@ const defaultProps = {
   aspectRatio: 1,
   itemHeight: '270px',
   gutter: spacing(2),
+  style: {},
 }
 
 const Default = styled.div`
@@ -26,8 +29,6 @@ const Default = styled.div`
 
 const Frame = styled.div`
   overflow: hidden;
-  margin: 0 -${spacing(2)};
-  padding: 0 ${spacing(2)};
 `
 
 const Scroll = styled.div`
@@ -42,6 +43,7 @@ const Scroll = styled.div`
 const Overflow = styled.div`
   display: flex;
   flex-flow: row nowrap;
+  transition: max-width 350ms ${ease};
 
   ${({aspectRatio, gutter, itemHeight}) => aspectRatio && `
     min-width: calc(${itemHeight} * ${aspectRatio} + ${gutter});
@@ -56,12 +58,13 @@ function Row (props) {
     aspectRatio,
     itemHeight,
     gutter,
+    style,
   } = props
 
   if (overflow) {
 
     return (
-      <Frame>
+      <Frame style={style} >
         <Scroll>
           <Overflow
             aspectRatio={aspectRatio}

@@ -2,16 +2,46 @@
  * Cached Object.prototype.hasOwnProperty method.
  * See {@link https://github.com/airbnb/javascript#objects--prototype-builtins AirBnB}
  *
- * @param  {object} obj The Object to test
- * @param  {string} key The String name or symbol of the property to test
- * @return {boolean}    The result of Object.hasOwnProperty
+ * @param  {Object} obj The Object to test
+ * @param  {String} key The String name or symbol of the property to test
+ * @return {Boolean}    The result of Object.hasOwnProperty
  */
-export const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key)
+export const has = (obj, key) => {
+  if ('object' !== typeof obj) {
+    return false
+  }
+  return Object.prototype.hasOwnProperty.call(obj, key)
+}
+
+/**
+ * Cached Object.prototype.hasOwnProperty method.
+ * See {@link https://github.com/airbnb/javascript#objects--prototype-builtins AirBnB}
+ *
+ * @param  {Object} obj The Object to test
+ * @param  {String} key The String name or symbol of the property to test
+ * @return {Boolean}    The result of Object.hasOwnProperty
+ */
+export const hasDeep = (obj, key) => {
+  const properties = key.split('.')
+  let tmpObj = obj
+
+  for (let i = 0; i < properties.length; i++) {
+    let prop = properties[i]
+
+    if (!tmpObj || !has(tmpObj, prop)) {
+      return false
+    } else {
+      tmpObj = tmpObj[prop]
+    }
+  }
+
+  return true
+}
 
 /**
  * Quick test against undefined and null
- * @param  {mixed} variable The binding to test
- * @return {boolean}         True if `variable` is not `null` or `undefined`, otherwise false
+ * @param  {Mixed} variable The binding to test
+ * @return {Boolean}         True if `variable` is not `null` or `undefined`, otherwise false
  */
 export const isSet = (variable) => 'undefined' !== typeof variable && null !== variable
 
@@ -28,3 +58,18 @@ export const round = (number, precision = 1) => {
   const factor = Math.pow(10, precision)
   return (Math.round(number * factor) / factor)
 }
+
+/**
+ * Capitalize the first letter of a string
+ * @param  {String} str The string to be manipulated
+ * @return {String}     A copy of the string provided with the first letter capitalized
+ */
+export const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+
+/**
+ * Capitalize the first letter of a string, and convert the rest to lower case
+ * @param  {String} str The string to be manipulated
+ * @return {String}     A copy of the string provided with the first letter capitalized
+ *                        and the rest lowercase
+ */
+export const capitalizeFirstLetterOnly = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 import { graphql } from 'gatsby'
 
-import breakpoints from 'utils/breakpoints'
+import { breakpoints } from 'utils/constants'
+import { isSet } from 'utils/helpers'
 
 import Layout from 'components/Layout'
 import ArtPieceDetails from 'components/ArtPieceDetails'
@@ -15,8 +16,8 @@ const propTypes = {
     PropTypes.object,
   ]).isRequired,
   pageContext: PropTypes.shape({
-    next: PropTypes.object,
-    previous: PropTypes.object,
+    next: PropTypes.string,
+    previous: PropTypes.string,
   }).isRequired,
   data: PropTypes.shape({
     artPiece: PropTypes.object,
@@ -28,10 +29,7 @@ function ArtPieceTemplate (props) {
 
   const {
     location,
-    pageContext: {
-      next,
-      previous,
-    },
+    pageContext,
     data: {
       artPiece
     },
@@ -39,24 +37,51 @@ function ArtPieceTemplate (props) {
   } = props
 
   const modalEnabled = !!(
-    location.state &&
-    location.state.enableModal &&
-    UIStore.viewportWidth >= breakpoints.modal
+    isSet(location.state)
+    && location.state.enableModal
+    && UIStore.viewportWidth >= breakpoints.modal
   )
 
-  const formatLocation = (node) => node
-    ? {
-      pathname: node.fields.slug,
+  let next, previous
+
+  if (modalEnabled) {
+
+    const {
+      siblings,
+      index,
+    } = location.state || {}
+
+    next = {
+      pathname: index + 1 < siblings.length ? siblings[index + 1] : null,
+      state: {
+        ...location.state,
+        index: index + 1,
+      }
+    }
+    previous = {
+      pathname: index > 0 ? siblings[index - 1] : null,
+      state: {
+        ...location.state,
+        index: index - 1,
+      }
+    }
+  } else {
+    next = {
+      pathname: pageContext.next,
       state: location.state,
     }
-    : null
+    previous = {
+      pathname: pageContext.previous,
+      state: location.state,
+    }
+  }
 
-  return modalEnabled
-    ? (
-      <Layout location={location} >
+  return (
+    <Layout location={location} >
+      {modalEnabled ? (
         <PostNavigation
-          next={formatLocation(next)}
-          previous={formatLocation(previous)}
+          next={next}
+          previous={previous}
           variant="dark"
           fullHeight
           fixed
@@ -66,17 +91,18 @@ function ArtPieceTemplate (props) {
             {...artPiece}
           />
         </PostNavigation>
-      </Layout>
-    ) : (
-      <Layout location={location} >
-        <PostNavigation
-          next={formatLocation(next)}
-          previous={formatLocation(previous)}
-          fixed={UIStore.viewportWidth >= breakpoints.modal}
-        />
-        <ArtPieceDetails {...artPiece} />
-      </Layout>
-    )
+      ) : (
+        <React.Fragment>
+          <PostNavigation
+            next={next}
+            previous={previous}
+            fixed={UIStore.viewportWidth >= breakpoints.modal}
+          />
+          <ArtPieceDetails {...artPiece} />
+        </React.Fragment>
+      )}
+    </Layout>
+  )
 }
 
 ArtPieceTemplate.propTypes = propTypes

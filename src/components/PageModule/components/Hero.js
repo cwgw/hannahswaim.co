@@ -5,7 +5,7 @@ import { transparentize } from 'polished'
 
 import GatsbyImage from 'gatsby-image'
 
-import colors from 'utils/colors'
+import { colors } from 'utils/constants'
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 

@@ -6,10 +6,8 @@ import { graphql } from 'gatsby'
 import Icon from 'components/Icon'
 import Link from './NavItem'
 
-import media from 'utils/media'
-import colors from 'utils/colors'
 import spacing from 'utils/spacing'
-import { ease } from 'utils/constants'
+import { colors, ease } from 'utils/constants'
 
 const propTypes = {
   pages: PropTypes.array,
@@ -20,32 +18,30 @@ const defaultProps = {}
 const Nav = styled.nav`
   display: flex;
   flex-flow: column nowrap;
-
-  ${media.min.nav`
-    flex-flow: row wrap;
-    padding: 0 0.75rem;
-  `}
+  flex-flow: row wrap;
+  padding: 0 0.75rem;
+  position: relative;
 `
 
 const NavItem = Link.extend`
   position: relative;
   padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
   color: inherit;
-  transition: color 175ms ${ease},
+  transition: color 175ms ${ease};
 
-  &:before {
-    content: '1';
+  &:focus {
+    outline: none;
   }
 
   &:before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: -1;
-    background-color: ${colors.body};
-    content: '';
+    background-color: ${colors.link};
     transform: translate(0,-20%);
     opacity: 0;
     transition: transform 350ms cubic-bezier(0.4, 0.0, 0.2, 1),

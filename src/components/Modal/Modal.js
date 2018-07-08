@@ -4,8 +4,11 @@ import ReactModal from 'react-modal'
 import { transparentize } from 'polished'
 import { push } from "gatsby"
 
-import colors from 'utils/colors'
-import { zIndex } from 'utils/constants'
+import { colors, zIndex } from 'utils/constants'
+import spacing from 'utils/spacing'
+
+import { Control } from 'components/Button'
+import Icon from 'components/Icon'
 
 const propTypes = {
   isOpen: PropTypes.bool,
@@ -24,10 +27,17 @@ function Modal (props) {
 
   const { children, location, isOpen } = props
 
+  const closeModal = () => push({
+    pathname: location.state.origin,
+    state: {
+      origin: 'modal',
+    },
+  })
+
   return (
     <ReactModal
       isOpen={isOpen}
-      onRequestClose={() => push(location.state.origin)}
+      onRequestClose={closeModal}
       style={{
         overlay: {
           position: `fixed`,
@@ -53,8 +63,22 @@ function Modal (props) {
       }}
       contentLabel="Modal"
     >
-      <div onClick={() => push(location.state.origin)} >
+      <div onClick={closeModal} >
         {children}
+        <Control
+          aria-label="Close Modal"
+          title="Close Modal"
+          variant="dark"
+          position="absolute"
+          onClick={closeModal}
+          style={{
+            right: 0,
+            top: 0,
+            marginBottom: spacing(-1),
+          }}
+        >
+          <Icon type="close" />
+        </Control>
       </div>
     </ReactModal>
   )

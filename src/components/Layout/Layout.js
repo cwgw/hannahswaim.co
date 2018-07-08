@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import { PageRenderer, StaticQuery, graphql } from 'gatsby'
 
-import Wrap from 'components/Wrap'
+import Wrap from './components/Wrap'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 
 import globalStyle from 'utils/globalStyle' // eslint-disable-line no-unused-vars
-import breakpoints from 'utils/breakpoints'
+import { breakpoints } from 'utils/constants'
 
 let Modal
 import('components/Modal').then(modal => {
@@ -55,7 +55,6 @@ const Layout = (props) => {
         >
           {children}
         </Modal>
-        )}
       </React.Fragment>
     ) : (
       <Wrap

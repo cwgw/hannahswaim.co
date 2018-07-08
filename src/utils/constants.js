@@ -8,6 +8,8 @@ export const zIndex = {
 
 export const fontSizeRoot = 16
 
+export const containerWidth = '832px'
+
 export const scale = {
   f: 1,
   r: 2,
@@ -40,6 +42,15 @@ export const breakpointValues = [
 
 export const breakpoints = _zipObject(breakpointKeys,breakpointValues)
 
+export const gray = [
+  '#191720',
+  '#343040',
+  '#504A5B',
+  '#7B7483',
+  '#A9A4AE',
+  '#CAC7CC',
+]
+
 export const brandColors = [
   '#19000e',
   '#530d1b',
@@ -50,11 +61,12 @@ export const brandColors = [
 ]
 
 export const colors = {
-  body: brandColors[1],
+  // body: brandColors[1],
+  body: gray[1],
   link: brandColors[2],
   white: brandColors[5],
   black: brandColors[0],
-  coolBlack: '#191720',
+  coolBlack: gray[0],
 }
 
 export const shadows = [

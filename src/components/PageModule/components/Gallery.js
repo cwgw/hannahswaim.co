@@ -18,10 +18,16 @@ const defaultProps = {
 
 function Gallery ({edges, location}) {
 
-  const renderArtPieces = ({node}) => (
+  const siblings = edges.map(({node}) => node.fields.slug)
+
+  // console.log(siblings)
+
+  const renderArtPieces = ({node}, index) => (
     <ArtPiece
       key={node.id}
       location={location}
+      siblings={siblings}
+      index={index}
       {...node}
     />
   )

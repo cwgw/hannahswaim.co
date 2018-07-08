@@ -9,6 +9,8 @@ const propTypes = {
   justifyContent: PropTypes.string,
   stretch: PropTypes.bool,
   breakpoint: PropTypes.string,
+  direction: PropTypes.string,
+  overflow: PropTypes.string,
 }
 
 const defaultProps = {
@@ -17,6 +19,8 @@ const defaultProps = {
   justifyContent: 'space-between',
   stretch: false,
   breakpoint: 'sm',
+  direction: 'row',
+  overflow: null,
 }
 
 const FlexContainer = styled.div`
@@ -27,6 +31,14 @@ const FlexContainer = styled.div`
 
   ${({stretch}) => stretch && `
     height: 100vh;
+  `}
+
+  ${({overflow}) => overflow && `
+    overflow: ${overflow};
+  `}
+
+  ${({direction}) => direction && `
+    flex-direction: ${direction};
   `}
 
   ${({noWrap}) => noWrap && `

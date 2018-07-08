@@ -1,9 +1,8 @@
 import { injectGlobal } from 'styled-components'
 import { normalize } from 'polished'
 
-import { fontSizeRoot } from 'utils/constants'
+import { fontSizeRoot, colors } from 'utils/constants'
 import fonts, { fontfaceDeclarations } from 'utils/fonts'
-import colors from 'utils/colors'
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 

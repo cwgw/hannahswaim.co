@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
-import colors from 'utils/colors'
 import spacing from 'utils/spacing'
-import { ease } from 'utils/constants'
+import { colors, ease } from 'utils/constants'
 
 const propTypes = {
   UIStore: PropTypes.object,

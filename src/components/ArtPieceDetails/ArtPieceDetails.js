@@ -9,7 +9,9 @@ import spacing from 'utils/spacing'
 import { shadows } from 'utils/constants'
 
 import DefaultContainer from 'components/Container'
+import FlexContainer from 'components/FlexContainer'
 import ArtPieceMeta from 'components/ArtPieceMeta'
+import Row from 'components/Row'
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -29,38 +31,6 @@ const propTypes = {
 const defaultProps = {
   modalEnabled: false,
 }
-
-const Row = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  margin: ${spacing(2)} auto;
-  overflow: hidden;
-`
-
-const PieceImages = styled.div`
-  background: #fff;
-  overflow: hidden;
-  box-shadow: ${shadows[2]};
-  position: relative;
-`
-
-const OverflowScroller = styled.div`
-  width: 100%;
-  margin-bottom: -${spacing(2)};
-  padding-bottom: ${spacing(2)};
-  overflow: hidden;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
-`
-
-const Overflow = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-
-  ${({aspectRatio}) => `
-    min-width: ${75 * aspectRatio}vh;
-  `}
-`
 
 const Figure = styled.figure`
   margin: 0;
@@ -100,26 +70,40 @@ function ArtPieceDetails (props) {
 
   return modalEnabled
     ? (
-      <Row onClick={(e) => {e.stopPropagation()}} >
-        <PieceImages>
-          <OverflowScroller>
-            <Overflow aspectRatio={combinedAspectRatio} >
-              {images.map(({id, sqip, fluid}) => (
-                <Figure
-                  key={id}
-                  aspectRatio={fluid.aspectRatio}
-                >
-                  <GatsbyImage
-                    fluid={{
-                      ...fluid,
-                      base64: sqip.dataURI
-                    }}
-                  />
-                </Figure>
-              ))}
-            </Overflow>
-          </OverflowScroller>
-        </PieceImages>
+      <FlexContainer
+        onClick={(e) => {e.stopPropagation()}}
+        direction="column"
+        justifyContent="center"
+        noWrap
+      >
+        <div
+          style={{
+            position: 'relative',
+            boxShadow: shadows[2],
+            backgroundColor: 'white',
+          }}
+        >
+          <Row
+            aspectRatio={combinedAspectRatio}
+            gutter="0px"
+            itemHeight="75vh"
+            overflow
+          >
+            {images.map(({id, sqip, fluid}) => (
+              <Figure
+                key={id}
+                aspectRatio={fluid.aspectRatio}
+              >
+                <GatsbyImage
+                  fluid={{
+                    ...fluid,
+                    base64: sqip.dataURI
+                  }}
+                />
+              </Figure>
+            ))}
+          </Row>
+        </div>
         <PieceDetails>
           <ArtPieceMeta
             title={title}
@@ -128,7 +112,7 @@ function ArtPieceDetails (props) {
             dimensions={dimensions}
           />
         </PieceDetails>
-      </Row>
+      </FlexContainer>
     ) : (
       <React.Fragment>
         <Container>
@@ -180,7 +164,7 @@ export const artPieceDetailsFragments = graphql`
     media
     images {
       id
-      sqip(numberOfPrimitives: 10, mode: 4, blur: 10) {
+      sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
         dataURI
       }
       fluid(quality: 90) {
