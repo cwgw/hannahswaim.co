@@ -31,7 +31,9 @@ function ArtPieceTemplate (props) {
     location,
     pageContext,
     data: {
-      artPiece
+      artPiece,
+      node_locale,
+      ...data
     },
     UIStore,
   } = props
@@ -77,7 +79,12 @@ function ArtPieceTemplate (props) {
   }
 
   return (
-    <Layout location={location} >
+    <Layout
+      location={location}
+      title={`${artPiece.title}, ${artPiece.date}`}
+      data={data}
+      locale={node_locale}
+    >
       {modalEnabled ? (
         <PostNavigation
           next={next}
@@ -111,7 +118,33 @@ export default inject('UIStore')(observer(ArtPieceTemplate))
 
 export const pageQuery = graphql`
   query singleArtPiece($id: String!) {
+    site {
+      siteMetadata {
+        siteTitle
+        siteTitleSeparator
+        siteUrl
+      }
+    }
+    socialMedia: allContentfulSocialMediaLink {
+      edges {
+        node {
+          service
+          url
+        }
+      }
+    }
+    menu: contentfulMenu {
+      menuItems {
+        ... on ContentfulPage {
+          ...MenuItemPage
+        }
+        ... on ContentfulSocialMediaLink {
+          ...MenuItemSocialMediaLink
+        }
+      }
+    }
     artPiece: contentfulArtPiece(contentful_id: {eq: $id}) {
+      node_locale
       ...ArtPieceDetailsFragment
     }
   }

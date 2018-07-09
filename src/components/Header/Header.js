@@ -18,11 +18,14 @@ import Hamburger from './components/Hamburger'
 
 const propTypes = {
   siteTitle: PropTypes.string.isRequired,
-  absolutePositioning: PropTypes.bool,
+  UIStore: PropTypes.object.isRequired,
+  pages: PropTypes.array,
+  absolute: PropTypes.bool,
 }
 
 const defaultProps = {
-  absolutePositioning: false
+  pages: [],
+  absolute: false,
 }
 
 const Default = styled.header`
@@ -39,10 +42,8 @@ const Default = styled.header`
     margin: 0 0 5.125rem;
     margin: 0 0 ${spacing(8)};
   `}
-`
 
-const Absolute = Default.extend`
-  ${media.min.lg`
+  ${({absolute}) => absolute && media.min.lg`
     position: absolute;
     top: ${spacing(4)};
     left: ${spacing(4)};
@@ -50,6 +51,7 @@ const Absolute = Default.extend`
     padding: 0 ${spacing(1)};
     color: ${colors.white};
   `}
+
 `
 
 const Brand = styled(GatsbyLink)`
@@ -68,10 +70,6 @@ const Brand = styled(GatsbyLink)`
     background-color: ${colors.link};
     color: ${colors.white};
   }
-
-  ${media.min.nav`
-    border-bottom: 1px solid currentColor;
-  `}
 `
 
 function Header (props) {
@@ -80,13 +78,14 @@ function Header (props) {
     siteTitle,
     pages,
     UIStore,
-    absolutePositioning,
+    absolute,
   } = props
 
-  const Element = absolutePositioning ? Absolute : Default
-
   return (
-    <Element role="banner" >
+    <Default
+      role="banner"
+      absolute={absolute}
+    >
       <Container>
         <FlexContainer
           breakpoint="none"
@@ -118,7 +117,7 @@ function Header (props) {
           </Transition>
         )}
       </Container>
-    </Element>
+    </Default>
   )
 }
 

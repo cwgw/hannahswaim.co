@@ -7,6 +7,7 @@ import Gallery from './components/Gallery'
 import Hero from './components/Hero'
 import Text from './components/Text'
 import FeatureRow from './components/FeatureRow'
+import Instagram from './components/Instagram'
 
 import spacing from 'utils/spacing'
 
@@ -29,6 +30,7 @@ function PageModule (props) {
     location,
     text,
     type,
+    posts,
   } = props
 
   const renderModule = () => {
@@ -84,6 +86,13 @@ function PageModule (props) {
                 }
               })
             }
+          />
+        )
+      case 'ContentfulPageInstagramPosts':
+        return (
+          <Instagram
+            location={location}
+            edges={posts}
           />
         )
       default:
@@ -204,6 +213,14 @@ export const PageModuleFragments = graphql`
       childMarkdownRemark {
         html
       }
+    }
+  }
+
+  fragment PageInstagram on ContentfulPageInstagramPosts {
+    __typename
+    id
+    posts {
+      url
     }
   }
 `

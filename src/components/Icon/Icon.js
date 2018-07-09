@@ -63,7 +63,9 @@ const icons = {
   },
 }
 
-function Icon ({type, style, className, inline}) {
+function Icon ({type: typeRaw, style, className, inline}) {
+
+  const type = typeRaw.slice().toLowerCase()
 
   const renderPaths = (paths) => paths.map(([Element, atts], index) => (
     <Element

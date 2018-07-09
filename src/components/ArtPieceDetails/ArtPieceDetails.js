@@ -74,6 +74,7 @@ function ArtPieceDetails (props) {
         onClick={(e) => {e.stopPropagation()}}
         direction="column"
         justifyContent="center"
+        overflow="hidden"
         noWrap
       >
         <div

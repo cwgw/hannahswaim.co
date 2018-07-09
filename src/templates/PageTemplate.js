@@ -24,7 +24,10 @@ function PageTemplate (props) {
     data: {
       page: {
         contentModules,
+        title,
+        node_locale,
       },
+      ...data
     },
   } = props
 
@@ -49,8 +52,10 @@ function PageTemplate (props) {
   return (
     <Layout
       location={location}
-      enableModal={location.state && location.state.enableModal}
+      title={title}
       overlayHeader={overlayHeader}
+      data={data}
+      locale={node_locale}
     >
       {contentModules && contentModules.map(renderContentModules)}
     </Layout>
@@ -65,10 +70,36 @@ export default PageTemplate
 
 export const pageQuery = graphql`
   query singlePage($id: String!) {
+    site {
+      siteMetadata {
+        siteTitle
+        siteTitleSeparator
+        siteUrl
+      }
+    }
+    socialMedia: allContentfulSocialMediaLink {
+      edges {
+        node {
+          service
+          url
+        }
+      }
+    }
+    menu: contentfulMenu {
+      menuItems {
+        ... on ContentfulPage {
+          ...MenuItemPage
+        }
+        ... on ContentfulSocialMediaLink {
+          ...MenuItemSocialMediaLink
+        }
+      }
+    }
     page: contentfulPage(contentful_id: {eq: $id}) {
       id
       title
       slug
+      node_locale
       contentModules {
         ... on ContentfulPageText {
           ...PageText
@@ -81,6 +112,9 @@ export const pageQuery = graphql`
         }
         ... on ContentfulPageFeatureRow {
           ...PageFeatureRow
+        }
+        ... on ContentfulPageInstagramPosts {
+          ...PageInstagram
         }
       }
     }

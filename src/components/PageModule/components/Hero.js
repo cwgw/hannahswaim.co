@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { transparentize } from 'polished'
 
 import GatsbyImage from 'gatsby-image'
 
@@ -26,7 +25,7 @@ const Wrapper = styled.div`
   align-items: center;
   overflow: hidden;
 
-  padding: ${spacing(8)} ${spacing(1)};
+  padding: ${spacing(10)} ${spacing(1)};
 
   ${media.min.lg`
     min-height: calc(100vh - (${spacing(4)} * 2));
@@ -39,28 +38,6 @@ const ImageContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-
-  &:before,
-  &:after {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    content: '';
-    background-image: linear-gradient(${colors.coolBlack},${transparentize(0.8,colors.coolBlack)});
-  }
-
-  &:before {
-    mix-blend-mode: color;
-    opacity: 1;
-  }
-
-  &:after {
-    mix-blend-mode: hard-light;
-    opacity: 0.5;
-  }
 `
 
 const Container = DefaultContainer.extend`

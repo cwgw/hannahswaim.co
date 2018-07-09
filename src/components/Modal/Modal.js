@@ -63,7 +63,7 @@ function Modal (props) {
       }}
       contentLabel="Modal"
     >
-      <div onClick={closeModal} >
+      <section onClick={closeModal} >
         {children}
         <Control
           aria-label="Close Modal"
@@ -79,7 +79,7 @@ function Modal (props) {
         >
           <Icon type="close" />
         </Control>
-      </div>
+      </section>
     </ReactModal>
   )
 }

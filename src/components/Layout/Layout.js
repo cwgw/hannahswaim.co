@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
-import { PageRenderer, StaticQuery, graphql } from 'gatsby'
+import { PageRenderer } from 'gatsby'
 
 import Wrap from './components/Wrap'
+import Head from 'components/Head'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 
@@ -27,24 +28,26 @@ const defaultProps = {
   overlayHeader: false,
 }
 
-const Layout = (props) => {
+class Layout extends React.Component {
 
-  const {
-    children,
-    location,
-    UIStore,
-    overlayHeader,
-  } = props
+  render ()  {
 
-  const modalEnabled = !!(
-    location.state &&
-    location.state.enableModal &&
-    UIStore.viewportWidth >= breakpoints.modal
-  )
+    const {
+      children,
+      location,
+      UIStore,
+      title,
+      overlayHeader,
+      locale,
+      data,
+    } = this.props
 
-  // console.log(UIStore.isNavOpen)
+    const modalEnabled = !!(
+      location.state &&
+      location.state.enableModal &&
+      UIStore.viewportWidth >= breakpoints.modal
+    )
 
-  const renderLayout = (data) => {
     return modalEnabled ?
     (
       <React.Fragment>
@@ -60,39 +63,28 @@ const Layout = (props) => {
       <Wrap
         noScroll={UIStore.isNavOpen ? true : false}
       >
+        <Head
+          pageTitle={title}
+          location={location}
+          siteMetadata={data.site.siteMetadata}
+          socialMedia={data.socialMedia.edges.map(edge => edge.node)}
+          locale={locale}
+        />
         <Header
-          siteTitle={data.site.siteMetadata.title}
+          siteTitle={data.site.siteMetadata.siteTitle}
           pages={data.menu.menuItems}
-          absolutePositioning={overlayHeader}
+          absolute={overlayHeader}
         />
         <main role="main" >
           {children}
         </main>
         <Footer
-          siteTitle={data.site.siteMetadata.title}
+          siteTitle={data.site.siteMetadata.siteTitle}
           pages={data.menu.menuItems}
         />
       </Wrap>
     )
   }
-
-  return (
-    <StaticQuery
-      query={graphql`
-        query layout {
-          site {
-            siteMetadata {
-              title
-            }
-          }
-          menu: contentfulMenu {
-            ...NavigationItems
-          }
-        }
-      `}
-      render={renderLayout}
-    />
-  )
 }
 
 Layout.propTypes = propTypes

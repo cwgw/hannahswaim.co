@@ -19,10 +19,25 @@ try {
 
 module.exports = {
   siteMetadata: {
-    title: 'hannah m. swaim',
+    siteName: 'hannahswaim.co',
+    siteTitle: 'hannah m. swaim',
+    siteTitleSeparator: ' | ',
     siteUrl: 'https://hannahswaim.co',
   },
   plugins: [
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        name: "hannah m. swaim",
+        short_name: "hannah m. swaim",
+        start_url: "/",
+        background_color: "#ffffff",
+        theme_color: "#b86e5c",
+        display: "minimal-ui",
+        icon: "src/images/icon.png",
+      },
+    },
+    'gatsby-plugin-offline',
     'gatsby-plugin-sharp',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',

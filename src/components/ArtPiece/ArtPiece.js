@@ -44,18 +44,37 @@ const Link = styled(GatsbyLink)`
   display: block;
   break-inside: avoid;
   margin-bottom: ${spacing(2)};
+  color: ${colors.white};
+  position: relative;
 
   &:focus {
     outline: none;
     background-color: ${colors.coolBlack};
   }
 
-  & .gatsby-image-wrapper {
+  &:focus .gatsby-image-wrapper {
+    opacity: 0.5;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: ${spacing(-3)};
+    left: ${spacing(-3)};
+    right: ${spacing(-3)};
+    bottom: ${spacing(-3)};
+    border: 1px solid ${gray[1]};
+    opacity: 0;
     transition: opacity 175ms ${ease};
   }
 
-  &:focus .gatsby-image-wrapper {
+  &:hover:after {
     opacity: 0.5;
+  }
+
+  &:focus:after {
+    border-color: currentColor;
+    opacity: 1;
   }
 `
 
@@ -73,17 +92,16 @@ const Caption = styled.figcaption`
   padding: ${spacing(-1)};
   margin: ${spacing(-3)};
   opacity: 0;
-  transform: translate(0,${spacing(2)});
+  transform: translate3d(0,${spacing(2)},0);
   transition: transform 175ms ${ease} 100ms,
               opacity 350ms ${ease} 0ms;
 
   background-color: ${transparentize(0.5,gray[1])};
-  color: ${colors.white};
 
   ${Link}:hover &,
   ${Link}:focus & {
     opacity: 1;
-    transform: translate(0,0);
+    transform: translate3d(0,0,0);
     transition-delay: 0ms;
   }
 

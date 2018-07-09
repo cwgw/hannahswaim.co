@@ -6,7 +6,8 @@ import fonts, { fontfaceDeclarations } from 'utils/fonts'
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 
-import background from 'images/background.svg'
+import bkCircle from 'images/background.svg'
+import bkSquiggles from 'images/squiggle.svg'
 
 injectGlobal`
   ${normalize()}
@@ -42,12 +43,10 @@ injectGlobal`
     font-family: ${fonts.serif};
     font-weight: 400;
     line-height: 1.5;
-    background-image: url(${background});
-    // background-size: calc(360px + 75vw) calc(360px + 75vw);
-    background-size: calc(180px + 85vw) calc(180px + 85vw);
-    // background-size: 100vw 100vw;
+    background-image: url(${bkCircle}), url(${bkSquiggles});
+    background-size: calc(180px + 85vw) calc(180px + 85vw), calc(200px + 20vw) calc(200px + 20vw);
     background-repeat: no-repeat;
-    background-position: -33vw -60vw;
+    background-position: -33vw -60vw, 70vw 90%;
     color: ${colors.body};
     -webkit-overflow-scrolling: touch;
   }

@@ -7,7 +7,7 @@ import Icon from 'components/Icon'
 import Link from './NavItem'
 
 import spacing from 'utils/spacing'
-import { colors, ease } from 'utils/constants'
+import { ease } from 'utils/constants'
 
 const propTypes = {
   pages: PropTypes.array,
@@ -27,63 +27,80 @@ const NavItem = Link.extend`
   position: relative;
   padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
   color: inherit;
-  transition: color 175ms ${ease};
-
-  &:focus {
-    outline: none;
-  }
+  transition: color 175ms ${ease},
+              background-color 175ms ${ease};
 
   &:before {
     content: '';
     position: absolute;
-    top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    top: 100%;
+    bottom: -1px;
+    border: 1px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 4px;
     z-index: -1;
-    background-color: ${colors.link};
-    transform: translate(0,-20%);
+    transform: scale(0,1);
+    transform-origin: center center;
     opacity: 0;
     transition: transform 350ms cubic-bezier(0.4, 0.0, 0.2, 1),
-                opacity 350ms cubic-bezier(0.4, 0.0, 0.2, 1);
+                opacity 350ms cubic-bezier(0.4, 0.0, 0.2, 1),
+                border 350ms cubic-bezier(0.4, 0.0, 0.2, 1),
+                top 175ms cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 
-  &:hover,
-  &:active,
   &:focus {
-    color: ${colors.white};
+    outline: none;
 
     &:before {
-      transform: translate(0,0);
-      transition-duration: 175ms;
-      opacity: 1;
+      top: 0;
+      border-color: currentColor;
     }
+  }
+
+  &:focus:before,
+  &:hover:before {
+    transform: scale(1,1);
+    transition-duration: 175ms;
+    opacity: 1;
   }
 `
 
 function Navigation ({pages}) {
 
-  const renderNavItems = ({title, slug}) => (
-    <NavItem
-      key={slug}
-      to={`/${slug ? slug : ''}`}
-    >
-      {title}
-    </NavItem>
-  )
+  const renderNavItems = (item) => {
+    switch (item['__typename']) {
+      case 'ContentfulSocialMediaLink':
+        return (
+          <NavItem
+            key={item.service}
+            href={item.url}
+            external
+          >
+            <Icon
+              type={item.service}
+              inline
+            />
+          </NavItem>
+        )
+      case 'ContentfulPage':
+        return (
+          <NavItem
+            key={item.slug}
+            to={`/${item.slug ? item.slug : ''}`}
+          >
+            {item.title}
+          </NavItem>
+        )
+      default:
+        return null
+    }
+  }
 
   return (
     <Nav role="navigation" >
       {pages.map(renderNavItems)}
-      <NavItem
-        href="https://www.instagram.com/hannahswaimco/"
-        external
-      >
-        <Icon
-          type="instagram"
-          inline
-        />
-      </NavItem>
     </Nav>
   )
 }
@@ -95,10 +112,15 @@ Navigation.defaultProps = defaultProps
 export default Navigation
 
 export const navigationFragment = graphql`
-  fragment NavigationItems on ContentfulMenu {
-    menuItems {
-      title
-      slug
-    }
+  fragment MenuItemPage on ContentfulPage {
+    __typename
+    title
+    slug
+  }
+
+  fragment MenuItemSocialMediaLink on ContentfulSocialMediaLink {
+    __typename
+    service
+    url
   }
 `
