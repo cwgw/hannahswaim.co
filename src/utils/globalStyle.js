@@ -30,7 +30,7 @@ injectGlobal`
   }
 
   ::selection {
-    background: blue;
+    background: ${colors.greens[3]};
     color: white;
   }
 
@@ -43,10 +43,12 @@ injectGlobal`
     font-family: ${fonts.serif};
     font-weight: 400;
     line-height: 1.5;
+    /*
     background-image: url(${bkCircle}), url(${bkSquiggles});
     background-size: calc(180px + 85vw) calc(180px + 85vw), calc(200px + 20vw) calc(200px + 20vw);
     background-repeat: no-repeat;
     background-position: -33vw -60vw, 70vw 90%;
+    */
     color: ${colors.body};
     -webkit-overflow-scrolling: touch;
   }

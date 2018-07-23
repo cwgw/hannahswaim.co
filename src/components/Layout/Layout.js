@@ -21,11 +21,11 @@ const propTypes = {
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
   ]),
-  overlayHeader: PropTypes.bool,
+  hasHero: PropTypes.bool,
 }
 
 const defaultProps = {
-  overlayHeader: false,
+  hasHero: false,
 }
 
 class Layout extends React.Component {
@@ -37,7 +37,7 @@ class Layout extends React.Component {
       location,
       UIStore,
       title,
-      overlayHeader,
+      hasHero,
       locale,
       data,
     } = this.props
@@ -73,14 +73,13 @@ class Layout extends React.Component {
         <Header
           siteTitle={data.site.siteMetadata.siteTitle}
           pages={data.menu.menuItems}
-          absolute={overlayHeader}
+          isAboveHero={hasHero}
         />
         <main role="main" >
           {children}
         </main>
         <Footer
           siteTitle={data.site.siteMetadata.siteTitle}
-          pages={data.menu.menuItems}
         />
       </Wrap>
     )

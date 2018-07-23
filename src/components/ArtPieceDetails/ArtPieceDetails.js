@@ -6,7 +6,6 @@ import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
 
 import spacing from 'utils/spacing'
-import { shadows } from 'utils/constants'
 
 import DefaultContainer from 'components/Container'
 import FlexContainer from 'components/FlexContainer'
@@ -80,7 +79,7 @@ function ArtPieceDetails (props) {
         <div
           style={{
             position: 'relative',
-            boxShadow: shadows[2],
+            // boxShadow: shadows[2],
             backgroundColor: 'white',
           }}
         >
@@ -88,6 +87,7 @@ function ArtPieceDetails (props) {
             aspectRatio={combinedAspectRatio}
             gutter="0px"
             itemHeight="75vh"
+            maxHeight="75vh"
             overflow
           >
             {images.map(({id, sqip, fluid}) => (

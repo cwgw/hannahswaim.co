@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
-import { Transition } from 'react-transition-group'
 
 import { Link as GatsbyLink } from 'gatsby'
 
@@ -20,12 +19,12 @@ const propTypes = {
   siteTitle: PropTypes.string.isRequired,
   UIStore: PropTypes.object.isRequired,
   pages: PropTypes.array,
-  absolute: PropTypes.bool,
+  isAboveHero: PropTypes.bool,
 }
 
 const defaultProps = {
   pages: [],
-  absolute: false,
+  isAboveHero: false,
 }
 
 const Default = styled.header`
@@ -39,36 +38,68 @@ const Default = styled.header`
   `}
 
   ${media.min.md`
-    margin: 0 0 5.125rem;
-    margin: 0 0 ${spacing(8)};
+    margin: ${spacing(-1)} 0 ${spacing(8)};
   `}
 
-  ${({absolute}) => absolute && media.min.lg`
+  ${({isAboveHero}) => isAboveHero && `
+    && {
+      margin-bottom: 0;
+    }
+  `}
+
+  ${({isAboveHero}) => isAboveHero && media.min.lg`
     position: absolute;
     top: ${spacing(4)};
     left: ${spacing(4)};
     width: calc(100% - ${spacing(4)} * 2);
     padding: 0 ${spacing(1)};
-    color: ${colors.white};
+    // color: ${colors.white};
   `}
 
 `
 
 const Brand = styled(GatsbyLink)`
+  position: relative;
+  margin-left: -${spacing(0)};
+  padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
   font-family: 'Tinos';
   font-weight: 700;
   font-size: ${spacing(2)};
-  margin-left: -${spacing(0)};
-  padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
   text-decoration: none;
   color: inherit;
   transition: color 175ms ${ease},
               background-color 175ms ${ease};
 
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    bottom: -1px;
+    border: 1px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 4px;
+    z-index: -1;
+    transform: scale(0,1);
+    transform-origin: center center;
+    opacity: 0;
+    transition: transform 350ms ${ease},
+                opacity 350ms ${ease},
+                border 350ms ${ease},
+                top 175ms ${ease};
+  }
+
   &:focus {
     outline: none;
-    background-color: ${colors.link};
-    color: ${colors.white};
+
+    &:before {
+      top: 0;
+      border-color: currentColor;
+      transform: scale(1,1);
+      transition-duration: 175ms;
+      opacity: 1;
+    }
   }
 `
 
@@ -78,13 +109,13 @@ function Header (props) {
     siteTitle,
     pages,
     UIStore,
-    absolute,
+    isAboveHero,
   } = props
 
   return (
     <Default
       role="banner"
-      absolute={absolute}
+      isAboveHero={isAboveHero}
     >
       <Container>
         <FlexContainer
@@ -102,19 +133,7 @@ function Header (props) {
           }
         </FlexContainer>
         {UIStore.viewportWidth < breakpoints.nav && (
-          <Transition
-            in={UIStore.isNavOpen}
-            timeout={300}
-            mountOnEnter
-            unmountOnExit
-          >
-            {(state) => (
-              <MobileNavigation
-                pages={pages}
-                transitionState={state}
-              />
-            )}
-          </Transition>
+          <MobileNavigation pages={pages} />
         )}
       </Container>
     </Default>

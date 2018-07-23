@@ -2,7 +2,8 @@
   <!-- <circle fill="#f5ede3" r="50" cx="50" cy="50" /> -->
   <defs>
     <linearGradient id="beigeGradient" x1="0%" y1="100%" x2="100%" y2="0%" >
-      <stop stop-color="#f5ede3" offset="20%" />
+      <!-- <stop stop-color="#f5ede3" offset="20%" /> -->
+      <stop stop-color="#ead4c0" offset="0%" />
       <stop stop-color="#fffbf5" offset="50%" />
     </linearGradient>
   </defs>

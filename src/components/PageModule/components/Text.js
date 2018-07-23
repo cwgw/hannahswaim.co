@@ -3,19 +3,23 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { containerWidth, colors, brandColors, gray } from 'utils/constants'
+import media from 'utils/media'
 import spacing from 'utils/spacing'
 
 import Container from 'components/Container'
 
 const propTypes = {
-  html: PropTypes.string.isRequired,
+  innerHTML: PropTypes.string.isRequired,
 }
 
 const defaultProps = {}
 
 const Content = styled.div`
-  background-color: ${colors.background};
   padding-bottom: ${spacing(2)};
+
+  ${media.max.sm`
+    background-color: ${colors.background};
+  `}
 
   @media screen and (min-width: ${containerWidth}) {
 
@@ -38,15 +42,11 @@ const Content = styled.div`
   }
 `
 
-function Text (props) {
-
-  const {
-    html,
-  } = props
+function Text ({innerHTML}) {
 
   return (
     <Container>
-      <Content dangerouslySetInnerHTML={{__html: html}} />
+      <Content dangerouslySetInnerHTML={{__html: innerHTML}} />
     </Container>
   )
 }

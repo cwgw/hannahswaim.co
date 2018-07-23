@@ -8,9 +8,11 @@ export const zIndex = {
 
 export const fontSizeRoot = 16
 
+export const borderRadius = '4px'
+
 export const containerWidth = '832px'
 
-export const scale = {
+export const defaultScale = {
   f: 1,
   r: 2,
   n: 3,
@@ -52,6 +54,15 @@ export const gray = [
   '#ededee',
 ]
 
+export const greens = [
+  '#053630',
+  '#185c4c',
+  '#5cb899',
+  '#89d6b4',
+  '#bbedd2',
+  '#e4fbea',
+]
+
 export const brandColors = [
   '#19000e',
   '#530d1b',
@@ -64,8 +75,12 @@ export const brandColors = [
 
 export const colors = {
   // body: brandColors[1],
+  greens: greens,
+  grays: gray,
+  brand: brandColors,
   body: gray[1],
   link: brandColors[3],
+  // link: greens[2],
   white: brandColors[6],
   black: brandColors[0],
   coolBlack: gray[0],

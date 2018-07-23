@@ -28,9 +28,10 @@ function PageModule (props) {
     image,
     items,
     location,
+    posts,
     text,
     type,
-    posts,
+    viewMoreLink,
   } = props
 
   const renderModule = () => {
@@ -62,19 +63,21 @@ function PageModule (props) {
               ...image.fluid,
               base64: image.sqip.dataURI
             }}}
-            html={text.childMarkdownRemark.html}
+            innerHTML={text.childMarkdownRemark.html}
           />
         )
       case 'ContentfulPageText':
         return (
           <Text
-            html={text.childMarkdownRemark.html}
+            innerHTML={text.childMarkdownRemark.html}
           />
         )
       case 'ContentfulPageFeatureRow':
         return (
           <FeatureRow
             location={location}
+            innerHTML={text.childMarkdownRemark && text.childMarkdownRemark.html}
+            link={viewMoreLink}
             edges={items
               .slice()
               .map((item) => {
@@ -202,6 +205,15 @@ export const PageModuleFragments = graphql`
           srcSetWebp
           sizes
         }
+      }
+    }
+    viewMoreLink {
+      slug
+      title
+    }
+    text {
+      childMarkdownRemark {
+        html
       }
     }
   }

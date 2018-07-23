@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { graphql } from 'gatsby'
 
 import Icon from 'components/Icon'
-import Link from './NavItem'
+import Link from 'components/Link'
 
 import spacing from 'utils/spacing'
 import { ease } from 'utils/constants'
@@ -26,6 +26,8 @@ const Nav = styled.nav`
 const NavItem = Link.extend`
   position: relative;
   padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
+  display: block;
+  text-decoration: none;
   color: inherit;
   transition: color 175ms ${ease},
               background-color 175ms ${ease};
@@ -44,10 +46,10 @@ const NavItem = Link.extend`
     transform: scale(0,1);
     transform-origin: center center;
     opacity: 0;
-    transition: transform 350ms cubic-bezier(0.4, 0.0, 0.2, 1),
-                opacity 350ms cubic-bezier(0.4, 0.0, 0.2, 1),
-                border 350ms cubic-bezier(0.4, 0.0, 0.2, 1),
-                top 175ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: transform 350ms ${ease},
+                opacity 350ms ${ease},
+                border 350ms ${ease},
+                top 175ms ${ease};
   }
 
   &:focus {

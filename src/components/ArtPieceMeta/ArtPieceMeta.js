@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import fonts from 'utils/fonts'
+import spacing from 'utils/spacing'
 import { capitalizeFirstLetterOnly } from 'utils/helpers'
 
 const propTypes = {
@@ -29,7 +30,7 @@ const TextFragment = styled.p`
 
   ${({small}) => small && `
     font-family: ${fonts.sansSerif};
-    font-size: 75%;
+    font-size: ${spacing(-1)};
   `}
 
   ${({emphasis}) => emphasis && `

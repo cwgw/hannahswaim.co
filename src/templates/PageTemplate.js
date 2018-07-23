@@ -44,7 +44,7 @@ function PageTemplate (props) {
     )
   }
 
-  const overlayHeader = isSet(contentModules)
+  const hasHero = isSet(contentModules)
     && contentModules.length > 0
     && 'ContentfulPageHero' === contentModules[0]['__typename']
     && isSet(contentModules[0].image)
@@ -53,7 +53,7 @@ function PageTemplate (props) {
     <Layout
       location={location}
       title={title}
-      overlayHeader={overlayHeader}
+      hasHero={hasHero}
       data={data}
       locale={node_locale}
     >

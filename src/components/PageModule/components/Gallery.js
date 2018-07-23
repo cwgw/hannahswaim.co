@@ -27,7 +27,7 @@ function Gallery ({edges, location}) {
       key={node.id}
       location={location}
       siblings={siblings}
-      index={index}
+      siblingIndex={index}
       {...node}
     />
   )

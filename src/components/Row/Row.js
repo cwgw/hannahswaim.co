@@ -10,6 +10,7 @@ const propTypes = {
   overflow: PropTypes.bool,
   aspectRatio: PropTypes.number,
   itemHeight: PropTypes.string,
+  maxHeight: PropTypes.string,
   gutter: PropTypes.string,
   style: PropTypes.object,
 }
@@ -18,6 +19,7 @@ const defaultProps = {
   overflow: false,
   aspectRatio: 1,
   itemHeight: '270px',
+  maxHeight: null,
   gutter: spacing(2),
   style: {},
 }
@@ -43,10 +45,15 @@ const Scroll = styled.div`
 const Overflow = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  transition: max-width 350ms ${ease};
+  transition: min-width 175ms ${ease};
+  width: 100%;
 
   ${({aspectRatio, gutter, itemHeight}) => aspectRatio && `
     min-width: calc(${itemHeight} * ${aspectRatio} + ${gutter});
+  `}
+
+  ${({maxHeight}) => maxHeight && `
+    height: ${maxHeight};
   `}
 `
 
@@ -57,6 +64,7 @@ function Row (props) {
     overflow,
     aspectRatio,
     itemHeight,
+    maxHeight,
     gutter,
     style,
   } = props
@@ -69,6 +77,7 @@ function Row (props) {
           <Overflow
             aspectRatio={aspectRatio}
             itemHeight={itemHeight}
+            maxHeight={maxHeight}
             gutter={gutter}
           >
             {children}

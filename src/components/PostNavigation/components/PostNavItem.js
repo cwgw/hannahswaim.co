@@ -43,7 +43,7 @@ class PostNavigation extends React.Component {
   }
 
   componentDidMount() {
-    mousetrap.bind(this.key, () => this.handleClick())
+    mousetrap.bind(this.key, this.handleClick)
   }
 
   componentWillUnmount() {

@@ -40,13 +40,15 @@ export const hasDeep = (obj, key) => {
 
 /**
  * Quick test against undefined and null
+ *
  * @param  {Mixed} variable The binding to test
  * @return {Boolean}         True if `variable` is not `null` or `undefined`, otherwise false
  */
-export const isSet = (variable) => 'undefined' !== typeof variable && null !== variable
+export const isSet = (variable) => typeof variable !== 'undefined' && variable !== null
 
 /**
  * Round a float to n decimal places
+ *
  * @param  {Number} number    The value to round
  * @param  {Number} precision Maximum number of decimal places for return value
  * @return {Number}           Rounded number
@@ -60,7 +62,20 @@ export const round = (number, precision = 1) => {
 }
 
 /**
+ * See {@link https://github.com/jxnblk/styled-system/blob/master/src/util.js#L29}
+ */
+export const merge = (a, b) => Object.assign({}, a, b, Object
+  .keys(b || {}).reduce((obj, key) =>
+    Object.assign(obj, {
+      [key]: a[key] !== null && typeof a[key] === 'object'
+      ? merge(a[key], b[key])
+      : b[key]
+    }),
+    {}))
+
+/**
  * Capitalize the first letter of a string
+ *
  * @param  {String} str The string to be manipulated
  * @return {String}     A copy of the string provided with the first letter capitalized
  */
@@ -68,6 +83,7 @@ export const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.
 
 /**
  * Capitalize the first letter of a string, and convert the rest to lower case
+ *
  * @param  {String} str The string to be manipulated
  * @return {String}     A copy of the string provided with the first letter capitalized
  *                        and the rest lowercase

@@ -1,12 +1,34 @@
-import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import { containerWidth } from 'utils/constants'
 
-const Container = styled.div`
-  margin: 0 auto;
-  // width: 980px;
+import Box from 'components/Box'
+
+const propTypes = {
+  is: PropTypes.string,
+  textAlign: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
+}
+
+const defaultProps = {
+  is: 'div',
+  textAlign: null,
+  marginLeft: 'auto',
+  marginRight: 'auto',
+}
+
+const Container = Box.extend`
   width: ${containerWidth};
   max-width: 100%;
+
+  ${({textAlign}) => textAlign && `
+    text-align: ${textAlign};
+  `}
 `
+
+Container.propTypes = propTypes
+
+Container.defaultProps = defaultProps
 
 export default Container

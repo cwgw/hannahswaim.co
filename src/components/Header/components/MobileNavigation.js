@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { inject, observer } from 'mobx-react'
+import { Transition } from 'react-transition-group'
 
 import Icon from 'components/Icon'
-import Link from './NavItem'
+import Link from 'components/Link'
 
 import spacing from 'utils/spacing'
 import fonts from 'utils/fonts'
@@ -11,7 +13,6 @@ import { ease } from 'utils/constants'
 
 const propTypes = {
   pages: PropTypes.array,
-  transitionState: PropTypes.string,
   UIStore: PropTypes.object,
 }
 
@@ -21,6 +22,7 @@ const Nav = styled.nav`
   display: flex;
   flex-flow: column nowrap;
   position: fixed;
+  justify-content: center;
   left: 0;
   top: 0;
   height: 100vh;
@@ -80,41 +82,65 @@ const Nav = styled.nav`
 `
 
 const NavItem = Link.extend`
+  display: block;
+  text-decoration: none;
+  padding: ${spacing(0)};
   font-family: ${fonts.sansSerif};
-  padding: ${spacing(-3)};
+  font-size: ${spacing(2)};
+  text-align: center;
 
   ${({icon}) => icon && `
     font-size: ${spacing(1)};
   `}
 `
 
-function Navigation ({pages, transitionState}) {
+function Navigation ({pages, UIStore}) {
 
-  const renderNavItems = ({title, slug}) => (
-    <NavItem
-      key={slug}
-      to={`/${slug ? slug : ''}`}
-    >
-      {title}
-    </NavItem>
-  )
+  const renderNavItems = (item) => {
+    switch (item['__typename']) {
+      case 'ContentfulSocialMediaLink':
+        return (
+          <NavItem
+            key={item.service}
+            href={item.url}
+            external
+          >
+            <Icon
+              type={item.service}
+              inline
+            />
+          </NavItem>
+        )
+      case 'ContentfulPage':
+        return (
+          <NavItem
+            key={item.slug}
+            to={`/${item.slug ? item.slug : ''}`}
+          >
+            {item.title}
+          </NavItem>
+        )
+      default:
+        return null
+    }
+  }
 
   return (
-    <Nav
-      transitionState={transitionState}
-      role="navigation"
+    <Transition
+      in={UIStore.isNavOpen}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
     >
-      {pages.map(renderNavItems)}
-      <NavItem
-        href="https://www.instagram.com/hannahswaimco/"
-        external
-      >
-        <Icon
-          type="instagram"
-          inline
-        />
-      </NavItem>
-    </Nav>
+      {transitionState => (
+        <Nav
+          transitionState={transitionState}
+          role="navigation"
+        >
+          {pages.map(renderNavItems)}
+        </Nav>
+      )}
+    </Transition>
   )
 }
 
@@ -122,4 +148,4 @@ Navigation.propTypes = propTypes
 
 Navigation.defaultProps = defaultProps
 
-export default Navigation
+export default inject('UIStore')(observer(Navigation))

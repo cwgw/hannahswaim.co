@@ -8,6 +8,7 @@ import GatsbyImage from 'gatsby-image'
 import { Link as GatsbyLink, graphql } from 'gatsby'
 
 import spacing from 'utils/spacing'
+import media from 'utils/media'
 import { breakpoints, ease, colors, gray } from 'utils/constants'
 
 import Meta from 'components/ArtPieceMeta'
@@ -38,6 +39,7 @@ const defaultProps = {
   captionBreakpoint: breakpoints.lg,
   siblings: [],
   index: 0,
+  style: {},
 }
 
 const Link = styled(GatsbyLink)`
@@ -47,35 +49,31 @@ const Link = styled(GatsbyLink)`
   color: ${colors.white};
   position: relative;
 
-  &:focus {
-    outline: none;
-    background-color: ${colors.coolBlack};
-  }
+  ${media.min.lg`
 
-  &:focus .gatsby-image-wrapper {
-    opacity: 0.5;
-  }
+    &:after {
+      content: '';
+      position: absolute;
+      top: ${spacing(-3)};
+      left: ${spacing(-3)};
+      right: ${spacing(-3)};
+      bottom: ${spacing(-3)};
+      border: 1px solid transparent;
+      background-color: ${transparentize(0.5,gray[1])};
+      transition: opacity 175ms ${ease};
+      opacity: 0;
+    }
 
-  &:after {
-    content: '';
-    position: absolute;
-    top: ${spacing(-3)};
-    left: ${spacing(-3)};
-    right: ${spacing(-3)};
-    bottom: ${spacing(-3)};
-    border: 1px solid ${gray[1]};
-    opacity: 0;
-    transition: opacity 175ms ${ease};
-  }
+    &:focus {
+      outline: none;
+      background-color: ${colors.coolBlack};
 
-  &:hover:after {
-    opacity: 0.5;
-  }
-
-  &:focus:after {
-    border-color: currentColor;
-    opacity: 1;
-  }
+      &:after {
+        opacity: 1;
+        border-color: currentColor;
+      }
+    }
+  `}
 `
 
 const Figure = styled.figure`
@@ -86,17 +84,18 @@ const Figure = styled.figure`
 
 const Caption = styled.figcaption`
   position: absolute;
+  z-index: 1;
   right: 0;
   bottom: 0;
   left: 0;
   padding: ${spacing(-1)};
   margin: ${spacing(-3)};
   opacity: 0;
+  background-color: ${transparentize(0.5,gray[1])};
   transform: translate3d(0,${spacing(2)},0);
   transition: transform 175ms ${ease} 100ms,
-              opacity 350ms ${ease} 0ms;
-
-  background-color: ${transparentize(0.5,gray[1])};
+              opacity 350ms ${ease} 0ms,
+              background-color 175ms ${ease};
 
   ${Link}:hover &,
   ${Link}:focus & {
@@ -104,7 +103,6 @@ const Caption = styled.figcaption`
     transform: translate3d(0,0,0);
     transition-delay: 0ms;
   }
-
   ${Link}:focus & {
     background-color: ${transparentize(1,gray[1])};
   }
@@ -115,7 +113,7 @@ function ArtPiece (props) {
   const  {
     location,
     siblings,
-    index,
+    siblingIndex,
     id,
     title,
     date,
@@ -127,6 +125,7 @@ function ArtPiece (props) {
     UIStore,
     captionBreakpoint,
     childContentfulArtPieceDimensionsJsonNode: dimensions,
+    style,
   } = props
 
   return (
@@ -138,10 +137,11 @@ function ArtPiece (props) {
           enableModal: UIStore.viewportWidth >= breakpoints.modal,
           origin: location.pathname,
           siblings: siblings,
-          index: index,
+          index: siblingIndex,
         }
       }}
-      >
+      style={style}
+    >
       <Figure>
         <GatsbyImage
           fluid={{

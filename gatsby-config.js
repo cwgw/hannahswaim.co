@@ -42,6 +42,7 @@ module.exports = {
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-styled-components',
+    'gatsby-plugin-catch-links',
     {
       resolve: 'gatsby-transformer-remark',
       options: {
@@ -51,6 +52,13 @@ module.exports = {
             options: {
               maxWidth: 832,
               linkImagesToOriginal: false,
+            },
+          },
+          {
+            resolve: "gatsby-remark-external-links",
+            options: {
+              target: "_blank",
+              rel: "noopener noreferrer",
             },
           },
         ],
