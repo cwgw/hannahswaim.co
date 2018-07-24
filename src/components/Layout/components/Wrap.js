@@ -1,13 +1,9 @@
-import React from 'react'
 import styled from 'styled-components'
 
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 
-import circle from 'images/background.svg'
-import squiggles from 'images/squiggle.svg'
-
-const Default = styled.div`
+const Wrap = styled.div`
   position: relative;
   display: flex;
   flex-flow: column nowrap;
@@ -32,51 +28,9 @@ const Default = styled.div`
   `}
 
   ${({noScroll}) => noScroll && `
-    max-height: calc(100vh - ${spacing(-3)} * 2);
+    max-height: 100vh;
     overflow: hidden;
   `}
 `
-
-const Image = styled.img`
-  position: absolute;
-  z-index: -1;
-  user-select: none;
-  pointer-events: none;
-  mix-blend-mode: hard-light;
-`
-
-const Circle = Image.extend`
-  width: calc(180px + 85vw);
-  height: calc(180px + 85vw);
-  left: -30vw;
-  // top: -60vw;
-  top: -50vw;
-`
-
-const Squiggles = Image.extend`
-  width: calc(200px + 20vw);
-  height: calc(200px + 20vw);
-  left: 70vw;
-  bottom: 0;
-`
-
-function Wrap ({children, noScroll}) {
-
-  return (
-    <Default
-      noScroll={noScroll}
-    >
-      <Circle
-        src={circle}
-        alt=""
-      />
-      <Squiggles
-        src={squiggles}
-        alt=""
-      />
-      {children}
-    </Default>
-  )
-}
 
 export default Wrap

@@ -5,14 +5,12 @@ import { containerWidth } from 'utils/constants'
 import Box from 'components/Box'
 
 const propTypes = {
-  is: PropTypes.string,
   textAlign: PropTypes.string,
   marginLeft: PropTypes.string,
   marginRight: PropTypes.string,
 }
 
 const defaultProps = {
-  is: 'div',
   textAlign: null,
   marginLeft: 'auto',
   marginRight: 'auto',

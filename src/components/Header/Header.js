@@ -20,6 +20,7 @@ const propTypes = {
   UIStore: PropTypes.object.isRequired,
   pages: PropTypes.array,
   isAboveHero: PropTypes.bool,
+  location: PropTypes.object,
 }
 
 const defaultProps = {
@@ -31,7 +32,7 @@ const Default = styled.header`
   position: relative;
   z-index: ${zIndex.banner};
   margin: 0 0 ${spacing(1)};
-  color: ${colors.link};
+  color: ${colors.navbar};
 
   ${media.min.sm`
     margin: ${spacing(2)} 0 ${spacing(4)};
@@ -41,19 +42,14 @@ const Default = styled.header`
     margin: ${spacing(-1)} 0 ${spacing(8)};
   `}
 
-  ${({isAboveHero}) => isAboveHero && `
-    && {
-      margin-bottom: 0;
-    }
-  `}
-
   ${({isAboveHero}) => isAboveHero && media.min.lg`
     position: absolute;
     top: ${spacing(4)};
     left: ${spacing(4)};
     width: calc(100% - ${spacing(4)} * 2);
+    margin-bottom: 0;
     padding: 0 ${spacing(1)};
-    // color: ${colors.white};
+    color: ${colors.link};
   `}
 
 `
@@ -110,6 +106,7 @@ function Header (props) {
     pages,
     UIStore,
     isAboveHero,
+    location,
   } = props
 
   return (
@@ -126,7 +123,10 @@ function Header (props) {
           <Brand to={'/'} >{siteTitle}</Brand>
           {UIStore.viewportWidth >= breakpoints.nav
             ? (
-              <Navigation pages={pages} />
+              <Navigation
+                pages={pages}
+                location={location}
+              />
             ) : (
               <Hamburger />
             )

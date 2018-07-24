@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import spacing from 'utils/spacing'
-// import { colors } from 'utils/constants'
+import media from 'utils/media'
+import { colors } from 'utils/constants'
 
 const propTypes = {
   siteTitle: PropTypes.string,
@@ -14,18 +15,27 @@ const defaultProps = {
 }
 
 const Default = styled.footer`
+  position: relative;
   margin-top: auto;
   min-height: ${spacing(2)};
   text-align: center;
+  background-color: ${colors.green[6]};
+  color: ${colors.gray[1]};
+  padding: ${spacing(2)};
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  ${media.min.md`
+    flex-flow: row wrap;
+  `}
 
   a,
   span {
-    display: inline-block;
-
-    &:nth-last-child(n + 2):after {
-      content: '|';
-      padding: 0 ${spacing(-1)};
-    }
+    display: block;
+    color: inherit;
+    padding: ${spacing(-3)} ${spacing(-1)};
   }
 `
 

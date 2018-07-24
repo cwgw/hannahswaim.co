@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { graphql } from 'gatsby'
+
+import Box from 'components/Box'
 
 import Gallery from './components/Gallery'
 import Hero from './components/Hero'
@@ -9,17 +10,11 @@ import Text from './components/Text'
 import FeatureRow from './components/FeatureRow'
 import Instagram from './components/Instagram'
 
-import spacing from 'utils/spacing'
-
 const propTypes = {
   type: PropTypes.string.isRequired
 }
 
 const defaultProps = {}
-
-const Container = styled.div`
-  margin-bottom: ${spacing(6)};
-`
 
 function PageModule (props) {
 
@@ -104,9 +99,12 @@ function PageModule (props) {
   }
 
   return (
-    <Container>
+    <Box
+      marginBottom={8}
+      position="relative"
+    >
       {renderModule()}
-    </Container>
+    </Box>
   )
 
 }

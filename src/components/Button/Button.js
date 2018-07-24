@@ -4,6 +4,8 @@ import styled from 'styled-components'
 
 import { colors, borderRadius, ease } from 'utils/constants'
 import spacing, { space } from 'utils/spacing'
+import { buttonVariant } from 'utils/buttons'
+import fonts from 'utils/fonts'
 import media from 'utils/media'
 
 import Link from 'components/Link'
@@ -19,43 +21,43 @@ const propTypes = {
   variant: PropTypes.oneOf([
     'dark',
     'light',
+    'green',
+    'gray',
   ]),
+  outline: PropTypes.bool,
   disabled: PropTypes.bool,
   link: PropTypes.bool,
 }
 
 const defaultProps = {
   position: null,
-  variant: null,
+  variant: 'light',
+  outline: false,
   disabled: false,
   link: false,
   padding: [-1, 0],
 }
 
 const Button = styled(
-  ({link, position, variant, ...props}) => link ? (
+  ({link, position, variant, outline, ...props}) => link ? (
     <Link {...props} />
   ) : (
     <button {...props} />
   )
 )`
   ${space}
+  ${buttonVariant}
+  font-family: ${fonts.sansSerif};
   position: relative;
   display: inline-block;
   vertical-align: middle;
   border: 1px solid currentColor;
   border-radius: ${borderRadius};
-  background: transparent;
   cursor: pointer;
-  color: inherit;
   text-decoration: none;
   text-align: center;
   white-space: nowrap;
   user-select: none;
-
-  ${({variant}) => `
-    color: ${variant === 'dark' ? colors.white : 'inherit'};
-  `}
 
   ${({position}) => position && `
     position: ${position};
@@ -67,30 +69,34 @@ const Button = styled(
     color: ${colors.white};
   }
 
-  &:before  {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: currentColor;
-    opacity: 0;
-    transform: scale(1.5);
-    transform-origin: center top;
-    transition: transform 175ms ${ease},
-                opacity 175ms ${ease};
-  }
-
-  &:hover,
-  &:focus {
-
+  ${media.min.md`
     &:before  {
-      opacity: 0.125;
-      transform: scale(1);
+      user-selct: none;
+      pointer-events: none;
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: currentColor;
+      opacity: 0;
+      transform: scale(1.5);
+      transform-origin: center center;
+      transition: transform 175ms ${ease},
+                  opacity 175ms ${ease};
     }
-  }
+
+    &:hover,
+    &:focus {
+
+      &:before  {
+        opacity: 0.125;
+        transform: scale(1);
+      }
+    }
+  `}
 
   ${({disabled}) => disabled && `
     opacity: 0;
@@ -124,6 +130,7 @@ export const Control = Button.extend`
 
   & > svg {
     width: 100%;
-    height: 100%;
+    height: auto;
+    box-sizing: border-box;
   }
 `

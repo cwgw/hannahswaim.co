@@ -3,10 +3,13 @@ import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import { PageRenderer } from 'gatsby'
 
+import Main from './components/Main'
 import Wrap from './components/Wrap'
+
 import Head from 'components/Head'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
+import Graphics from 'components/Graphics'
 
 import globalStyle from 'utils/globalStyle' // eslint-disable-line no-unused-vars
 import { breakpoints } from 'utils/constants'
@@ -60,9 +63,8 @@ class Layout extends React.Component {
         </Modal>
       </React.Fragment>
     ) : (
-      <Wrap
-        noScroll={UIStore.isNavOpen ? true : false}
-      >
+      <Wrap noScroll={UIStore.isNavOpen ? true : false} >
+        <Graphics />
         <Head
           pageTitle={title}
           location={location}
@@ -74,10 +76,11 @@ class Layout extends React.Component {
           siteTitle={data.site.siteMetadata.siteTitle}
           pages={data.menu.menuItems}
           isAboveHero={hasHero}
+          location={location}
         />
-        <main role="main" >
+        <Main>
           {children}
-        </main>
+        </Main>
         <Footer
           siteTitle={data.site.siteMetadata.siteTitle}
         />

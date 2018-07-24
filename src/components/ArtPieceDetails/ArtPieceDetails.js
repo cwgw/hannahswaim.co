@@ -7,7 +7,7 @@ import GatsbyImage from 'gatsby-image'
 
 import spacing from 'utils/spacing'
 
-import DefaultContainer from 'components/Container'
+import Container from 'components/Container'
 import FlexContainer from 'components/FlexContainer'
 import ArtPieceMeta from 'components/ArtPieceMeta'
 import Row from 'components/Row'
@@ -49,10 +49,10 @@ const PieceDetails = styled.div`
   background: #fff;
 `
 
-const Container = DefaultContainer.extend`
-  position: relative;
-  margin-bottom: ${spacing(2)};
-`
+// const Container = DefaultContainer.extend`
+//   position: relative;
+//   margin-bottom: ${spacing(2)};
+// `
 
 function ArtPieceDetails (props) {
 
@@ -88,7 +88,6 @@ function ArtPieceDetails (props) {
             gutter="0px"
             itemHeight="75vh"
             maxHeight="75vh"
-            overflow
           >
             {images.map(({id, sqip, fluid}) => (
               <Figure
@@ -135,7 +134,7 @@ function ArtPieceDetails (props) {
                 base64: sqip.dataURI
               }}
               style={{
-                marginBottom: spacing(2)
+                marginBottom: spacing(-1)
               }}
             />
           ))}

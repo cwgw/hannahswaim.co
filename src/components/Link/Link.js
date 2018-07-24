@@ -13,7 +13,7 @@ const defaultProps = {
 }
 
 const Link = styled(
-  ({external, children, to, href, ...props}) => external ? (
+  ({external, children, to, href, isActive, ...props}) => external ? (
     <a
       rel="noopener noreferrer"
       target="_blank"
@@ -24,7 +24,7 @@ const Link = styled(
     </a>
   ) : (
     <GatsbyLink
-    to={to || href}
+      to={to || href}
       {...props}
     >
       {children}

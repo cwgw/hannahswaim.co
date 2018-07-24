@@ -72,6 +72,7 @@ class PostNavigation extends React.Component {
         aria-label={capitalizeFirstLetter(direction)}
         title={capitalizeFirstLetter(direction)}
         variant={variant}
+        outline
         onClick={this.handleClick}
         disabled={!location.pathname}
       >

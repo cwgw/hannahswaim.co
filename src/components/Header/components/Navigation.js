@@ -11,6 +11,7 @@ import { ease } from 'utils/constants'
 
 const propTypes = {
   pages: PropTypes.array,
+  location: PropTypes.object,
 }
 
 const defaultProps = {}
@@ -67,9 +68,17 @@ const NavItem = Link.extend`
     transition-duration: 175ms;
     opacity: 1;
   }
+
+  ${({isActive}) => isActive && `
+    &:before {
+      transform: scale(1,1);
+      transition-duration: 175ms;
+      opacity: 1;
+    }
+  `}
 `
 
-function Navigation ({pages}) {
+function Navigation ({pages, location}) {
 
   const renderNavItems = (item) => {
     switch (item['__typename']) {
@@ -91,6 +100,8 @@ function Navigation ({pages}) {
           <NavItem
             key={item.slug}
             to={`/${item.slug ? item.slug : ''}`}
+            // isActive={location.pathname === `/${item.slug}`}
+            isActive={location.pathname === '/' + item.slug}
           >
             {item.title}
           </NavItem>

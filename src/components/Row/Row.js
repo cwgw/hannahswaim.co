@@ -7,7 +7,6 @@ import { ease } from 'utils/constants'
 
 const propTypes = {
   children: PropTypes.arrayOf(PropTypes.node).isRequired,
-  overflow: PropTypes.bool,
   aspectRatio: PropTypes.number,
   itemHeight: PropTypes.string,
   maxHeight: PropTypes.string,
@@ -16,7 +15,6 @@ const propTypes = {
 }
 
 const defaultProps = {
-  overflow: false,
   aspectRatio: 1,
   itemHeight: '270px',
   maxHeight: null,
@@ -24,13 +22,11 @@ const defaultProps = {
   style: {},
 }
 
-const Default = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-`
-
-const Frame = styled.div`
+const Frame = styled(
+  ({style, ...props}) => <div {...props} />
+)`
   overflow: hidden;
+  ${({style}) => style}
 `
 
 const Scroll = styled.div`
@@ -48,37 +44,49 @@ const Overflow = styled.div`
   transition: min-width 175ms ${ease};
   width: 100%;
 
-  ${({aspectRatio, gutter, itemHeight}) => aspectRatio && `
-    min-width: calc(${itemHeight} * ${aspectRatio} + ${gutter});
+  ${({width}) => width && `
+    min-width: ${width};
   `}
 
-  ${({maxHeight}) => maxHeight && `
-    height: ${maxHeight};
+  ${({height}) => height && `
+    height: ${height};
   `}
 `
 
-function Row (props) {
+class Row extends React.Component {
 
-  const {
-    children,
-    overflow,
-    aspectRatio,
-    itemHeight,
-    maxHeight,
-    gutter,
-    style,
-  } = props
+  constructor (props) {
+    super(props)
+    this.setScrollRef = this.setScrollRef.bind(this)
+  }
 
-  if (overflow) {
+  componentDidUpdate () {
+    if (this.scrollEl) {
+      this.scrollEl.scrollLeft = 0
+    }
+  }
+
+  setScrollRef (ref) {
+    this.scrollEl = ref
+  }
+
+  render () {
+
+    const {
+      children,
+      aspectRatio,
+      itemHeight,
+      maxHeight,
+      gutter,
+      style,
+    } = this.props
 
     return (
       <Frame style={style} >
-        <Scroll>
+        <Scroll innerRef={this.setScrollRef} >
           <Overflow
-            aspectRatio={aspectRatio}
-            itemHeight={itemHeight}
-            maxHeight={maxHeight}
-            gutter={gutter}
+            width={`calc(${aspectRatio} * ${itemHeight} + ${gutter})`}
+            height={maxHeight}
           >
             {children}
           </Overflow>
@@ -86,12 +94,6 @@ function Row (props) {
       </Frame>
     )
   }
-
-  return (
-    <Default>
-      {children}
-    </Default>
-  )
 }
 
 Row.propTypes = propTypes

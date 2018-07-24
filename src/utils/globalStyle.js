@@ -17,7 +17,7 @@ injectGlobal`
     height: auto;
     min-height: auto;
     box-sizing: border-box;
-    font-size: ${fontSizeRoot};
+    font-size: ${fontSizeRoot}px;
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-overflow-scrolling: touch;
@@ -30,7 +30,7 @@ injectGlobal`
   }
 
   ::selection {
-    background: ${colors.greens[3]};
+    background: ${colors.green[3]};
     color: white;
   }
 
@@ -43,6 +43,7 @@ injectGlobal`
     font-family: ${fonts.serif};
     font-weight: 400;
     line-height: 1.5;
+    background-color: ${colors.background};
     /*
     background-image: url(${bkCircle}), url(${bkSquiggles});
     background-size: calc(180px + 85vw) calc(180px + 85vw), calc(200px + 20vw) calc(200px + 20vw);

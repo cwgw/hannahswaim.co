@@ -6,7 +6,6 @@ import FlexContainer from 'components/FlexContainer'
 import NavItem from './components/PostNavItem'
 
 import media from 'utils/media'
-import spacing from 'utils/spacing'
 import { zIndex } from 'utils/constants'
 
 const propTypes = {
@@ -36,7 +35,6 @@ const defaultProps = {
 const NavContainer = FlexContainer.extend`
 
   ${media.max.sm`
-    margin-top: -${spacing(1)};
     position: sticky;
     top: 0;
     z-index: ${zIndex.postNavigation};

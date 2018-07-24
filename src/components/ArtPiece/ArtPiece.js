@@ -9,7 +9,7 @@ import { Link as GatsbyLink, graphql } from 'gatsby'
 
 import spacing from 'utils/spacing'
 import media from 'utils/media'
-import { breakpoints, ease, colors, gray } from 'utils/constants'
+import { breakpoints, ease, colors } from 'utils/constants'
 
 import Meta from 'components/ArtPieceMeta'
 
@@ -59,7 +59,7 @@ const Link = styled(GatsbyLink)`
       right: ${spacing(-3)};
       bottom: ${spacing(-3)};
       border: 1px solid transparent;
-      background-color: ${transparentize(0.5,gray[1])};
+      background-color: ${transparentize(0.5, colors.gray[1])};
       transition: opacity 175ms ${ease};
       opacity: 0;
     }
@@ -91,7 +91,7 @@ const Caption = styled.figcaption`
   padding: ${spacing(-1)};
   margin: ${spacing(-3)};
   opacity: 0;
-  background-color: ${transparentize(0.5,gray[1])};
+  background-color: ${transparentize(0.5, colors.gray[1])};
   transform: translate3d(0,${spacing(2)},0);
   transition: transform 175ms ${ease} 100ms,
               opacity 350ms ${ease} 0ms,
@@ -104,7 +104,7 @@ const Caption = styled.figcaption`
     transition-delay: 0ms;
   }
   ${Link}:focus & {
-    background-color: ${transparentize(1,gray[1])};
+    background-color: ${transparentize(1, colors.gray[1])};
   }
 `
 

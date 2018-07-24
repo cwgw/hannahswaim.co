@@ -69,6 +69,7 @@ function Modal (props) {
           aria-label="Close Modal"
           title="Close Modal"
           variant="dark"
+          outline
           position="absolute"
           onClick={closeModal}
           style={{

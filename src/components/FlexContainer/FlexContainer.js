@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import media from 'utils/media'
+
+import Box from 'components/Box'
 
 const propTypes = {
   noWrap: PropTypes.bool,
@@ -23,7 +24,7 @@ const defaultProps = {
   overflow: null,
 }
 
-const FlexContainer = styled.div`
+const FlexContainer = Box.extend`
 
   ${({breakpoint}) => media.min[breakpoint]`
     display: flex;

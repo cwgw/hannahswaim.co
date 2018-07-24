@@ -44,7 +44,7 @@ export const breakpointValues = [
 
 export const breakpoints = _zipObject(breakpointKeys,breakpointValues)
 
-export const gray = [
+export const grays = [
   '#191720',
   '#343040',
   '#504a5b',
@@ -55,6 +55,7 @@ export const gray = [
 ]
 
 export const greens = [
+  '#02201c',
   '#053630',
   '#185c4c',
   '#5cb899',
@@ -75,15 +76,16 @@ export const brandColors = [
 
 export const colors = {
   // body: brandColors[1],
-  greens: greens,
-  grays: gray,
+  green: greens,
+  gray: grays,
   brand: brandColors,
-  body: gray[1],
+  body: grays[1],
   link: brandColors[3],
+  navbar: brandColors[2],
   // link: greens[2],
   white: brandColors[6],
   black: brandColors[0],
-  coolBlack: gray[0],
+  coolBlack: grays[0],
   background: '#fff',
 }
 

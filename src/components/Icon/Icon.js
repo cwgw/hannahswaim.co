@@ -4,6 +4,8 @@ import _find from 'lodash/find'
 
 import has from 'utils/has'
 
+import { Svg } from 'components/Graphics'
+
 const propTypes = {
   type: PropTypes.string,
   style: PropTypes.object,
@@ -63,24 +65,15 @@ const icons = {
   },
 }
 
-function Icon ({type: typeRaw, style, className, inline}) {
+function Icon ({type, style, className, inline}) {
 
-  const type = typeRaw.slice().toLowerCase()
-
-  const renderPaths = (paths) => paths.map(([Element, atts], index) => (
-    <Element
-      key={Element+index}
-      vectorEffect="non-scaling-stroke"
-      {...atts}
-    />
-  ))
+  const name = type.slice().toLowerCase()
 
   const defaultAtts = {
     viewBox: '0 0 100 100',
     fill: 'none',
     stroke: 'currentColor',
     preserveAspectRatio: 'none',
-    color: 'inherit',
   }
 
   const additionalStyle = inline
@@ -92,26 +85,27 @@ function Icon ({type: typeRaw, style, className, inline}) {
     } : {
       display: 'block',
       width: '100%',
-      height: '100%',
+      height: 'auto',
     }
 
-  if (has(icons, type) || _find(icons, (o) => Array.isArray(o.aliases) && o.aliases.includes(type))) {
+  if (has(icons, name) || _find(icons, (o) => Array.isArray(o.aliases) && o.aliases.includes(name))) {
     const {
       atts,
-    } = icons[type]
+    } = icons[name]
 
     return (
-      <svg
+      <Svg
         style={{
           ...additionalStyle,
           ...style,
         }}
         className={className}
-        {...defaultAtts}
-        {...atts}
-      >
-        {renderPaths(icons[type].paths)}
-      </svg>
+        atts={{
+          ...defaultAtts,
+          ...atts,
+        }}
+        paths={icons[name].paths}
+      />
     )
   }
 

@@ -6,7 +6,7 @@ import { transparentize } from 'polished'
 import spacing from 'utils/spacing'
 import media from 'utils/media'
 import fonts from 'utils/fonts'
-import { colors, gray, ease } from 'utils/constants'
+import { colors, ease } from 'utils/constants'
 
 import Row from 'components/Row'
 import Icon from 'components/Icon'
@@ -63,7 +63,7 @@ const Link = styled.a`
       right: ${spacing(-3)};
       top: ${spacing(-3)};
       bottom: ${spacing(-3)};
-      background-color: ${transparentize(0.5,gray[1])};
+      background-color: ${transparentize(0.5, colors.gray[1])};
       border: 1px solid transparent;
       content: '';
     }

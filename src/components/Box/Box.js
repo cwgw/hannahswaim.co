@@ -1,29 +1,37 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import tag from 'clean-tag'
 
 import { space, spaceProps } from 'utils/spacing'
 
 const propTypes = {
-  is: PropTypes.string,
-  blacklist: PropTypes.array,
   flex: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
+  ]),
+  position: PropTypes.oneOf([
+    'absolute',
+    'fixed',
+    'initial',
+    'relative',
+    'static',
   ]),
   ...spaceProps.types,
 }
 
 const defaultProps = {
-  is: 'div',
-  blacklist: spaceProps.list,
   flex: null,
+  position: null,
 }
 
-const Box = styled(tag)`
+const Box = styled.div`
   ${space}
+
   ${({flex}) => flex && `
     flex: ${flex};
+  `}
+
+  ${({position}) => position && `
+    position: ${position};
   `}
 `
 

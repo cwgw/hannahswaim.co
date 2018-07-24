@@ -61,6 +61,7 @@ function FeatureRow (props) {
             to={link.slug || link.url}
             external={isSet(link.url)}
             marginLeft="auto"
+            variant="green"
             link
           >
             View More&hellip;
