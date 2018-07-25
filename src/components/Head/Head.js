@@ -62,7 +62,7 @@ function Head (props) {
     '@context': 'http://schema.org',
     '@type': 'website',
     url: siteUrl,
-    logo: defaultImage,
+    image: defaultImage,
     sameAs: socialMedia.map(({url}) => url),
   }
 
