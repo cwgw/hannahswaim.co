@@ -22,6 +22,7 @@ const Nav = styled.nav`
   flex-flow: row wrap;
   padding: 0 0.75rem;
   position: relative;
+  margin-right: auto;
 `
 
 const NavItem = Link.extend`

@@ -19,6 +19,7 @@ export const replaceRouterComponent = ({ history }) => {
 }
 
 export const onRouteUpdate = ({ location }) => {
+  UIStore.updateViewportDimensions()
   UIStore.closeNav()
 }
 

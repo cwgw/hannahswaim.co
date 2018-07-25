@@ -117,7 +117,6 @@ function Header (props) {
       <Container>
         <FlexContainer
           breakpoint="none"
-          justifyContent={UIStore.viewportWidth >= breakpoints.nav ? 'flex-start' : 'space-between'}
           alignItems="baseline"
         >
           <Brand to={'/'} >{siteTitle}</Brand>
