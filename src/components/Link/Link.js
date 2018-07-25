@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { Link as GatsbyLink } from 'gatsby'
+import { OutboundLink } from 'gatsby-plugin-google-analytics'
 
 const propTypes = {
   external: PropTypes.bool,
@@ -14,14 +15,14 @@ const defaultProps = {
 
 const Link = styled(
   ({external, children, to, href, isActive, ...props}) => external ? (
-    <a
+    <OutboundLink
       rel="noopener noreferrer"
       target="_blank"
       href={href || to}
       {...props}
     >
       {children}
-    </a>
+    </OutboundLink>
   ) : (
     <GatsbyLink
       to={to || href}

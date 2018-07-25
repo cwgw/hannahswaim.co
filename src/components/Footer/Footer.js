@@ -7,6 +7,7 @@ import media from 'utils/media'
 import { colors } from 'utils/constants'
 
 import Icon from 'components/Icon'
+import Link from 'components/Link'
 
 const propTypes = {
   siteTitle: PropTypes.string,
@@ -48,11 +49,10 @@ function Footer (props) {
       <span>
         {props.siteTitle}
       </span>
-      <a
+      <Link
         href="https://www.instagram.com/hannahswaimco/"
-        rel="noopener noreferrer"
-        target="_blank"
         title="follow me on Instagram"
+        external
       >
         <Icon
           type="instagram"
@@ -62,7 +62,7 @@ function Footer (props) {
           }}
         />
         @hannahswaimco
-      </a>
+      </Link>
       <a
         href="mailto:hannahswaimco@gmail.com"
         title="send me an email"
