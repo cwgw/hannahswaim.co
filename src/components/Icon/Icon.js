@@ -79,7 +79,7 @@ function Icon ({type, style, className, inline}) {
   const additionalStyle = inline
     ? {
       display: 'inline-block',
-      verticalAlign: '-.125em',
+      verticalAlign: '-.175em',
       width: '1em',
       height: '1em',
     } : {

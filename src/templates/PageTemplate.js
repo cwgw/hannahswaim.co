@@ -75,6 +75,7 @@ export const pageQuery = graphql`
         siteTitle
         siteTitleSeparator
         siteUrl
+        siteDescription
       }
     }
     socialMedia: allContentfulSocialMediaLink {

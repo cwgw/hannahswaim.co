@@ -11,6 +11,7 @@ const propTypes = {
     siteTitle: PropTypes.string,
     siteTitleSeparator: PropTypes.string,
     siteUrl: PropTypes.string,
+    siteDescription: PropTypes.string,
   }).isRequired,
   pageTitle: PropTypes.string,
   description: PropTypes.string,
@@ -37,6 +38,7 @@ function Head (props) {
       siteTitle,
       siteTitleSeparator,
       siteUrl,
+      siteDescription,
     },
     image,
     description,
@@ -48,17 +50,18 @@ function Head (props) {
   const title = pageTitle ? pageTitle + siteTitleSeparator + siteTitle : siteTitle
 
   const metaTags = [
+    ['description', description || siteDescription],
     ['twitter:card', 'summary'],
     ['og:type', 'website'],
     ['og:title', title],
     ['og:url', location.pathname || siteUrl],
     ['og:image', image || defaultImage],
-    description ? ['og:description', description] : null,
+    ['og:description', description || siteDescription],
     ['og:site_name', siteName],
     ['og:locale', locale.replace(/-+/,'_')],
   ]
 
-  const stricturedData = {
+  const structuredData = {
     '@context': 'http://schema.org',
     '@type': 'website',
     url: siteUrl,
@@ -91,7 +94,7 @@ function Head (props) {
       <link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#b86e5c" />
       <link rel="shortcut icon" href="/static/favicon.ico" />
       <script type="application/ld+json" >
-        {JSON.stringify(stricturedData)}
+        {JSON.stringify(structuredData)}
       </script>
     </Helmet>
   )

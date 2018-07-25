@@ -6,6 +6,8 @@ import spacing from 'utils/spacing'
 import media from 'utils/media'
 import { colors } from 'utils/constants'
 
+import Icon from 'components/Icon'
+
 const propTypes = {
   siteTitle: PropTypes.string,
 }
@@ -52,6 +54,13 @@ function Footer (props) {
         target="_blank"
         title="follow me on Instagram"
       >
+        <Icon
+          type="instagram"
+          inline
+          style={{
+            marginRight: '0.5em',
+          }}
+        />
         @hannahswaimco
       </a>
       <a
