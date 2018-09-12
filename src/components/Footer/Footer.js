@@ -22,8 +22,8 @@ const Default = styled.footer`
   margin-top: auto;
   min-height: ${spacing(2)};
   text-align: center;
-  background-color: ${colors.green[6]};
-  color: ${colors.gray[1]};
+  background-color: ${colors.brand[5]};
+  color: ${colors.brand[2]};
   padding: ${spacing(2)};
   display: flex;
   flex-flow: column nowrap;
@@ -32,6 +32,7 @@ const Default = styled.footer`
 
   ${media.min.md`
     flex-flow: row wrap;
+    align-items: flex-end;
   `}
 
   a,
@@ -56,9 +57,10 @@ function Footer (props) {
       >
         <Icon
           type="instagram"
-          inline
           style={{
-            marginRight: '0.5em',
+            width: spacing(1),
+            height: spacing(1),
+            margin: '0 auto',
           }}
         />
         @hannahswaimco
@@ -67,6 +69,14 @@ function Footer (props) {
         href="mailto:hannahswaimco@gmail.com"
         title="send me an email"
       >
+        <Icon
+          type="mail"
+          style={{
+            width: spacing(1),
+            height: spacing(1),
+            margin: '0 auto',
+          }}
+        />
         get in touch
       </a>
     </Default>
