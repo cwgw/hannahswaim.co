@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import mousetrap from "mousetrap"
-import { push } from 'gatsby'
+import { navigate } from 'gatsby'
 
 import { capitalizeFirstLetter } from 'utils/helpers'
 
@@ -56,7 +56,7 @@ class PostNavigation extends React.Component {
     }
 
     if (this.props.location.pathname) {
-      push(this.props.location)
+      navigate(this.props.location.pathname)
     }
   }
 

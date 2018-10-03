@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { observer, inject } from 'mobx-react'
 import { transparentize } from 'polished'
 
 import GatsbyImage from 'gatsby-image'
@@ -10,7 +9,7 @@ import { Link as GatsbyLink, graphql } from 'gatsby'
 import spacing from 'utils/spacing'
 import media from 'utils/media'
 import { breakpoints, ease, colors } from 'utils/constants'
-
+import { withViewportProps } from 'components/ViewportObserver'
 import Meta from 'components/ArtPieceMeta'
 
 const propTypes = {
@@ -122,7 +121,7 @@ function ArtPiece (props) {
     fields: {
       slug,
     },
-    UIStore,
+    viewportDimensions,
     captionBreakpoint,
     childContentfulArtPieceDimensionsJsonNode: dimensions,
     style,
@@ -131,14 +130,12 @@ function ArtPiece (props) {
   return (
     <Link
       key={id}
-      to={{
-        pathname: slug,
-        state: {
-          enableModal: UIStore.viewportWidth >= breakpoints.modal,
-          origin: location.pathname,
-          siblings: siblings,
-          index: siblingIndex,
-        }
+      to={slug}
+      state={{
+        enableModal: viewportDimensions.width >= breakpoints.modal,
+        origin: location.pathname,
+        siblings: siblings,
+        index: siblingIndex,
       }}
       style={style}
     >
@@ -149,7 +146,7 @@ function ArtPiece (props) {
             base64: images[0].sqip.dataURI
           }}
         />
-        {UIStore.viewportWidth >= captionBreakpoint && (
+        {viewportDimensions.width >= captionBreakpoint && (
           <Caption>
             <Meta
               title={title}
@@ -168,7 +165,7 @@ ArtPiece.propTypes = propTypes
 
 ArtPiece.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(ArtPiece))
+export default withViewportProps(ArtPiece)
 
 export const artPieceFragments = graphql`
   fragment ArtPieceFragment on ContentfulArtPiece {

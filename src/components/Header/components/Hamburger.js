@@ -1,18 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
 
 import spacing from 'utils/spacing'
 import { colors, ease } from 'utils/constants'
+import { withViewportProps } from 'components/ViewportObserver'
 
 const propTypes = {
-  UIStore: PropTypes.object,
+  isNavOpen: PropTypes.bool.isRequired,
+  toggleNav: PropTypes.func.isRequired,
 }
 
-const defaultProps = {
-  UIStore: {},
-}
+const defaultProps = {}
 
 const Button = styled.button`
   position: relative;
@@ -65,22 +64,23 @@ const Line = styled.line`
 function Hamburger (props) {
 
   const {
-    UIStore,
+    isNavOpen,
+    toggleNav,
     ...atts
   } = props
 
   return (
     <Button
-      onClick={UIStore.toggleNav}
-      isOpen={UIStore.isNavOpen}
+      onClick={toggleNav}
+      isOpen={isNavOpen}
       {...atts}
     >
       <Svg>
-        <Line isOpen={UIStore.isNavOpen} vectorEffect="non-scaling-stroke" x1="0%" y1="25%" x2="50%" y2="25%" />
-        <Line isOpen={UIStore.isNavOpen} vectorEffect="non-scaling-stroke" x1="50%" y1="25%" x2="100%" y2="25%" />
-        <Line isOpen={UIStore.isNavOpen} vectorEffect="non-scaling-stroke" x1="50%" y1="75%" x2="100%" y2="75%" />
-        <Line isOpen={UIStore.isNavOpen} vectorEffect="non-scaling-stroke" x1="0%" y1="75%" x2="50%" y2="75%" />
-        <Line isOpen={UIStore.isNavOpen} vectorEffect="non-scaling-stroke" x1="0%" y1="50%" x2="100%" y2="50%" />
+        <Line isOpen={isNavOpen} vectorEffect="non-scaling-stroke" x1="0%" y1="25%" x2="50%" y2="25%" />
+        <Line isOpen={isNavOpen} vectorEffect="non-scaling-stroke" x1="50%" y1="25%" x2="100%" y2="25%" />
+        <Line isOpen={isNavOpen} vectorEffect="non-scaling-stroke" x1="50%" y1="75%" x2="100%" y2="75%" />
+        <Line isOpen={isNavOpen} vectorEffect="non-scaling-stroke" x1="0%" y1="75%" x2="50%" y2="75%" />
+        <Line isOpen={isNavOpen} vectorEffect="non-scaling-stroke" x1="0%" y1="50%" x2="100%" y2="50%" />
       </Svg>
     </Button>
   )
@@ -90,4 +90,4 @@ Hamburger.propTypes = propTypes
 
 Hamburger.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Hamburger))
+export default withViewportProps(Hamburger)

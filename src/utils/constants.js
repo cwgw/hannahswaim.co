@@ -44,6 +44,8 @@ export const breakpointValues = [
 
 export const breakpoints = _zipObject(breakpointKeys,breakpointValues)
 
+export const navBreakpoint = breakpoints['sm']
+
 export const grays = [
   '#191720',
   '#343040',

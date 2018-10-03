@@ -27,7 +27,7 @@ exports.onCreateNode = (args) => {
 
   if (/ContentfulArtPiece/.test(node.internal.type) && typeof node.slug === `undefined` ) {
     // This is pretty fragile.
-    // It equires that all properties are set and truthy, and does no type checking.
+    // It requires that all properties are set and truthy, and does no type checking.
     // Also, the date is expected to be in ISO 8601 format, with leading four-digit year
     const slug = `/artwork/${makeArtPieceSlug({...node, date: node.date.slice(0,4)})}/`
 

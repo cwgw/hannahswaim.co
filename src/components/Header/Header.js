@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
 
 import { Link as GatsbyLink } from 'gatsby'
 
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 import { colors, breakpoints, ease, zIndex } from 'utils/constants'
-
+import { withViewportProps } from 'components/ViewportObserver'
 import Container from 'components/Container'
 import FlexContainer from 'components/FlexContainer'
 import Navigation from './components/Navigation'
@@ -17,7 +16,6 @@ import Hamburger from './components/Hamburger'
 
 const propTypes = {
   siteTitle: PropTypes.string.isRequired,
-  UIStore: PropTypes.object.isRequired,
   pages: PropTypes.array,
   isAboveHero: PropTypes.bool,
   location: PropTypes.object,
@@ -104,7 +102,7 @@ function Header (props) {
   const {
     siteTitle,
     pages,
-    UIStore,
+    viewportDimensions,
     isAboveHero,
     location,
   } = props
@@ -117,11 +115,11 @@ function Header (props) {
       <Container>
         <FlexContainer
           breakpoint="none"
-          justifyContent={UIStore.viewportWidth >= breakpoints.nav ? 'flex-start' : 'space-between'}
+          justifyContent={viewportDimensions.width >= breakpoints.nav ? 'flex-start' : 'space-between'}
           alignItems="baseline"
         >
           <Brand to={'/'} >{siteTitle}</Brand>
-          {UIStore.viewportWidth >= breakpoints.nav
+          {viewportDimensions.width >= breakpoints.nav
             ? (
               <Navigation
                 pages={pages}
@@ -132,7 +130,7 @@ function Header (props) {
             )
           }
         </FlexContainer>
-        {UIStore.viewportWidth < breakpoints.nav && (
+        {viewportDimensions.width < breakpoints.nav && (
           <MobileNavigation pages={pages} />
         )}
       </Container>
@@ -144,4 +142,4 @@ Header.propTypes = propTypes
 
 Header.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Header))
+export default withViewportProps(Header)

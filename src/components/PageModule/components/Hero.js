@@ -1,16 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
-
 import GatsbyImage from 'gatsby-image'
 
 import { colors, borderRadius, breakpoints, ease, containerWidth } from 'utils/constants'
 import media from 'utils/media'
 import spacing from 'utils/spacing'
-
+import { withViewportProps } from 'components/ViewportObserver'
 import Container from 'components/Container'
-
 import { Circle } from 'components/Graphics'
 
 const propTypes = {
@@ -98,7 +95,7 @@ function Hero (props) {
   const {
     innerHTML,
     image,
-    UIStore,
+    viewportDimensions,
   } = props
 
   return (
@@ -113,7 +110,7 @@ function Hero (props) {
           }}
         />
       </ImageContainer>
-      {UIStore.viewportWidth >= breakpoints.lg && (
+      {viewportDimensions.width >= breakpoints.lg && (
         <Circle
           fill="white"
           // style={{transform: `translate(-${spacing(4)}, -${spacing(4)})`}}
@@ -131,4 +128,4 @@ Hero.propTypes = propTypes
 
 Hero.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Hero))
+export default withViewportProps(Hero)

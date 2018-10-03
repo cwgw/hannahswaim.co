@@ -1,19 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
 import { Transition } from 'react-transition-group'
-
-import Icon from 'components/Icon'
-import Link from 'components/Link'
 
 import spacing from 'utils/spacing'
 import fonts from 'utils/fonts'
 import { ease } from 'utils/constants'
+import { withViewportProps } from 'components/ViewportObserver'
+import Icon from 'components/Icon'
+import Link from 'components/Link'
 
 const propTypes = {
   pages: PropTypes.array,
-  UIStore: PropTypes.object,
 }
 
 const defaultProps = {}
@@ -94,7 +92,7 @@ const NavItem = Link.extend`
   `}
 `
 
-function Navigation ({pages, UIStore}) {
+function Navigation ({pages, isNavOpen}) {
 
   const renderNavItems = (item) => {
     switch (item['__typename']) {
@@ -127,7 +125,7 @@ function Navigation ({pages, UIStore}) {
 
   return (
     <Transition
-      in={UIStore.isNavOpen}
+      in={isNavOpen}
       timeout={300}
       mountOnEnter
       unmountOnExit
@@ -148,4 +146,4 @@ Navigation.propTypes = propTypes
 
 Navigation.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Navigation))
+export default withViewportProps(Navigation)

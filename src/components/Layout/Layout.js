@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { observer, inject } from 'mobx-react'
 import { PageRenderer } from 'gatsby'
 
+import ViewportObserver from 'components/ViewportObserver'
 import Main from './components/Main'
 import Wrap from './components/Wrap'
 
@@ -12,9 +12,9 @@ import Footer from 'components/Footer'
 import Graphics from 'components/Graphics'
 
 import globalStyle from 'utils/globalStyle' // eslint-disable-line no-unused-vars
-import { breakpoints } from 'utils/constants'
 
 let Modal
+
 import('components/Modal').then(modal => {
   Modal = modal.default
 })
@@ -38,53 +38,52 @@ class Layout extends React.Component {
     const {
       children,
       location,
-      UIStore,
       title,
       hasHero,
       locale,
+      isModal,
       data,
     } = this.props
 
-    const modalEnabled = !!(
-      location.state &&
-      location.state.enableModal &&
-      UIStore.viewportWidth >= breakpoints.modal
-    )
+    if (isModal) {
+      return (
+        <React.Fragment>
+          <PageRenderer location={{pathname: location.state && location.state.origin ? location.state.origin : location.pathname}} />
+          <Modal
+            isOpen
+            location={location}
+          >
+            {children}
+          </Modal>
+        </React.Fragment>
+      )
+    }
 
-    return modalEnabled ?
-    (
-      <React.Fragment>
-        <PageRenderer location={{pathname: location.state && location.state.origin ? location.state.origin : location.pathname}} />
-        <Modal
-          isOpen
-          location={location}
-        >
-          {children}
-        </Modal>
-      </React.Fragment>
-    ) : (
-      <Wrap noScroll={UIStore.isNavOpen ? true : false} >
-        <Graphics />
-        <Head
-          pageTitle={title}
-          location={location}
-          siteMetadata={data.site.siteMetadata}
-          socialMedia={data.socialMedia.edges.map(edge => edge.node)}
-          locale={locale}
-        />
-        <Header
-          siteTitle={data.site.siteMetadata.siteTitle}
-          pages={data.menu.menuItems}
-          isAboveHero={hasHero}
-          location={location}
-        />
-        <Main>
-          {children}
-        </Main>
-        <Footer
-          siteTitle={data.site.siteMetadata.siteTitle}
-        />
-      </Wrap>
+    return (
+      <ViewportObserver.Provider>
+        <Wrap>
+          <Graphics />
+          <Head
+            pageTitle={title}
+            location={location}
+            siteMetadata={data.site.siteMetadata}
+            socialMedia={data.socialMedia.edges.map(edge => edge.node)}
+            locale={locale}
+          />
+          <Header
+            siteTitle={data.site.siteMetadata.siteTitle}
+            pages={data.menu.menuItems}
+            isAboveHero={hasHero}
+            location={location}
+          />
+          <Main>
+            {children}
+          </Main>
+          <Footer
+            siteTitle={data.site.siteMetadata.siteTitle}
+          />
+        </Wrap>
+      </ViewportObserver.Provider>
     )
   }
 }
@@ -93,4 +92,4 @@ Layout.propTypes = propTypes
 
 Layout.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Layout))
+export default Layout

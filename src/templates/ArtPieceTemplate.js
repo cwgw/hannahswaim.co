@@ -1,10 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { inject, observer } from 'mobx-react'
 import { graphql } from 'gatsby'
-
-import { breakpoints } from 'utils/constants'
-import { isSet } from 'utils/helpers'
 
 import Layout from 'components/Layout'
 import ArtPieceDetails from 'components/ArtPieceDetails'
@@ -22,7 +18,6 @@ const propTypes = {
   data: PropTypes.shape({
     artPiece: PropTypes.object,
   }).isRequired,
-  UIStore: PropTypes.object,
 }
 
 function ArtPieceTemplate (props) {
@@ -35,18 +30,20 @@ function ArtPieceTemplate (props) {
       node_locale,
       ...data
     },
-    UIStore,
   } = props
 
-  const modalEnabled = !!(
-    isSet(location.state)
-    && location.state.enableModal
-    && UIStore.viewportWidth >= breakpoints.modal
-  )
+  let isModal = false
+
+  if (
+    typeof window !== `undefined` &&
+    window.___HMS_INITIAL_RENDER_COMPLETE
+  ) {
+    isModal = true
+  }
 
   let next, previous
 
-  if (modalEnabled) {
+  if (isModal) {
 
     const {
       siblings,
@@ -85,7 +82,7 @@ function ArtPieceTemplate (props) {
       data={data}
       locale={node_locale}
     >
-      {modalEnabled ? (
+      {isModal ? (
         <PostNavigation
           next={next}
           previous={previous}
@@ -94,7 +91,7 @@ function ArtPieceTemplate (props) {
           fixed
         >
           <ArtPieceDetails
-            modalEnabled={modalEnabled}
+            modalEnabled={isModal}
             {...artPiece}
           />
         </PostNavigation>
@@ -103,7 +100,7 @@ function ArtPieceTemplate (props) {
           <PostNavigation
             next={next}
             previous={previous}
-            fixed={UIStore.viewportWidth >= breakpoints.modal}
+            // fixed={viewportDimensions.width >= breakpoints.modal}
           />
           <ArtPieceDetails {...artPiece} />
         </React.Fragment>
@@ -114,7 +111,7 @@ function ArtPieceTemplate (props) {
 
 ArtPieceTemplate.propTypes = propTypes
 
-export default inject('UIStore')(observer(ArtPieceTemplate))
+export default ArtPieceTemplate
 
 export const pageQuery = graphql`
   query singleArtPiece($id: String!) {
