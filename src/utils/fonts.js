@@ -44,12 +44,13 @@ const fonts = [
   },
 ]
 
-export const fontfaceDeclarations = () => fonts.map((font) => (`
+export const fontFaceDeclarations = () => fonts.map((font) => (`
   @font-face {
     font-family: ${font.family};
     font-style: ${font.style};
     font-weight: ${font.weight};
     src: ${font.src};
+    font-display: swap;
   }
 `))
 

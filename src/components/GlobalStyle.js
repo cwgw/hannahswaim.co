@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components'
 import { normalize } from 'polished'
 
 import { fontSizeRoot, colors } from 'utils/constants'
-import fonts, { fontfaceDeclarations } from 'utils/fonts'
+import fonts, { fontFaceDeclarations } from 'utils/fonts'
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 
@@ -11,7 +11,7 @@ import bkSquiggles from 'images/squiggle.svg'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize()}
-  ${fontfaceDeclarations()}
+  ${fontFaceDeclarations()}
 
   html {
     height: auto;

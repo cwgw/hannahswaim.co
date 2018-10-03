@@ -6,6 +6,9 @@ import spacing from 'utils/spacing'
 import media from 'utils/media'
 import { colors } from 'utils/constants'
 
+import Icon from 'components/Icon'
+import Link from 'components/Link'
+
 const propTypes = {
   siteTitle: PropTypes.string,
 }
@@ -19,8 +22,8 @@ const Default = styled.footer`
   margin-top: auto;
   min-height: ${spacing(2)};
   text-align: center;
-  background-color: ${colors.green[6]};
-  color: ${colors.gray[1]};
+  background-color: ${colors.brand[5]};
+  color: ${colors.brand[2]};
   padding: ${spacing(2)};
   display: flex;
   flex-flow: column nowrap;
@@ -29,6 +32,7 @@ const Default = styled.footer`
 
   ${media.min.md`
     flex-flow: row wrap;
+    align-items: flex-end;
   `}
 
   a,
@@ -46,18 +50,33 @@ function Footer (props) {
       <span>
         {props.siteTitle}
       </span>
-      <a
+      <Link
         href="https://www.instagram.com/hannahswaimco/"
-        rel="noopener noreferrer"
-        target="_blank"
         title="follow me on Instagram"
+        external
       >
+        <Icon
+          type="instagram"
+          style={{
+            width: spacing(1),
+            height: spacing(1),
+            margin: '0 auto',
+          }}
+        />
         @hannahswaimco
-      </a>
+      </Link>
       <a
         href="mailto:hannahswaimco@gmail.com"
         title="send me an email"
       >
+        <Icon
+          type="mail"
+          style={{
+            width: spacing(1),
+            height: spacing(1),
+            margin: '0 auto',
+          }}
+        />
         get in touch
       </a>
     </Default>

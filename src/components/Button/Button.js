@@ -23,6 +23,7 @@ const propTypes = {
     'light',
     'green',
     'gray',
+    'brand',
   ]),
   outline: PropTypes.bool,
   disabled: PropTypes.bool,
