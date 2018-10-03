@@ -6,12 +6,11 @@ import ViewportObserver from 'components/ViewportObserver'
 import Main from './components/Main'
 import Wrap from './components/Wrap'
 
+import GlobalStyle from 'components/GlobalStyle'
 import Head from 'components/Head'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import Graphics from 'components/Graphics'
-
-import globalStyle from 'utils/globalStyle' // eslint-disable-line no-unused-vars
 
 let Modal
 
@@ -62,6 +61,7 @@ class Layout extends React.Component {
     return (
       <ViewportObserver.Provider>
         <Wrap>
+          <GlobalStyle />
           <Graphics />
           <Head
             pageTitle={title}

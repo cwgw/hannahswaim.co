@@ -79,7 +79,7 @@ const Nav = styled.nav`
   }}
 `
 
-const NavItem = Link.extend`
+const NavItem = styled(Link)`
   display: block;
   text-decoration: none;
   padding: ${spacing(0)};

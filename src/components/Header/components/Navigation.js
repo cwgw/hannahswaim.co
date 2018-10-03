@@ -24,7 +24,7 @@ const Nav = styled.nav`
   position: relative;
 `
 
-const NavItem = Link.extend`
+const NavItem = styled(Link)`
   position: relative;
   padding: ${spacing(-1)} ${spacing(0)} ${spacing(-2)};
   display: block;

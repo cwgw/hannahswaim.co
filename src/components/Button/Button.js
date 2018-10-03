@@ -109,7 +109,7 @@ Button.defaultProps = defaultProps
 
 export default Button
 
-export const Control = Button.extend`
+export const Control = styled(Button)`
   display: block;
   box-sizing: content-box;
   flex: 0 0 auto;

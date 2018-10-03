@@ -83,7 +83,7 @@ class Row extends React.Component {
 
     return (
       <Frame style={style} >
-        <Scroll innerRef={this.setScrollRef} >
+        <Scroll ref={this.setScrollRef} >
           <Overflow
             width={`calc(${aspectRatio} * ${itemHeight} + ${gutter})`}
             height={maxHeight}

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import { containerWidth } from 'utils/constants'
 
@@ -16,7 +17,7 @@ const defaultProps = {
   marginRight: 'auto',
 }
 
-const Container = Box.extend`
+const Container = styled(Box)`
   width: ${containerWidth};
   max-width: 100%;
 

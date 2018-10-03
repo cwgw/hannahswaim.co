@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import FlexContainer from 'components/FlexContainer'
 
@@ -32,7 +33,7 @@ const defaultProps = {
   fullHeight: false,
 }
 
-const NavContainer = FlexContainer.extend`
+const NavContainer = styled(FlexContainer)`
 
   ${media.max.sm`
     position: sticky;
