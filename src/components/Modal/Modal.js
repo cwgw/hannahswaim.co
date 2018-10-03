@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import { transparentize } from 'polished'
-import { push } from "gatsby"
+import { navigate } from "gatsby"
 
 import { colors, zIndex } from 'utils/constants'
 import spacing from 'utils/spacing'
@@ -27,11 +27,10 @@ function Modal (props) {
 
   const { children, location, isOpen } = props
 
-  const closeModal = () => push({
-    pathname: location.state.origin,
+  const closeModal = () => navigate(location.state.origin, {
     state: {
       origin: 'modal',
-    },
+    }
   })
 
   return (

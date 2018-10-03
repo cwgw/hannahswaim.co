@@ -56,7 +56,7 @@ class PostNavigation extends React.Component {
     }
 
     if (this.props.location.pathname) {
-      navigate(this.props.location.pathname)
+      navigate(this.props.location.pathname, {state: this.props.location.state})
     }
   }
 

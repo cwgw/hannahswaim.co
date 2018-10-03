@@ -81,6 +81,7 @@ function ArtPieceTemplate (props) {
       title={`${artPiece.title}, ${artPiece.date}`}
       data={data}
       locale={node_locale}
+      isModal={isModal}
     >
       {isModal ? (
         <PostNavigation
