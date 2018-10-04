@@ -1,8 +1,7 @@
-const _hasIn = require('lodash/hasIn')
-
 exports.shouldUpdateScroll = ({routerProps}) => {
+
   if (
-    _hasIn(routerProps, 'location.state') &&
+    routerProps.location.state !== null &&
     (
       routerProps.location.state.origin === 'modal' ||
       routerProps.location.state.enableModal

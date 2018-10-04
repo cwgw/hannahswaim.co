@@ -29,7 +29,7 @@ module.exports = {
       resolve: 'gatsby-plugin-manifest',
       options: {
         name: "hannah m. swaim",
-        short_name: "hannah m. swaim",
+        short_name: "hannah swaim",
         start_url: "/",
         background_color: "#ffffff",
         theme_color: "#b86e5c",

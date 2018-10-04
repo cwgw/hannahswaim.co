@@ -58,7 +58,7 @@ function Head (props) {
     ['og:locale', locale.replace(/-+/,'_')],
   ]
 
-  const stricturedData = {
+  const structuredData = {
     '@context': 'http://schema.org',
     '@type': 'website',
     url: siteUrl,
@@ -68,6 +68,9 @@ function Head (props) {
 
   return (
     <Helmet>
+      <html
+        lang={locale}
+      />
       <title>{title}</title>
       {metaTags.map(tag => {
         if (tag) {
@@ -91,7 +94,7 @@ function Head (props) {
       <link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#b86e5c" />
       <link rel="shortcut icon" href="/static/favicon.ico" />
       <script type="application/ld+json" >
-        {JSON.stringify(stricturedData)}
+        {JSON.stringify(structuredData)}
       </script>
     </Helmet>
   )
