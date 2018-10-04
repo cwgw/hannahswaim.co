@@ -21,8 +21,12 @@ const Default = styled.div`
     column-gap: ${spacing(2)};
   `}
 
-  ${media.min.lg`
+  ${media.min.md`
     columns: 3 auto;
+  `}
+
+  ${media.min.xl`
+    columns: 4 auto;
   `}
 `
 

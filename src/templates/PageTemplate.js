@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 
 import Layout from 'components/Layout'
-import PageModule from 'components/PageModule'
+import * as PageModule from 'components/PageModule'
+import Box from 'components/Box'
 
 import { isSet } from 'utils/helpers'
 
@@ -31,19 +32,6 @@ function PageTemplate (props) {
     },
   } = props
 
-  const renderContentModules = (content) => {
-    const pageModule = {...content}
-    delete pageModule['__typename']
-    return (
-      <PageModule
-        key={content.id}
-        location={location}
-        type={content['__typename']}
-        {...pageModule}
-      />
-    )
-  }
-
   const hasHero = isSet(contentModules)
     && contentModules.length > 0
     && 'ContentfulPageHero' === contentModules[0]['__typename']
@@ -57,7 +45,20 @@ function PageTemplate (props) {
       data={data}
       locale={node_locale}
     >
-      {contentModules && contentModules.map(renderContentModules)}
+      {contentModules && contentModules.map(({__typename, ...content}) => {
+        const Module = PageModule[__typename]
+        return Module ? (
+          <Box
+            key={content.id}
+            marginBottom={8}
+          >
+            <Module
+              location={location}
+              {...content}
+            />
+          </Box>
+        ) : null
+      })}
     </Layout>
   )
 }
@@ -101,21 +102,11 @@ export const pageQuery = graphql`
       slug
       node_locale
       contentModules {
-        ... on ContentfulPageText {
-          ...PageText
-        }
-        ... on ContentfulPageHero {
-          ...PageHero
-        }
-        ... on ContentfulPageArtworkGallery {
-          ...PageArtwork
-        }
-        ... on ContentfulPageFeatureRow {
-          ...PageFeatureRow
-        }
-        ... on ContentfulPageInstagramPosts {
-          ...PageInstagram
-        }
+        ...PageText
+        ...PageHero
+        ...PageArtwork
+        ...PageFeatureRow
+        ...PageInstagram
       }
     }
   }

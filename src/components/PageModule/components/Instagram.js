@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
+import { graphql } from 'gatsby'
 
 import spacing from 'utils/spacing'
 import media from 'utils/media'
@@ -12,7 +13,7 @@ import Row from 'components/Row'
 import Icon from 'components/Icon'
 
 const propTypes = {
-  edges: PropTypes.array,
+  posts: PropTypes.array,
 }
 
 const defaultProps = {}
@@ -130,7 +131,7 @@ class Instagram extends React.Component {
   }
 
   componentDidMount () {
-    this.props.edges.forEach(({url}) => {
+    this.props.posts.forEach(({url}) => {
       fetch(`https://api.instagram.com/oembed?url=${url}&omitscript=true`, {method: 'get'})
         .then(response => response.json())
         .then(data => {
@@ -145,6 +146,7 @@ class Instagram extends React.Component {
   }
 
   render () {
+
     const posts = this.state.posts.map(({media_id, thumbnail_url, thumbnail_width, thumbnail_height, post_url, title}) => (
       <Link
         key={media_id}
@@ -200,3 +202,12 @@ Instagram.propTypes = propTypes
 Instagram.defaultProps = defaultProps
 
 export default Instagram
+
+export const pageQuery = graphql`
+  fragment PageInstagram on ContentfulPageInstagramPosts {
+    id
+    posts {
+      url
+    }
+  }
+`

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import GatsbyImage from 'gatsby-image'
+import { graphql } from 'gatsby'
 
 import { colors, borderRadius, breakpoints, ease, containerWidth } from 'utils/constants'
 import media from 'utils/media'
@@ -13,8 +14,10 @@ import { Circle } from 'components/Graphics'
 const propTypes = {
   image: PropTypes.shape({
     fluid: PropTypes.object,
-  }),
-  innerHTML: PropTypes.string.isRequired,
+  }).isRequired,
+  text: PropTypes.shape({
+    childMarkdownRemark: PropTypes.object,
+  }).isRequired,
 }
 
 const defaultProps = {}
@@ -93,7 +96,9 @@ const TextContainer = styled.div`
 function Hero (props) {
 
   const {
-    innerHTML,
+    text: {
+      childMarkdownRemark
+    },
     image,
     viewportDimensions,
   } = props
@@ -118,7 +123,7 @@ function Hero (props) {
         />
       )}
       <Container>
-        <TextContainer dangerouslySetInnerHTML={{__html: innerHTML}} />
+        <TextContainer dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}} />
       </Container>
     </Wrapper>
   )
@@ -129,3 +134,27 @@ Hero.propTypes = propTypes
 Hero.defaultProps = defaultProps
 
 export default withViewportProps(Hero)
+
+export const pageQuery = graphql`
+  fragment PageHero on ContentfulPageHero {
+    id
+    text {
+      childMarkdownRemark {
+        html
+      }
+    }
+    image {
+      sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
+        dataURI
+      }
+      fluid(maxWidth: 1440, quality: 90) {
+        aspectRatio
+        src
+        srcSet
+        srcWebp
+        srcSetWebp
+        sizes
+      }
+    }
+  }
+`

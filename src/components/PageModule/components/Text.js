@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { graphql } from 'gatsby'
 
 import { containerWidth, colors, brandColors } from 'utils/constants'
 import media from 'utils/media'
@@ -57,3 +58,14 @@ Text.propTypes = propTypes
 Text.defaultProps = defaultProps
 
 export default Text
+
+export const pageQuery = graphql`
+  fragment PageText on ContentfulPageText {
+    id
+    text {
+      childMarkdownRemark {
+        html
+      }
+    }
+  }
+`
