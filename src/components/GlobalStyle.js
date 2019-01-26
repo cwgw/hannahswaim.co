@@ -2,21 +2,18 @@ import { createGlobalStyle } from 'styled-components'
 import { normalize } from 'polished'
 
 import { fontSizeRoot, colors } from 'utils/constants'
-import fonts, { fontFaceDeclarations } from 'utils/fonts'
+import fonts from 'utils/fonts'
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 
-import bkCircle from 'images/background.svg'
-import bkSquiggles from 'images/squiggle.svg'
-
 const GlobalStyle = createGlobalStyle`
   ${normalize()}
-  ${fontFaceDeclarations()}
 
   html {
     height: auto;
     min-height: auto;
     box-sizing: border-box;
+    background-color: ${colors.brand[4]};
     font-size: ${fontSizeRoot}px;
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -44,12 +41,6 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     line-height: 1.5;
     background-color: ${colors.background};
-    /*
-    background-image: url(${bkCircle}), url(${bkSquiggles});
-    background-size: calc(180px + 85vw) calc(180px + 85vw), calc(200px + 20vw) calc(200px + 20vw);
-    background-repeat: no-repeat;
-    background-position: -33vw -60vw, 70vw 90%;
-    */
     color: ${colors.body};
     -webkit-overflow-scrolling: touch;
   }
@@ -110,6 +101,17 @@ const GlobalStyle = createGlobalStyle`
       font-size: ${spacing(3)};
     }
   `}
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 `
 
 export default GlobalStyle

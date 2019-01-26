@@ -2,14 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
-import { graphql } from 'gatsby'
+// import { graphql } from 'gatsby'
 
 import spacing from 'utils/spacing'
 import media from 'utils/media'
 import fonts from 'utils/fonts'
 import { colors, ease } from 'utils/constants'
 
-import Row from 'components/Row'
+// import Row from 'components/Row'
+import Row from 'components/Row/RowAlt'
 import Icon from 'components/Icon'
 
 const propTypes = {
@@ -136,7 +137,7 @@ class Instagram extends React.Component {
         .then(response => response.json())
         .then(data => {
           this.setState((prevState) => ({
-            posts: [...prevState.posts, {post_url: url, ...data} ]
+            posts: [...prevState.posts, {post_url: url, ...data}]
           }))
         })
         .catch(e => {
@@ -155,7 +156,7 @@ class Instagram extends React.Component {
         target="_blank"
         href={post_url}
         title="View on Instagram"
-      >
+        >
         <ImageWrapper>
           <Image
             src={thumbnail_url}
@@ -181,10 +182,10 @@ class Instagram extends React.Component {
       <React.Fragment>
         {posts ? (
           <Row
-            itemHeight="300px"
-            aspectRatio={this.state.posts.length}
-            overflow
-          >
+            childAspectRatioResolver={_ => 1}
+            items={posts}
+            height={400}
+            >
             {posts}
           </Row>
         ) : (
@@ -203,11 +204,11 @@ Instagram.defaultProps = defaultProps
 
 export default Instagram
 
-export const pageQuery = graphql`
-  fragment PageInstagram on ContentfulPageInstagramPosts {
-    id
-    posts {
-      url
-    }
-  }
-`
+// export const pageQuery = graphql`
+//   fragment PageInstagram on ContentfulPageInstagramPosts {
+//     id
+//     posts {
+//       url
+//     }
+//   }
+// `

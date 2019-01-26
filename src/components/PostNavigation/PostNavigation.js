@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import FlexContainer from 'components/FlexContainer'
+import Flex from 'components/Flex'
 
 import NavItem from './components/PostNavItem'
 
@@ -33,7 +33,7 @@ const defaultProps = {
   fullHeight: false,
 }
 
-const NavContainer = styled(FlexContainer)`
+const NavContainer = styled(Flex)`
 
   ${media.max.sm`
     position: sticky;
@@ -64,7 +64,7 @@ function PostNavigation (props) {
   return (
     <NavContainer
       noWrap
-      breakpoint="none"
+      breakpoint={null}
       stretch={fullHeight}
       fixed={fixed}
       alignItems="center"

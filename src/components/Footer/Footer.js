@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import spacing from 'utils/spacing'
-import media from 'utils/media'
+// import media from 'utils/media'
 import { colors } from 'utils/constants'
+import { makeFlex } from 'utils/props'
+import { space } from 'utils/spacing'
 
 import Icon from 'components/Icon'
 import Link from 'components/Link'
@@ -14,26 +16,23 @@ const propTypes = {
 }
 
 const defaultProps = {
-  siteTitle: null
+  siteTitle: null,
+  justifyContent: 'center',
+  flexFlow: ['column nowrap',,,'row wrap'], // eslint-disable-line no-sparse-arrays
+  alignItems: ['center',,,'flex-end'], // eslint-disable-line no-sparse-arrays
+  marginTop: 'auto',
+  padding: 2,
 }
 
+
 const Default = styled.footer`
+  ${makeFlex}
+  ${space}
   position: relative;
-  margin-top: auto;
   min-height: ${spacing(2)};
   text-align: center;
   background-color: ${colors.brand[5]};
   color: ${colors.brand[2]};
-  padding: ${spacing(2)};
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-
-  ${media.min.md`
-    flex-flow: row wrap;
-    align-items: flex-end;
-  `}
 
   a,
   span {
@@ -43,45 +42,41 @@ const Default = styled.footer`
   }
 `
 
-function Footer (props) {
-
-  return (
-    <Default>
-      <span>
-        {props.siteTitle}
-      </span>
-      <Link
-        href="https://www.instagram.com/hannahswaimco/"
-        title="follow me on Instagram"
-        external
+const Footer = ({siteTitle, ...props}) => (
+  <Default {...props} >
+    <span>
+      {siteTitle}
+    </span>
+    <Link
+      to="https://www.instagram.com/hannahswaimco/"
+      title="follow me on Instagram"
       >
-        <Icon
-          type="instagram"
-          style={{
-            width: spacing(1),
-            height: spacing(1),
-            margin: '0 auto',
-          }}
-        />
-        @hannahswaimco
-      </Link>
-      <a
-        href="mailto:hannahswaimco@gmail.com"
-        title="send me an email"
+      <Icon
+        type="instagram"
+        style={{
+          width: spacing(1),
+          height: spacing(1),
+          margin: '0 auto',
+        }}
+      />
+      @hannahswaimco
+    </Link>
+    <Link
+      to="mailto:hannahswaimco@gmail.com"
+      title="send me an email"
       >
-        <Icon
-          type="mail"
-          style={{
-            width: spacing(1),
-            height: spacing(1),
-            margin: '0 auto',
-          }}
-        />
-        get in touch
-      </a>
-    </Default>
-  )
-}
+      <Icon
+        type="mail"
+        style={{
+          width: spacing(1),
+          height: spacing(1),
+          margin: '0 auto',
+        }}
+      />
+      get in touch
+    </Link>
+  </Default>
+)
 
 Footer.propTypes = propTypes
 

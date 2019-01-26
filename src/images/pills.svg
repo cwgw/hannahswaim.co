@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" >
+  <defs>
+    <pattern id="pill-1" viewbox="0 0 10 10" width="10" height="10" patternUnits="userSpaceOnUse" >
+
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#pill-1)" ></rect>
+</svg>

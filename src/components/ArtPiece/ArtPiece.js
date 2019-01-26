@@ -8,9 +8,10 @@ import { Link as GatsbyLink, graphql } from 'gatsby'
 
 import spacing from 'utils/spacing'
 import media from 'utils/media'
-import { breakpoints, ease, colors } from 'utils/constants'
-import { withViewportProps } from 'components/ViewportObserver'
+import { breakpoints, modalBreakpoint, ease, colors } from 'utils/constants'
+import { withUIProps } from 'components/UIContext'
 import Meta from 'components/ArtPieceMeta'
+import Grid from 'components/Grid'
 
 const propTypes = {
   location: PropTypes.oneOfType([
@@ -28,14 +29,14 @@ const propTypes = {
     units: PropTypes.string,
   }).isRequired,
   className: PropTypes.string,
-  captionBreakpoint: PropTypes.number,
+  captionBreakpoint: PropTypes.string,
   siblings: PropTypes.array,
   index: PropTypes.number,
 }
 
 const defaultProps = {
   className: null,
-  captionBreakpoint: breakpoints.lg,
+  captionBreakpoint: 'lg',
   siblings: [],
   index: 0,
   style: {},
@@ -73,6 +74,11 @@ const Link = styled(GatsbyLink)`
       }
     }
   `}
+
+  ${Grid} & {
+    margin-bottom: 0;
+    height: 100%;
+  }
 `
 
 const Figure = styled.figure`
@@ -132,7 +138,7 @@ function ArtPiece (props) {
       key={id}
       to={slug}
       state={{
-        enableModal: viewportDimensions.width >= breakpoints.modal,
+        enableModal: viewportDimensions.width >= modalBreakpoint,
         origin: location.pathname,
         siblings: siblings,
         index: siblingIndex,
@@ -146,7 +152,7 @@ function ArtPiece (props) {
             base64: images[0].sqip.dataURI
           }}
         />
-        {viewportDimensions.width >= captionBreakpoint && (
+        {viewportDimensions.width >= breakpoints[captionBreakpoint] && (
           <Caption>
             <Meta
               title={title}
@@ -165,7 +171,7 @@ ArtPiece.propTypes = propTypes
 
 ArtPiece.defaultProps = defaultProps
 
-export default withViewportProps(ArtPiece)
+export default withUIProps(ArtPiece)
 
 export const artPieceFragments = graphql`
   fragment ArtPieceFragment on ContentfulArtPiece {

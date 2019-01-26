@@ -21,30 +21,30 @@ export const defaultScale = {
 export const ease = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
 export const breakpointKeys = [
-  'none',
   'xs',
   'sm',
   'md',
   'lg',
   'xl',
-  'nav',
-  'modal',
 ]
 
 export const breakpointValues = [
-  0,
   480,
   576,
   768,
   992,
   1200,
-  576,
-  768,
 ]
 
-export const breakpoints = _zipObject(breakpointKeys,breakpointValues)
+export const navBreakpoint = breakpointValues[1]
 
-export const navBreakpoint = breakpoints['sm']
+export const modalBreakpoint = breakpointValues[1]
+
+export const breakpoints = {
+  ..._zipObject(breakpointKeys, breakpointValues),
+  nav: navBreakpoint,
+  modal: modalBreakpoint,
+}
 
 export const grays = [
   '#191720',

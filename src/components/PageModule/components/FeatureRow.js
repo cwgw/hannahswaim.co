@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { graphql } from 'gatsby'
+// import { graphql } from 'gatsby'
 
 import spacing from 'utils/spacing'
 import { isSet } from 'utils/helpers'
 
-import ArtPiece from 'components/ArtPiece'
+// import ArtPiece from 'components/ArtPiece'
+import Piece from 'components/Piece'
 import Row from 'components/Row'
 import Button from 'components/Button'
 import Container from 'components/Container'
@@ -50,9 +51,9 @@ function FeatureRow (props) {
         aspectRatio={combinedAspectRatio}
         itemHeight="320px"
         overflow
-      >
+        >
         {edges.map(({node}, index, arr) => (
-          <ArtPiece
+          <Piece
             key={node.id}
             location={location}
             siblings={siblings}
@@ -69,14 +70,14 @@ function FeatureRow (props) {
       {viewMoreLink && (
         <Container
           marginTop={2}
-        >
+          >
           <Button
             to={viewMoreLink.slug || viewMoreLink.url}
             external={isSet(viewMoreLink.url)}
             marginLeft="auto"
             variant="brand"
             link
-          >
+            >
             View More&hellip;
           </Button>
         </Container>
@@ -91,46 +92,46 @@ FeatureRow.defaultProps = defaultProps
 
 export default FeatureRow
 
-export const pageQuery = graphql`
-  fragment PageFeatureRow on ContentfulPageFeatureRow {
-    id
-    items {
-      id
-      fields {
-        slug
-      }
-      title
-      date(formatString: "YYYYMMDD")
-      media
-      childContentfulArtPieceDimensionsJsonNode {
-        height
-        width
-        depth
-        units
-      }
-      images {
-        id
-        sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
-          dataURI
-        }
-        fluid(maxWidth: 480, quality: 90) {
-          aspectRatio
-          src
-          srcSet
-          srcWebp
-          srcSetWebp
-          sizes
-        }
-      }
-    }
-    viewMoreLink {
-      slug
-      title
-    }
-    text {
-      childMarkdownRemark {
-        html
-      }
-    }
-  }
-`
+// export const pageQuery = graphql`
+//   fragment PageFeatureRow on ContentfulPageFeatureRow {
+//     id
+//     items {
+//       id
+//       fields {
+//         slug
+//       }
+//       title
+//       date(formatString: "YYYYMMDD")
+//       media
+//       childContentfulArtPieceDimensionsJsonNode {
+//         height
+//         width
+//         depth
+//         units
+//       }
+//       images {
+//         id
+//         sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
+//           dataURI
+//         }
+//         fluid(maxWidth: 480, quality: 90) {
+//           aspectRatio
+//           src
+//           srcSet
+//           srcWebp
+//           srcSetWebp
+//           sizes
+//         }
+//       }
+//     }
+//     viewMoreLink {
+//       slug
+//       title
+//     }
+//     text {
+//       childMarkdownRemark {
+//         html
+//       }
+//     }
+//   }
+// `

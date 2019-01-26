@@ -1,18 +1,19 @@
-import PropTypes from 'prop-types'
-
-import { fontSizeRoot, defaultScale } from 'utils/constants'
-import { round, isSet, has, merge } from 'utils/helpers'
+import { spreadValues } from './media'
+import { fontSizeRoot, defaultScale } from './constants'
+import { round, isSet, merge } from './helpers'
 
 export const scale = (i, {f, r, n} = defaultScale) => f * Math.pow(r, i / n)
 
-const spacing = (i, units = 'rem') => {
+export const remToPx = (n, fontSize = fontSizeRoot) => parseFloat(n) * fontSize
+
+export const spacing = (i = 0, units = 'rem') => {
 
   if ('none' === units || false === units) {
     return round(scale(i), 3)
   }
 
-  if ('px' === units) {
-    return round(scale(i) * fontSizeRoot, 1) + units
+  if ('px' === units || !units) {
+    return round(remToPx(scale(i)), 1) + (units || 0)
   }
 
   if ('em' === units || 'rem' === units) {
@@ -31,12 +32,12 @@ export default spacing
  * See {@link https://github.com/jxnblk/styled-system/blob/master/src/space.js}
  */
 
-const properties = {
+const spaceProperties = {
   margin: 'margin',
   padding: 'padding',
 }
 
-const directions = {
+const spaceDirections = {
   Top: 'Top',
   Right: 'Right',
   Bottom: 'Bottom',
@@ -64,18 +65,20 @@ const directions = {
  * @param  {String} key The property name
  * @return {Array}      An array of css property names
  */
-const getProperties = (key) => {
+const getSpaceProperties = (key) => {
 
   // split the key on capital letters, e.g. ['padding', 'Top']
   const [ keyProp, ...keyDir ] = key.split(/(?=[A-Z])/)
 
-  // bail early if the
-  if (!has(properties, keyProp)) {
+  const property = spaceProperties[keyProp]
+
+  // bail early if the given key isn't one of our space properties
+  if (!property) {
     return null
   }
 
-  const property = properties[keyProp] || ''
-  const direction = directions[keyDir] || ''
+  const direction = spaceDirections[keyDir] || ''
+
   return Array.isArray(direction)
     ? direction.map(dir => property + dir)
     : [ property + direction ]
@@ -87,14 +90,14 @@ const getProperties = (key) => {
  * @param  {Mixed} value The value to process.
  * @return {String}      The processed, css-ready value
  */
-const getValue = (value) => {
+const getSpaceValue = (value) => {
   if (Array.isArray(value)) {
     return value
-      .map(val => isNaN(val) ? val : spacing(val))
+      .map(val => typeof val === 'number' ? spacing(val) : val )
       .join(' ')
   }
 
-  return isNaN(value) ? value : spacing(value)
+  return typeof value === 'number' ? spacing(value) : value
 }
 
 /**
@@ -116,46 +119,22 @@ export const space = (props) => () => {
   return keys
     .map(key => {
       const val = props[key]
-      const properties = getProperties(key)
+      const properties = getSpaceProperties(key)
 
-      const styles = isSet(val) && isSet(properties)
-        ? properties.reduce((acc, prop) => ({
+      if (!isSet(val) || !isSet(properties)) {
+        return null
+      }
+
+      if (Array.isArray(val) || typeof val === 'object') {
+        return properties.reduce((acc, prop) => (
+          merge(acc, spreadValues(val, (n) => ({[prop]: getSpaceValue(n)})))
+        ), {})
+      } else {
+        return properties.reduce((acc, prop) => ({
           ...acc,
-          [prop]: getValue(val)
+          [prop]: getSpaceValue(val),
         }), {})
-        : null
-
-      return styles
+      }
     })
     .reduce(merge, {})
 }
-
-const getProps = () => {
-
-  let props = []
-  let types = {}
-
-  for (let prop in properties) {
-    props.push(prop)
-    types[prop] = PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.string,
-      PropTypes.number,
-    ])
-
-    for (let dir in directions) {
-      props.push(prop + dir)
-      types[prop + dir] = PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-      ])
-    }
-  }
-
-  return {
-    types: types,
-    list: props,
-  }
-}
-
-export const spaceProps = getProps()

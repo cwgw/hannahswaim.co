@@ -3,27 +3,23 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 
-import { containerWidth, colors, brandColors } from 'utils/constants'
+import { colors, brandColors } from 'utils/constants'
 import media from 'utils/media'
 import spacing from 'utils/spacing'
 
-import Container from 'components/Container'
+import Box from 'components/Box'
+import { StandardGrid } from 'components/Grid'
 
 const propTypes = {
-  innerHTML: PropTypes.string.isRequired,
+  text: PropTypes.shape({
+    childMarkdownRemark: PropTypes.object,
+  }).isRequired,
 }
 
 const defaultProps = {}
 
-const Content = styled.div`
-  padding-bottom: ${spacing(2)};
-
-  ${media.max.sm`
-    background-color: ${colors.background};
-  `}
-
-  @media screen and (min-width: ${containerWidth}) {
-
+const Content = styled(Box)`
+  ${media.min.md`
     & .gatsby-resp-image-wrapper {
       margin-left: -${spacing(2)} !important;
       margin-bottom: ${spacing(4)};
@@ -41,17 +37,29 @@ const Content = styled.div`
         z-index: -1;
       }
     }
-  }
+  `}
 `
 
-function Text ({innerHTML}) {
+const Text = ({
+  text: {
+    childMarkdownRemark
+  },
+  location,
+  id,
+  ...props
+}) => (
+  <StandardGrid {...props} >
+    <Content
+      gridColumn={{
+        null: 'contentStart / contentEnd',
+        lg: 'col2Start / col5End',
+      }}
+      gridRow="contentStart / contentEnd"
+      dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
+    />
+  </StandardGrid>
+)
 
-  return (
-    <Container>
-      <Content dangerouslySetInnerHTML={{__html: innerHTML}} />
-    </Container>
-  )
-}
 
 Text.propTypes = propTypes
 

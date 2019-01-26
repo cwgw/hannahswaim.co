@@ -52,7 +52,7 @@ export const fontFaceDeclarations = () => fonts.map((font) => (`
     src: ${font.src};
     font-display: swap;
   }
-`))
+`)).join('')
 
 export default {
   sansSerif: '"Inter UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',

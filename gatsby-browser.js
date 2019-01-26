@@ -1,18 +1,18 @@
-exports.shouldUpdateScroll = ({routerProps}) => {
+import React from 'react'
+import _get from 'lodash/get'
 
-  if (
-    routerProps.location.state !== null &&
-    (
-      routerProps.location.state.origin === 'modal' ||
-      routerProps.location.state.enableModal
-    )
-  ) {
-    return false
-  }
+import UIContext from 'components/UIContext'
+import Layout from 'components/Layout'
 
-  return true
+export const wrapRootElement = ({element}) => <UIContext.Provider>{element}</UIContext.Provider>
+
+export const wrapPageElement = ({element, props}) => <Layout {...props} >{element}</Layout>
+
+export const shouldUpdateScroll = ({routerProps}) => {
+  const {origin, enableModal} = _get(routerProps, 'location.state') || {}
+  return !(enableModal || origin === 'modal')
 }
 
-exports.onInitialClientRender = () => {
+export const onInitialClientRender = () => {
   window.___HMS_INITIAL_RENDER_COMPLETE = true
 }

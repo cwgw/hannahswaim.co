@@ -1,15 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import GatsbyImage from 'gatsby-image'
 import { graphql } from 'gatsby'
+import GatsbyImage from 'gatsby-image'
 
-import { colors, borderRadius, breakpoints, ease, containerWidth } from 'utils/constants'
-import media from 'utils/media'
-import spacing from 'utils/spacing'
-import { withViewportProps } from 'components/ViewportObserver'
-import Container from 'components/Container'
-import { Circle } from 'components/Graphics'
+import { media } from 'utils/media'
+import { colors, breakpoints } from 'utils/constants'
+import { withUIProps } from 'components/UIContext'
+import { StandardGrid } from 'components/Grid'
+import Box from 'components/Box'
 
 const propTypes = {
   image: PropTypes.shape({
@@ -20,120 +19,99 @@ const propTypes = {
   }).isRequired,
 }
 
-const defaultProps = {}
+const defaultProps = {
+  breakpoint: 'lg',
+}
 
-const Wrapper = styled.div`
-  border-radius: ${borderRadius};
-
-  ${media.max.lg`
-    padding-bottom: 40%;
-  `}
+const Wrapper = styled(StandardGrid)`
+  min-height: ${breakpoints.sm}px;
 
   ${media.min.lg`
-    position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    min-height: calc(100vh - (${spacing(4)} * 2));
-    min-height: 50vh;
-    background-color: ${colors.gray[3]};
-    overflow: hidden;
+    height: 100vh;
   `}
 `
 
-const ImageContainer = styled.div`
-  position: absolute;
-  top: -${spacing(2)};
-  bottom: 0;
-  right: 0;
-  max-width: ${containerWidth};
-  width: calc(100% - ${spacing(4)});
-  transition: left 350ms ${ease};
-
-  ${media.min.lg`
-    left: calc(50vw - 100px);
-    width: auto;
-    max-width: none;
-  `}
+const Figure = styled(Box)`
+  margin-bottom: 0;
 `
 
-const TextContainer = styled.div`
+const TextBox = styled(Box)`
   position: relative;
-  font-size: ${spacing(1)};
+  font-size: 1.5rem;
+  line-height: 1.2;
+  border: 2px solid ${colors.brand[4]};
 
-  h1,
-  h2 {
-    font-size: ${spacing(4,'em')};
+  & > p:first-child {
+    font-size: 2.5rem;
+    font-weight: 700;
   }
 
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: ${spacing(2,'em')};
+  & > p:last-child {
+    margin-bottom: 0;
   }
-
-  ${media.min.sm`
-    font-size: ${spacing(2)};
-  `}
-
-  ${media.min.lg`
-    padding: ${spacing(10)} 50% ${spacing(12)} 0;
-    font-size: ${spacing(2)};
-  `}
-
-  ${media.max.lg`
-    padding: ${spacing(4)};
-    border-radius: ${borderRadius};
-    background-color: white;
-    width: 70%;
-    min-width: 300px;
-    border-bottom: 1px solid ${colors.brand[4]};
-    border-left: 1px solid ${colors.brand[4]};
-  `}
-
 `
 
-function Hero (props) {
-
-  const {
-    text: {
-      childMarkdownRemark
-    },
-    image,
-    viewportDimensions,
-  } = props
-
-  return (
-    <Wrapper>
-      <ImageContainer>
+const Hero = ({
+  text: {
+    childMarkdownRemark
+  },
+  image,
+  viewportDimensions,
+  breakpoint,
+  location,
+  id,
+  ...props
+}) => (
+  <Wrapper
+    {...props}
+    >
+    <TextBox
+      paddingY={4}
+      paddingX={1}
+      gridColumn={{
+        null: 'contentStart / contentEnd',
+        lg: 'col1Start / col3End',
+        xl: 'col1Start / col2End',
+      }}
+      gridRow={{
+        null: 'contentStart / contentEnd',
+        lg: 'contentStart / contentEnd',
+      }}
+      dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
+    />
+    {viewportDimensions.width >= breakpoints[breakpoint] && (
+      <Figure
+        gridColumn={{
+          null: 'wideStart / wideEnd',
+          // lg: 'col4Start / wideEnd',
+          lg: 'col4Start / bleedEnd',
+        }}
+        gridRow={{
+          null: 'contentEnd / figureEnd',
+          lg: 'figureStart / figureEnd',
+        }}
+        as="figure"
+        >
         <GatsbyImage
-          fluid={image.fluid}
+          fixed={{
+            ...image.fixed,
+            base64: image.sqip.dataURI
+          }}
           style={{
-            position: 'absolute',
             width: '100%',
             height: '100%',
           }}
         />
-      </ImageContainer>
-      {viewportDimensions.width >= breakpoints.lg && (
-        <Circle
-          fill="white"
-          // style={{transform: `translate(-${spacing(4)}, -${spacing(4)})`}}
-          style={{transform: `translate(${spacing(4)}, -${spacing(4)})`}}
-        />
-      )}
-      <Container>
-        <TextContainer dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}} />
-      </Container>
-    </Wrapper>
-  )
-}
+      </Figure>
+    )}
+  </Wrapper>
+)
 
 Hero.propTypes = propTypes
 
 Hero.defaultProps = defaultProps
 
-export default withViewportProps(Hero)
+export default withUIProps(Hero)
 
 export const pageQuery = graphql`
   fragment PageHero on ContentfulPageHero {
@@ -144,16 +122,12 @@ export const pageQuery = graphql`
       }
     }
     image {
-      sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
+      sqip (numberOfPrimitives: 6, mode: 4, blur: 10) {
         dataURI
       }
-      fluid(maxWidth: 1440, quality: 90) {
+      fixed (height: 720, quality: 90, resizingBehavior: NO_CHANGE) {
         aspectRatio
-        src
-        srcSet
-        srcWebp
-        srcSetWebp
-        sizes
+        ...GatsbyContentfulFixed_withWebp_noBase64
       }
     }
   }

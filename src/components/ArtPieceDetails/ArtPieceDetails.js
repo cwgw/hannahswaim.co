@@ -2,15 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
-
 import GatsbyImage from 'gatsby-image'
 
 import spacing from 'utils/spacing'
-
+import { media } from 'utils/media'
+// import { modalBreakpoint } from 'utils/constants'
+import { formatArtMeta } from 'utils/formatting'
 import Container from 'components/Container'
-import FlexContainer from 'components/FlexContainer'
+import Flex from 'components/Flex'
 import ArtPieceMeta from 'components/ArtPieceMeta'
-import Row from 'components/Row'
+import Row from 'components/Row/RowAlt'
+import Box from 'components/Box'
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -24,35 +26,36 @@ const propTypes = {
     depth: PropTypes.number,
     units: PropTypes.string,
   }).isRequired,
-  modalEnabled: PropTypes.bool,
+  isModalEnabled: PropTypes.bool,
 }
 
 const defaultProps = {
-  modalEnabled: false,
+  isModalEnabled: false,
 }
 
-const Figure = styled.figure`
-  margin: 0;
+const Wrapper = styled(Flex)`
+  display: flex;
+  max-width: 100%;
+  overflow: hidden;
+  justify-content: center;
+  margin: 0 auto;
+  transition: width 300ms linear;
+  flex-direction: column;
 
-  ${({aspectRatio}) => aspectRatio && `
-    flex: ${aspectRatio};
+  ${media.min.modal`
+    flex-direction: column-reverse;
   `}
+`
 
-  &:only-child {
-    flex: 1;
+const Meta = styled(Box)`
+  background: #fff;
+
+  & span,
+  & small {
+    display: block;
+    line-height: 1.2;
   }
 `
-
-const PieceDetails = styled.div`
-  width: 100%;
-  padding: ${spacing(2)};
-  background: #fff;
-`
-
-// const Container = DefaultContainer.extend`
-//   position: relative;
-//   margin-bottom: ${spacing(2)};
-// `
 
 function ArtPieceDetails (props) {
 
@@ -61,69 +64,63 @@ function ArtPieceDetails (props) {
     date,
     media,
     images,
-    modalEnabled,
+    isModalEnabled,
     childContentfulArtPieceDimensionsJsonNode: dimensions,
   } = props
 
-  const combinedAspectRatio = images.reduce((acc, {fluid}) => acc = acc + fluid.aspectRatio, 0)
+  // const combinedAspectRatio = images.reduce((acc, {fluid}) => acc = acc + fluid.aspectRatio, 0)
 
-  return modalEnabled
+  const meta = formatArtMeta({title, date, media, dimensions})
+
+  return isModalEnabled
     ? (
-      <FlexContainer
+      <Wrapper
         onClick={(e) => {e.stopPropagation()}}
-        direction="column"
-        justifyContent="center"
-        overflow="hidden"
-        noWrap
-      >
-        <div
-          style={{
-            position: 'relative',
-            // boxShadow: shadows[2],
-            backgroundColor: 'white',
-          }}
+
         >
-          <Row
-            aspectRatio={combinedAspectRatio}
-            gutter="0px"
-            itemHeight="75vh"
-            maxHeight="75vh"
+        <Meta
+          padding={2}
           >
-            {images.map(({id, sqip, fluid}) => (
-              <Figure
-                key={id}
-                aspectRatio={fluid.aspectRatio}
+          <span>{meta.title}</span>
+          <small><em>{meta.media}</em></small>
+          <small>{meta.dimensions}</small>
+        </Meta>
+        <Row
+          childAspectRatioResolver={({fluid}) => fluid.aspectRatio}
+          height="75vh"
+          items={images}
+          >
+          {images.map(({id, sqip, fluid}) => (
+            <Box
+              key={id}
+              as="figure"
+              margin="0"
               >
-                <GatsbyImage
-                  fluid={{
-                    ...fluid,
-                    base64: sqip.dataURI
-                  }}
-                />
-              </Figure>
-            ))}
-          </Row>
-        </div>
-        <PieceDetails>
-          <ArtPieceMeta
-            title={title}
-            date={date}
-            media={media}
-            dimensions={dimensions}
-          />
-        </PieceDetails>
-      </FlexContainer>
+              <GatsbyImage
+                fluid={{
+                  ...fluid,
+                  base64: sqip.dataURI,
+                }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </Box>
+          ))}
+        </Row>
+      </Wrapper>
     ) : (
       <React.Fragment>
         <Container>
-          <PieceDetails>
+          <Meta>
             <ArtPieceMeta
               title={title}
               date={date}
               media={media}
               dimensions={dimensions}
             />
-          </PieceDetails>
+          </Meta>
         </Container>
         <Container>
           {images.map(({id, sqip, fluid}) => (

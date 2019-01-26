@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
 import defaultImage from 'images/icon.png'
+import { fontFaceDeclarations } from 'utils/fonts'
 
 const propTypes = {
   location: PropTypes.object.isRequired,
@@ -23,7 +24,7 @@ const defaultProps = {
   pageTitle: null,
   image: null,
   description: '',
-  locale: 'en_US',
+  locale: 'en-US',
   socialMedia: [],
 }
 
@@ -93,6 +94,7 @@ function Head (props) {
       <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png" />
       <link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#b86e5c" />
       <link rel="shortcut icon" href="/static/favicon.ico" />
+      <style type="text/css" >{fontFaceDeclarations()}</style>
       <script type="application/ld+json" >
         {JSON.stringify(structuredData)}
       </script>

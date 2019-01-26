@@ -2,8 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 
-import Wall from 'components/Wall'
-import ArtPiece from 'components/ArtPiece'
+// import Wall from 'components/Wall'
+import ImageWall from 'components/Wall/ImageWall'
+// import Grid from 'components/Grid'
+// import ArtPiece from 'components/ArtPiece'
+import Piece from 'components/Piece'
 
 const propTypes = {
   artwork: PropTypes.array.isRequired,
@@ -15,7 +18,12 @@ const propTypes = {
 
 const defaultProps = {}
 
-function Gallery ({location, artwork}) {
+const Gallery = ({
+  location,
+  artwork,
+  id,
+  ...props
+}) => {
 
   const edges = artwork
     .slice()
@@ -34,9 +42,13 @@ function Gallery ({location, artwork}) {
   const siblings = edges.map(({node}) => node.fields.slug)
 
   return (
-    <Wall>
+    <ImageWall
+      items={edges.map(({node}) => node)}
+      childAspectRatioResolver={({images}) => (images[0] && images[0].fluid && images[0].fluid.aspectRatio) || 1}
+      {...props}
+      >
       {edges.map(({node}, index) => (
-        <ArtPiece
+        <Piece
           key={node.id}
           location={location}
           siblings={siblings}
@@ -44,7 +56,7 @@ function Gallery ({location, artwork}) {
           {...node}
         />
       ))}
-    </Wall>
+    </ImageWall>
   )
 }
 
