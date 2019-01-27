@@ -61,7 +61,7 @@ export const StandardGrid = styled(Box)
   .attrs({
     // gridTemplateColumns: '[bleedStart] 1fr [wideStart] 1fr [contentStart col1Start] 3fr [col1End] 1fr [center] 1fr [content2Start] 5fr [contentEnd content2End] 1fr [wideEnd] 1fr [bleedEnd]',
     gridTemplateColumns: columns.join(' '),
-    gridTemplateRows: '1rem [figureStart] minmax(1rem, auto) [contentStart] min-content [contentEnd] minmax(1rem, auto) [figureEnd] 1rem',
+    // gridTemplateRows: 'repeat(auto-fill, minmax(1rem, min-content))'
   })`
     ${makeGrid}
   `

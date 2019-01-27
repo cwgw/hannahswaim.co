@@ -25,10 +25,11 @@ const defaultProps = {
 
 const Wrapper = styled(StandardGrid)`
   width: 100%;
+  position: relative;
+  z-index: 10;
 
   ${media.min.lg`
     position: absolute;
-    z-index: 10;
   `}
 `
 
@@ -75,11 +76,11 @@ const Header = ({
     >
     <Nav
       gridColumn="contentStart / contentEnd"
-      gridRow="contentStart / contentEnd"
       justifyContent={isMobile ? 'space-between' : 'flex-start'}
       flexFlow="row nowrap"
       alignItems="baseline"
       marginRight="auto"
+      paddingY={1}
       as="nav"
       role="navigation"
       >

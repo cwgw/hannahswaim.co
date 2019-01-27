@@ -4,7 +4,7 @@ import { PageRenderer, StaticQuery, graphql } from 'gatsby'
 import _get from 'lodash/get'
 
 import GlobalStyle from 'components/GlobalStyle'
-import Background from 'components/BackgroundGraphics'
+import Background from 'components/BackgroundGraphics.js'
 import Head from 'components/Head'
 import Header from 'components/Header'
 import Footer from 'components/Footer'

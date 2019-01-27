@@ -24,10 +24,11 @@ const defaultProps = {
 }
 
 const Wrapper = styled(StandardGrid)`
-  min-height: ${breakpoints.sm}px;
+  min-height: ${breakpoints.xs}px;
 
   ${media.min.lg`
-    height: 100vh;
+    height: 80vh;
+    // max-height: ${breakpoints.md}px;
   `}
 `
 
@@ -68,15 +69,13 @@ const Hero = ({
     <TextBox
       paddingY={4}
       paddingX={1}
+      alignSelf="start"
       gridColumn={{
-        null: 'contentStart / contentEnd',
+        base: 'contentStart / contentEnd',
         lg: 'col1Start / col3End',
         xl: 'col1Start / col2End',
       }}
-      gridRow={{
-        null: 'contentStart / contentEnd',
-        lg: 'contentStart / contentEnd',
-      }}
+      gridRow="2"
       dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
     />
     {viewportDimensions.width >= breakpoints[breakpoint] && (
@@ -87,19 +86,32 @@ const Hero = ({
           lg: 'col4Start / bleedEnd',
         }}
         gridRow={{
-          null: 'contentEnd / figureEnd',
-          lg: 'figureStart / figureEnd',
+          lg: "1 / span 3",
         }}
         as="figure"
+        paddingY={2}
         >
         <GatsbyImage
-          fixed={{
-            ...image.fixed,
-            base64: image.sqip.dataURI
-          }}
+          {...(image.fixed
+            ? {
+              fixed: {
+                ...image.fixed,
+                base64: image.sqip.dataURI,
+              }
+            }
+            : {
+              fluid: {
+                ...image.fluid,
+                base64: image.sqip.dataURI,
+              }
+            }
+          )}
           style={{
             width: '100%',
             height: '100%',
+          }}
+          imgStyle={{
+            objectPosition: 'left center'
           }}
         />
       </Figure>
@@ -125,9 +137,9 @@ export const pageQuery = graphql`
       sqip (numberOfPrimitives: 6, mode: 4, blur: 10) {
         dataURI
       }
-      fixed (height: 720, quality: 90, resizingBehavior: NO_CHANGE) {
+      fluid (maxHeight: 720, quality: 90) {
         aspectRatio
-        ...GatsbyContentfulFixed_withWebp_noBase64
+        ...GatsbyContentfulFluid_withWebp_noBase64
       }
     }
   }

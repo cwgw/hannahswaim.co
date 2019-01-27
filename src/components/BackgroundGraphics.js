@@ -5,31 +5,36 @@ import { Controller, animated } from 'react-spring'
 import { colors } from 'utils/constants'
 
 const defaultProps = {
-  speed: -0.3,
+  speed: -0.2,
   colors: [
     colors.brand[5],
     colors.brand[4]
   ],
 }
 
-const Graphic = animated(styled.div`
+const Graphic = styled.div`
   position: absolute;
   z-index: 0;
   width: 100vw;
   height: 100vh;
-`)
+  user-select: none;
+  pointer-events: none;
+`
 
 const Svg = styled.svg`
-  display: block;
   position: absolute;
+  display: block;
   width: 100%;
   height: 100%;
   overflow: visible;
 `
 
-const AnimatedCircle = animated('circle')
-
-const AnimatedGroup = animated('g')
+const AnimatedContainer = animated(styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+`)
 
 const clamp = (num, min, max) => num <= min ? min : num >= max ? max : num
 
@@ -38,10 +43,16 @@ class Background extends React.Component {
   constructor (props) {
     super(props)
     this.controller = new Controller({
-      y1: 0,
-      y2: 0,
-      o1: 1,
-      o2: 1,
+      to: {
+        y1: 0,
+        y2: 0,
+        o1: 1,
+        o2: 1,
+      },
+      config: {
+        tension: 400,
+        friction: 18,
+      },
     })
     this.isWindowDefined = typeof window !== 'undefined'
     this.isBusy = false
@@ -51,6 +62,7 @@ class Background extends React.Component {
     if (this.isWindowDefined) {
       window.addEventListener('scroll', this.handleScrollChange)
       this.handleScrollChange()
+      this.controller.start()
     }
   }
 
@@ -67,7 +79,9 @@ class Background extends React.Component {
     if (!this.isBusy) {
       this.isBusy = true
       this.requestAnimationFrame(() => {
-        this.controller.update(this.getAnimationValues())
+        this.controller.update({
+          to: this.getAnimationValues()
+        })
         this.isBusy = false
       })
     }
@@ -119,38 +133,43 @@ class Background extends React.Component {
               <rect width="100%" height="100%" fill="url(#squiggle-2)" />
             </mask>
           </defs>
-          <AnimatedGroup
-            style={{
-              willChange: 'transform',
-              transform: y1.interpolate(y => `translate3d(0,${y}px,0)`),
-              opacity: o1,
-            }}
-            >
-            <AnimatedCircle
+        </Svg>
+        <AnimatedContainer
+          style={{
+            transform: y1.interpolate(y => `translate3d(0px, ${y}px, 0px) scale3d(1, 1, 1)`),
+            opacity: o1,
+          }}
+          >
+          <Svg preserveAspectRatio="none" >
+            <circle
               cx="25%"
               cy="0"
               r="65%"
               fill={color1}
             />
-            <AnimatedCircle
+            <circle
               cx="18%"
               cy="20"
               r="60%"
               fill="url(#squiggle-1)"
             />
-          </AnimatedGroup>
-          <AnimatedCircle
-            cx="16%"
-            cy="20"
-            r="60%"
-            fill="url(#squiggle-2)"
-            style={{
-              willChange: 'transform',
-              transform: y2.interpolate(y => `translate3d(0,${y}px,0)`),
-              opacity: o2,
-            }}
-          />
-        </Svg>
+          </Svg>
+        </AnimatedContainer>
+        <AnimatedContainer
+          style={{
+            transform: y2.interpolate(y => `translate3d(0px, ${y}px, 0px) scale3d(1, 1, 1)`),
+            opacity: o2,
+          }}
+          >
+          <Svg preserveAspectRatio="none" >
+            <circle
+              cx="16%"
+              cy="20"
+              r="60%"
+              fill="url(#squiggle-2)"
+            />
+          </Svg>
+        </AnimatedContainer>
       </Graphic>
     )
   }
