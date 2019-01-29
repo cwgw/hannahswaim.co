@@ -4,15 +4,13 @@ import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
 
-import spacing from 'utils/spacing'
-import { media } from 'utils/media'
-// import { modalBreakpoint } from 'utils/constants'
+import { spacing, media } from 'style/layout'
+import { modalBreakpoint } from 'style/constants'
 import { formatArtMeta } from 'utils/formatting'
-import Container from 'components/Container'
 import Flex from 'components/Flex'
-import ArtPieceMeta from 'components/ArtPieceMeta'
-import Row from 'components/Row/RowAlt'
+import Row from 'components/Row'
 import Box from 'components/Box'
+import { StandardGrid } from 'components/Grid'
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -42,45 +40,36 @@ const Wrapper = styled(Flex)`
   transition: width 300ms linear;
   flex-direction: column;
 
-  ${media.min.modal`
+  ${media.min[modalBreakpoint]`
     flex-direction: column-reverse;
   `}
 `
 
 const Meta = styled(Box)`
   background: #fff;
+  padding: ${spacing('md')};
 
   & span,
   & small {
     display: block;
-    line-height: 1.2;
   }
 `
 
-function ArtPieceDetails (props) {
-
-  const {
-    title,
-    date,
-    media,
-    images,
-    isModalEnabled,
-    childContentfulArtPieceDimensionsJsonNode: dimensions,
-  } = props
-
-  // const combinedAspectRatio = images.reduce((acc, {fluid}) => acc = acc + fluid.aspectRatio, 0)
+const ArtPieceDetails = ({
+  title,
+  date,
+  media,
+  images,
+  isModalEnabled,
+  childContentfulArtPieceDimensionsJsonNode: dimensions,
+}) => {
 
   const meta = formatArtMeta({title, date, media, dimensions})
 
   return isModalEnabled
     ? (
-      <Wrapper
-        onClick={(e) => {e.stopPropagation()}}
-
-        >
-        <Meta
-          padding={2}
-          >
+      <Wrapper onClick={(e) => {e.stopPropagation()}} >
+        <Meta>
           <span>{meta.title}</span>
           <small><em>{meta.media}</em></small>
           <small>{meta.dimensions}</small>
@@ -110,19 +99,26 @@ function ArtPieceDetails (props) {
           ))}
         </Row>
       </Wrapper>
-    ) : (
-      <React.Fragment>
-        <Container>
-          <Meta>
-            <ArtPieceMeta
-              title={title}
-              date={date}
-              media={media}
-              dimensions={dimensions}
-            />
-          </Meta>
-        </Container>
-        <Container>
+    )
+    : (
+      <StandardGrid>
+        <Meta
+          gridColumn={{
+            base: 'wideStart / wideEnd',
+            xl: 'contentStart / contentEnd',
+          }}
+          marginTop="xxl"
+          >
+          <span>{meta.title}</span>
+          <small><em>{meta.media}</em></small>
+          <small>{meta.dimensions}</small>
+        </Meta>
+        <Box
+          gridColumn={{
+            base: 'wideStart / wideEnd',
+            xl: 'contentStart / contentEnd',
+          }}
+          >
           {images.map(({id, sqip, fluid}) => (
             <GatsbyImage
               key={id}
@@ -131,12 +127,12 @@ function ArtPieceDetails (props) {
                 base64: sqip.dataURI
               }}
               style={{
-                marginBottom: spacing(-1)
+                marginBottom: spacing('md')
               }}
             />
           ))}
-        </Container>
-      </React.Fragment>
+        </Box>
+      </StandardGrid>
     )
 }
 

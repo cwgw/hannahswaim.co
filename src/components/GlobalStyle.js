@@ -1,20 +1,15 @@
 import { createGlobalStyle } from 'styled-components'
-import { normalize } from 'polished'
 
-import { fontSizeRoot, colors } from 'utils/constants'
-import fonts from 'utils/fonts'
-import media from 'utils/media'
-import spacing from 'utils/spacing'
+import { spacing } from 'style/layout'
+import { colors } from 'style/constants'
+import * as fonts from 'style/fonts'
 
 const GlobalStyle = createGlobalStyle`
-  ${normalize()}
-
   html {
     height: auto;
     min-height: auto;
     box-sizing: border-box;
-    background-color: ${colors.brand[4]};
-    font-size: ${fontSizeRoot}px;
+    ${fonts.style.html}
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-overflow-scrolling: touch;
@@ -36,13 +31,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-size: 1rem;
-    font-family: ${fonts.serif};
-    font-weight: 400;
-    line-height: 1.5;
-    background-color: ${colors.background};
+    ${fonts.style.body}
     color: ${colors.body};
     -webkit-overflow-scrolling: touch;
+    margin: 0;
   }
 
   a {
@@ -68,39 +60,20 @@ const GlobalStyle = createGlobalStyle`
   pre,
   table,
   ul {
-    margin: 0 0 ${spacing(2)};
+    margin: 0 0 ${spacing('md')};
   }
 
-  h1 {
-    font-family: ${fonts.sansSerif};
-    font-weight: 700;
-    font-size: ${spacing(5)};
-  }
-
-  h2 {
-    font-weight: 400;
-    font-size: ${spacing(3)};
-  }
-
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: 700;
-    font-size: ${spacing(2)};
-  }
-
-  ${media.max.md`
-    h1 {
-      font-size: ${spacing(4)};
-    }
-  `}
-
-  ${media.max.sm`
-    h1 {
-      font-size: ${spacing(3)};
-    }
-  `}
+  ${() => {
+    const printHeadingStyles = (n) => n > 0
+      ? {
+        [`h${n}`]: {
+          ...(fonts[`h${n}`] || {}),
+        },
+        ...printHeadingStyles(n - 1)
+      }
+      : {}
+    return printHeadingStyles(6)
+  }}
 
   .sr-only {
     position: absolute;

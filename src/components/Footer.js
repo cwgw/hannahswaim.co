@@ -2,11 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import spacing from 'utils/spacing'
-// import media from 'utils/media'
-import { colors } from 'utils/constants'
-import { makeFlex } from 'utils/props'
-import { space } from 'utils/spacing'
+import { spacing, space, makeFlex } from 'style/layout'
+import { colors } from 'style/constants'
 
 import Icon from 'components/Icon'
 import Link from 'components/Link'
@@ -21,15 +18,13 @@ const defaultProps = {
   flexFlow: ['column nowrap',,,'row wrap'], // eslint-disable-line no-sparse-arrays
   alignItems: ['center',,,'flex-end'], // eslint-disable-line no-sparse-arrays
   marginTop: 'auto',
-  padding: 2,
+  padding: 'md',
 }
-
 
 const Default = styled.footer`
   ${makeFlex}
   ${space}
   position: relative;
-  min-height: ${spacing(2)};
   text-align: center;
   background-color: ${colors.brand[5]};
   color: ${colors.brand[2]};
@@ -38,7 +33,7 @@ const Default = styled.footer`
   span {
     display: block;
     color: inherit;
-    padding: ${spacing(-3)} ${spacing(-1)};
+    padding: ${spacing('sm')} ${spacing('md')};
   }
 `
 
@@ -54,8 +49,8 @@ const Footer = ({siteTitle, ...props}) => (
       <Icon
         type="instagram"
         style={{
-          width: spacing(1),
-          height: spacing(1),
+          width: '1rem',
+          height: '1rem',
           margin: '0 auto',
         }}
       />
@@ -68,8 +63,8 @@ const Footer = ({siteTitle, ...props}) => (
       <Icon
         type="mail"
         style={{
-          width: spacing(1),
-          height: spacing(1),
+          width: '1rem',
+          height: '1rem',
           margin: '0 auto',
         }}
       />

@@ -1,15 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import ReactModal from 'react-modal'
-import { transparentize } from 'polished'
 import { navigate } from "gatsby"
-// import { Spring } from 'react-spring'
+import { transparentize } from 'polished'
 
-import { colors } from 'utils/constants'
-import spacing from 'utils/spacing'
-
-import { Control } from 'components/Button'
+import { style as fontStyle } from 'style/fonts'
+import { colors } from 'style/constants'
+import PostNavigation from 'components/PostNavigation'
+import Button from 'components/Button'
 import Icon from 'components/Icon'
+
+const Close = styled(Button)`
+  color: ${colors.white};
+  background-color: transparent;
+  border: none;
+  font-size: ${fontStyle.lead.fontSize};
+
+  &:hover,
+  &:focus {
+    background-color: ${colors.gray[0]};
+  }
+`
 
 const propTypes = {
   isOpen: PropTypes.bool,
@@ -44,8 +56,30 @@ class Modal extends React.Component {
 
     const {
       children,
-      isOpen
+      location,
+      isOpen,
     } = this.props
+
+    const {
+      siblings = [],
+      index = 0,
+    } = location.state || {}
+
+    const next = {
+      pathname: siblings[index + 1] || null,
+      state: {
+        ...location.state,
+        index: index + 1,
+      }
+    }
+
+    const previous = {
+      pathname: siblings[index - 1] || null,
+      state: {
+        ...location.state,
+        index: index - 1,
+      }
+    }
 
     return (
       <ReactModal
@@ -77,24 +111,27 @@ class Modal extends React.Component {
         }}
         >
         <section onClick={this.closeModal} >
-          {children}
-          <Control
+          <Close
             aria-label="Close Modal"
-            title="Close Modal"
-            variant="dark"
-            outline
-            position="absolute"
             onClick={this.closeModal}
             style={{
               position: 'absolute',
               top: 0,
               right: 0,
               zIndex: 1000,
-              marginBottom: spacing(-1),
             }}
             >
-            <Icon type="close" />
-          </Control>
+            <Icon
+              type="close"
+              inline
+            />
+          </Close>
+          <PostNavigation
+            next={next}
+            previous={previous}
+            >
+            {children}
+          </PostNavigation>
         </section>
       </ReactModal>
     )

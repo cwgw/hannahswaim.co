@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { makeFlex } from 'utils/props'
+import { makeFlex } from 'style/layout'
 import Box from 'components/Box'
 
 const Flex = styled(Box)`

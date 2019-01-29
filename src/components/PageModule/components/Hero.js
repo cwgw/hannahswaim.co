@@ -4,8 +4,9 @@ import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
 
-import { media } from 'utils/media'
-import { colors, breakpoints } from 'utils/constants'
+import { style as fontStyle } from 'style/fonts'
+import { media } from 'style/layout'
+import { colors, breakpoints } from 'style/constants'
 import { withUIProps } from 'components/UIContext'
 import { StandardGrid } from 'components/Grid'
 import Box from 'components/Box'
@@ -24,11 +25,10 @@ const defaultProps = {
 }
 
 const Wrapper = styled(StandardGrid)`
-  min-height: ${breakpoints.xs}px;
+  min-height: ${breakpoints.get('xs')}px;
 
   ${media.min.lg`
     height: 80vh;
-    // max-height: ${breakpoints.md}px;
   `}
 `
 
@@ -38,13 +38,11 @@ const Figure = styled(Box)`
 
 const TextBox = styled(Box)`
   position: relative;
-  font-size: 1.5rem;
-  line-height: 1.2;
+  ${fontStyle.lead}
   border: 2px solid ${colors.brand[4]};
 
   & > p:first-child {
-    font-size: 2.5rem;
-    font-weight: 700;
+    ${fontStyle.hero}
   }
 
   & > p:last-child {
@@ -57,7 +55,7 @@ const Hero = ({
     childMarkdownRemark
   },
   image,
-  viewportDimensions,
+  isViewport,
   breakpoint,
   location,
   id,
@@ -67,8 +65,8 @@ const Hero = ({
     {...props}
     >
     <TextBox
-      paddingY={4}
-      paddingX={1}
+      paddingX="lg"
+      paddingY="xl"
       alignSelf="start"
       gridColumn={{
         base: 'contentStart / contentEnd',
@@ -78,18 +76,17 @@ const Hero = ({
       gridRow="2"
       dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
     />
-    {viewportDimensions.width >= breakpoints[breakpoint] && (
+    {isViewport[breakpoint] && (
       <Figure
         gridColumn={{
-          null: 'wideStart / wideEnd',
-          // lg: 'col4Start / wideEnd',
+          base: 'wideStart / wideEnd',
           lg: 'col4Start / bleedEnd',
         }}
         gridRow={{
           lg: "1 / span 3",
         }}
         as="figure"
-        paddingY={2}
+        paddingY="xl"
         >
         <GatsbyImage
           {...(image.fixed

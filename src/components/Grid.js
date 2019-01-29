@@ -1,20 +1,11 @@
 import styled from 'styled-components'
 
-import { makeGrid } from 'utils/props'
+import { makeGrid } from 'style/layout'
 import Box from 'components/Box'
 
 const Grid = styled(Box)`
   ${makeGrid}
 `
-
-export default Grid
-
-/**
- * |||  ||  ||  |||  ||  ||  |||
- *
- *
- *
- */
 
 const colWidth = '1fr'
 const gutterWidth = 'minmax(auto, 1.5rem)'
@@ -57,7 +48,7 @@ const columns = [
   '[bleedEnd]'
 ]
 
-export const StandardGrid = styled(Box)
+const StandardGrid = styled(Box)
   .attrs({
     // gridTemplateColumns: '[bleedStart] 1fr [wideStart] 1fr [contentStart col1Start] 3fr [col1End] 1fr [center] 1fr [content2Start] 5fr [contentEnd content2End] 1fr [wideEnd] 1fr [bleedEnd]',
     gridTemplateColumns: columns.join(' '),
@@ -65,3 +56,9 @@ export const StandardGrid = styled(Box)
   })`
     ${makeGrid}
   `
+
+export {
+  Grid as default,
+  Grid,
+  StandardGrid
+}

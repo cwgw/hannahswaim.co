@@ -2,27 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 
-// import Layout from 'components/Layout'
 import * as PageModule from 'components/PageModule'
 
 const propTypes = {
-  location: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  data: PropTypes.object,
-}
-
-const defaultProps = {
-  data: {
-    page: {
-      id: null,
-      title: null,
-      slug: null,
-      node_locale: null,
-      contentModules: []
-    }
-  }
+  location: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    page: PropTypes.object,
+  }).isRequired,
 }
 
 const PageTemplate = ({
@@ -30,8 +16,8 @@ const PageTemplate = ({
   data: {
     page: {
       contentModules,
-      title,
-      node_locale,
+      // title,
+      // node_locale,
     },
   },
 }) => (
@@ -43,10 +29,10 @@ const PageTemplate = ({
           <Module
             key={content.id}
             marginBottom={{
-              null: 4,
-              md: 8,
+              base: 'lg',
+              md: 'xl',
             }}
-            paddingTop={__typename !== 'ContentfulPageHero' && index === 0 ? 8 : '0'}
+            paddingTop={(index === 0 && __typename !== 'ContentfulPageHero') ? 8 : null}
             location={location}
             {...content}
           />
@@ -56,45 +42,7 @@ const PageTemplate = ({
   </React.Fragment>
 )
 
-// const PageTemplate = ({
-//   location,
-//   data: {
-//     page: {
-//       contentModules,
-//       title,
-//       node_locale,
-//     },
-//   },
-// }) => (
-//   <Layout
-//     location={location}
-//     title={title}
-//     locale={node_locale}
-//     >
-//     {contentModules.map(({__typename, ...content}, index) => {
-//       const Module = PageModule[__typename]
-//       return Module
-//         ? (
-//           <Module
-//             key={content.id}
-//             marginBottom={{
-//               null: 4,
-//               md: 8,
-//             }}
-//             paddingTop={__typename !== 'ContentfulPageHero' && index === 0 ? 8 : '0'}
-//             location={location}
-//             {...content}
-//           />
-//         )
-//         : null
-//     })}
-//   </Layout>
-// )
-
-
 PageTemplate.propTypes = propTypes
-
-PageTemplate.defaultProps = defaultProps
 
 export default PageTemplate
 
@@ -113,5 +61,3 @@ export const pageQuery = graphql`
     }
   }
 `
-        // ...PageInstagram
-        // ...PageFeatureRow

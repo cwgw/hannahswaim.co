@@ -4,13 +4,12 @@ import styled from 'styled-components'
 import { transparentize } from 'polished'
 // import { graphql } from 'gatsby'
 
-import spacing from 'utils/spacing'
-import media from 'utils/media'
-import fonts from 'utils/fonts'
-import { colors, ease } from 'utils/constants'
+import { spacing, media } from 'style/layout'
+import { sansSerif, size as fontSize } from 'style/fonts'
+import { colors, ease } from 'style/constants'
 
 // import Row from 'components/Row'
-import Row from 'components/Row/RowAlt'
+import Row from 'components/Row'
 import Icon from 'components/Icon'
 
 const propTypes = {
@@ -21,7 +20,7 @@ const defaultProps = {}
 
 const Link = styled.a`
   display: block;
-  margin-right: ${spacing(2)};
+  margin-right: ${spacing('md')};
   flex: 1;
   color: ${colors.white};
   position: relative;
@@ -61,10 +60,10 @@ const Link = styled.a`
     }
 
     &:before {
-      left: ${spacing(-3)};
-      right: ${spacing(-3)};
-      top: ${spacing(-3)};
-      bottom: ${spacing(-3)};
+      left: ${spacing('xs')};
+      right: ${spacing('xs')};
+      top: ${spacing('xs')};
+      bottom: ${spacing('xs')};
       background-color: ${transparentize(0.5, colors.gray[1])};
       border: 1px solid transparent;
       content: '';
@@ -75,7 +74,7 @@ const Link = styled.a`
       left: 50%;
       text-align: center;
       content: 'View on Instagram';
-      transform: translate3d(-50%,calc(-50% + ${spacing(0)}),0);
+      transform: translate3d(-50%,calc(-50% + ${spacing('lg')}),0);
       transition: transform 175ms ${ease} 100ms,
                   opacity 350ms ${ease} 0ms;
     }
@@ -91,18 +90,18 @@ const Caption = styled.span`
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
-  padding: ${spacing(-1)};
-  margin: ${spacing(-3)};
+  padding: ${spacing('sm')};
+  margin: ${spacing('xs')};
   z-index: 1;
 
   & > span {
     display: inline-block;
-    padding-right: ${spacing(2)};
+    padding-right: ${spacing('md')};
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-family: ${fonts.sansSerif};
-    font-size: ${spacing(-1)};
+    font-family: ${sansSerif};
+    font-size: ${fontSize('small')};
   }
 `
 
@@ -169,8 +168,8 @@ class Instagram extends React.Component {
             type="instagram"
             inline
             style={{
-              width: spacing(3),
-              height: spacing(3),
+              width: '1rem',
+              height: '1rem',
               flex: '0 0 auto',
             }}
           />

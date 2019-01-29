@@ -2,19 +2,20 @@ import React from 'react'
 import styled from 'styled-components'
 import { Controller, animated } from 'react-spring'
 
-import { colors } from 'utils/constants'
+import { colors } from 'style/constants'
 
 const defaultProps = {
   speed: -0.2,
   colors: [
     colors.brand[5],
+    colors.brand[4],
     colors.brand[4]
   ],
 }
 
 const Graphic = styled.div`
   position: absolute;
-  z-index: 0;
+  z-index: -1;
   width: 100vw;
   height: 100vh;
   user-select: none;
@@ -34,6 +35,7 @@ const AnimatedContainer = animated(styled.div`
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  transform-origin: center top;
 `)
 
 const clamp = (num, min, max) => num <= min ? min : num >= max ? max : num
@@ -107,7 +109,7 @@ class Background extends React.Component {
   render () {
 
     const {
-      colors: [color1, color2]
+      colors: [color1, color2, color3]
     } = this.props
 
     const {
@@ -125,13 +127,8 @@ class Background extends React.Component {
               <path fill="none" stroke={color2} strokeWidth="1" d="M 0,0 C 4 0, 4 1, 8 1 S 12 0, 16 0" transform="translate(0 1) scale(3)" vectorEffect="non-scaling-stroke" />
             </pattern>
             <pattern id="squiggle-2" width="48" height="6" patternUnits="userSpaceOnUse" patternTransform="skewX(-12) skewY(4)" >
-              <rect width="100%" height="100%" fill="url(#squiggle-1)" />
+              <path fill="none" stroke={color3} strokeWidth="1" d="M 0,0 C 4 0, 4 1, 8 1 S 12 0, 16 0" transform="translate(0 1) scale(3)" vectorEffect="non-scaling-stroke" />
             </pattern>
-            <mask id="squiggle-mask" >
-              <rect width="100%" height="100%" fill="#000" />
-              <rect width="100%" height="100%" fill="url(#squiggle-1)" />
-              <rect width="100%" height="100%" fill="url(#squiggle-2)" />
-            </mask>
           </defs>
         </Svg>
         <AnimatedContainer
@@ -148,10 +145,10 @@ class Background extends React.Component {
               fill={color1}
             />
             <circle
-              cx="18%"
+              cx="16%"
               cy="20"
               r="60%"
-              fill="url(#squiggle-1)"
+              fill="url(#squiggle-2)"
             />
           </Svg>
         </AnimatedContainer>
@@ -163,10 +160,10 @@ class Background extends React.Component {
           >
           <Svg preserveAspectRatio="none" >
             <circle
-              cx="16%"
+              cx="18%"
               cy="20"
               r="60%"
-              fill="url(#squiggle-2)"
+              fill="url(#squiggle-1)"
             />
           </Svg>
         </AnimatedContainer>

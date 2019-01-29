@@ -2,16 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { media } from 'utils/media'
-import spacing from 'utils/spacing'
+import { spacing, media } from 'style/layout'
 import { acronymize } from 'utils/formatting'
-import { colors, breakpoints } from 'utils/constants'
+import { colors, navBreakpoint } from 'style/constants'
 import { withUIProps } from 'components/UIContext'
 import { StandardGrid } from 'components/Grid'
 import Flex from 'components/Flex'
 import Link from 'components/Link'
 import Icon from 'components/Icon'
-
 
 const propTypes = {
   siteTitle: PropTypes.string.isRequired,
@@ -38,8 +36,8 @@ const Nav = styled(Flex)`
 
 const NavLink = styled(Link)`
   display: inline-block;
-  min-width: ${spacing(6)};
-  padding: ${spacing(-1)} ${spacing(1)};
+  min-width: ${spacing('xl')};
+  padding: ${spacing('sm')} ${spacing('md')};
   margin: 0 1px;
   background-color: ${colors.white};
   border-radius: 3px;
@@ -67,8 +65,7 @@ const Nameplate = styled(NavLink)`
 const Header = ({
   siteTitle,
   menuItems,
-  isMobile,
-  viewportDimensions,
+  isViewport,
 }) => (
   <Wrapper
     role="banner"
@@ -76,11 +73,11 @@ const Header = ({
     >
     <Nav
       gridColumn="contentStart / contentEnd"
-      justifyContent={isMobile ? 'space-between' : 'flex-start'}
+      justifyContent={isViewport[navBreakpoint] ? 'space-between' : 'flex-start'}
       flexFlow="row nowrap"
       alignItems="baseline"
       marginRight="auto"
-      paddingY={1}
+      paddingY="md"
       as="nav"
       role="navigation"
       >
@@ -89,7 +86,7 @@ const Header = ({
         as={Link}
         title="Home"
         >
-        {viewportDimensions.width < breakpoints.xs ? acronymize(siteTitle) : siteTitle}
+        {isViewport.xs ? siteTitle : acronymize(siteTitle)}
       </Nameplate>
       {menuItems.map(({
         id,

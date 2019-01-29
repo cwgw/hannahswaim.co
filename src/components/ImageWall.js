@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _debounce from 'lodash/debounce'
 
-import Grid, { StandardGrid } from 'components/Grid'
+import { Grid, StandardGrid } from 'components/Grid'
 
 const propTypes = {
   items: PropTypes.array,

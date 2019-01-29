@@ -1,10 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _find from 'lodash/find'
-
-import has from 'utils/has'
-
-import { Svg } from 'components/Graphics'
+import styled from 'styled-components'
+import _has from 'lodash/has'
+import _uniqueId from 'lodash/uniqueId'
 
 const propTypes = {
   type: PropTypes.string,
@@ -32,26 +30,16 @@ const icons = {
       ['line', {x1: 0, y1: 0, x2: 100, y2: 100}],
       ['line', {x1: 100, y1: 0, x2: 0, y2: 100}],
     ],
-    aliases: [
-      'x',
-    ]
   },
   previous: {
     paths: [
       ['polyline', {points: '50,0 0,50 50,100', transform: 'translate(25,0)'}],
     ],
-    aliases: [
-      'left',
-      'prev',
-    ]
   },
   next: {
     paths: [
       ['polyline', {points: '0,0 50,50 0,100', transform: 'translate(25,0)'}],
     ],
-    aliases: [
-      'right',
-    ]
   },
   instagram: {
     atts: {
@@ -75,7 +63,19 @@ const icons = {
   }
 }
 
-function Icon ({type, style, className, inline}) {
+const Svg = styled(
+  ({style, ...props}) => <svg {...props} />
+)`
+  ${({style}) => style}
+`
+
+const Icon = ({
+  className,
+  inline,
+  style,
+  title,
+  type,
+}) => {
 
   const name = type.slice().toLowerCase()
 
@@ -98,10 +98,13 @@ function Icon ({type, style, className, inline}) {
       height: 'auto',
     }
 
-  if (has(icons, name) || _find(icons, (o) => Array.isArray(o.aliases) && o.aliases.includes(name))) {
+  if (_has(icons, name)) {
     const {
       atts,
+      paths,
     } = icons[name]
+
+    const titleId = _uniqueId('iconTitle_')
 
     return (
       <Svg
@@ -110,16 +113,28 @@ function Icon ({type, style, className, inline}) {
           ...style,
         }}
         className={className}
-        atts={{
+        {...{
           ...defaultAtts,
-          ...atts,
+          ...atts
         }}
-        paths={icons[name].paths}
-      />
+        {...(title
+          ? {'aria-labelledby': titleId}
+          : {'aria-hidden': true}
+        )}
+        >
+        {title && (
+          <title id={titleId} >{title}</title>
+        )}
+        {paths.map(([Element, pathAtts], index) => (
+          <Element
+            key={Element + index}
+            vectorEffect="non-scaling-stroke"
+            {...pathAtts}
+          />
+        ))}
+      </Svg>
     )
-  }
-
-  return null
+  } else return null
 }
 
 Icon.propTypes = propTypes

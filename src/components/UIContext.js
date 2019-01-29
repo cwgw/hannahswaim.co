@@ -1,77 +1,49 @@
 import React from 'react'
 import _debounce from 'lodash/debounce'
+import _isEqual from 'lodash/isEqual'
 
-import { navBreakpoint } from 'utils/constants'
+import { breakpoints } from 'style/constants'
 
 const UIContext = React.createContext({})
 
-export const { Consumer } = UIContext
-
-export class Provider extends React.Component {
-
+class Provider extends React.Component {
   constructor (props) {
     super(props)
-
-    this.debouncedSetViewportDimensions = _debounce(this.setViewportDimensions, 50, {trailing: true})
     this.isWindowDefined = typeof window !== 'undefined'
-
-    if (this.isWindowDefined) {
-      const dimensions = this.getViewportDimensions()
-      this.state = {
-        dimensions: dimensions,
-        isNavOpen: false,
-        isMobile: dimensions.width < navBreakpoint,
-      }
-    } else {
-      this.state = {
-        dimensions: {
-          width: 0,
-          height: 0,
-        },
-        isNavOpen: false,
-        isMobile: true,
-      }
+    this.debouncedSetViewportWidth = _debounce(this.setViewportWidth, 50, {trailing: true}).bind(this)
+    this.state = {
+      isViewport: this.getViewportWidth(),
     }
   }
 
   componentDidMount () {
     if (this.isWindowDefined) {
-      window.addEventListener('resize', this.debouncedSetViewportDimensions)
-      this.setViewportDimensions()
+      window.addEventListener('resize', this.debouncedSetViewportWidth)
+      this.setViewportWidth()
     }
   }
 
   componentWillUnmount () {
     if (this.isWindowDefined) {
-      window.removeEventListener('resize', this.debouncedSetViewportDimensions)
+      window.removeEventListener('resize', this.debouncedSetViewportWidth)
     }
   }
 
-  getViewportDimensions = () => ({
-    width: window.innerWidth,
-    height: window.innerHeight
-  })
-
-  setViewportDimensions = () => {
-    const dimensions = this.getViewportDimensions()
-    this.setState(state => ({
-      dimensions: dimensions,
-      isNavOpen: dimensions.width >= navBreakpoint ? false : state.isNavOpen,
-      isMobile: dimensions.width < navBreakpoint,
-    }))
+  getViewportWidth = () => {
+    const viewportWidth = this.isWindowDefined ? window.innerWidth : 0
+    const state = {}
+    for (const [key, value] of breakpoints.entries()) {
+      state[key] = value < viewportWidth
+    }
+    return state
   }
 
-  toggleNav = () => {
-    this.setState(state => ({
-      isNavOpen: !state.isNavOpen,
-    }))
-  }
-
-  closeNav = () => {
-    if (this.state.isNavOpen) {
-      this.setState({
-        isNavOpen: false,
-      })
+  setViewportWidth = () => {
+    const state = this.getViewportWidth()
+    if(!_isEqual(state, this.state.isViewport)) {
+      this.setState(prevState => ({
+        isViewport: state,
+      }))
     }
   }
 
@@ -79,22 +51,21 @@ export class Provider extends React.Component {
     return (
       <UIContext.Provider
         value={{
-          toggleNav: this.toggleNav,
-          closeNav: this.closeNav,
           ...this.state
         }}
-      >
+        >
         {this.props.children}
       </UIContext.Provider>
     )
   }
 }
 
-export const withUIProps = (Component) => (props) => (
+const { Consumer } = UIContext
+
+const withUIProps = (Component) => (props) => (
   <UIContext.Consumer>
-    {({dimensions, ...state}) => (
+    {state => (
       <Component
-        viewportDimensions={dimensions}
         {...state}
         {...props}
       />
@@ -102,7 +73,8 @@ export const withUIProps = (Component) => (props) => (
   </UIContext.Consumer>
 )
 
-export default {
+export {
   Consumer,
-  Provider
+  Provider,
+  withUIProps
 }

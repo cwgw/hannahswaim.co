@@ -2,10 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 
-// import Wall from 'components/Wall'
-import ImageWall from 'components/Wall/ImageWall'
-// import Grid from 'components/Grid'
-// import ArtPiece from 'components/ArtPiece'
+import ImageWall from 'components/ImageWall'
 import Piece from 'components/Piece'
 
 const propTypes = {

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import GatsbyImage from 'gatsby-image'
 
-import fonts from 'utils/fonts'
-import spacing from 'utils/spacing'
+import * as fonts from 'style/fonts'
+import { spacing } from 'style/layout'
+import { colors, ease } from 'style/constants'
 import { formatArtMeta } from 'utils/formatting'
-import { colors, ease } from 'utils/constants'
 import DefaultLink from 'components/Link'
 import Box from 'components/Box'
 
