@@ -2,7 +2,7 @@ import _upperFirst from 'lodash/upperFirst'
 
 export const acronymize = (str) => str.split(/\s+/).reduce((acc, val) => acc + val.charAt(0), '')
 
-export const formatArtMediaString = (media) => {
+export const formatArtMedia = (media) => {
   const mediaArray = Array.isArray(media)
     ? media
     : typeof media === 'string'
@@ -50,7 +50,16 @@ export const formatArtTitle = ({title, date}) => {
 export const formatArtMeta = ({title, date, media, dimensions}) => {
   return {
     title: formatArtTitle({title, date}),
-    media: formatArtMediaString(media),
+    media: formatArtMedia(media),
     dimensions: formatArtDimensions(dimensions),
   }
+}
+
+export const artMetaString = ({title, date, media, dimensions}) => {
+  const meta = formatArtMeta({title, date, media, dimensions})
+  return [
+    meta.title + '.',
+    meta.media,
+    meta.dimensions
+  ].join(' ')
 }

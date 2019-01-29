@@ -6,11 +6,11 @@ import GatsbyImage from 'gatsby-image'
 
 import { spacing, media } from 'style/layout'
 import { modalBreakpoint } from 'style/constants'
-import { formatArtMeta } from 'utils/formatting'
 import Flex from 'components/Flex'
 import Row from 'components/Row'
 import Box from 'components/Box'
 import { StandardGrid } from 'components/Grid'
+import ArtPieceMeta from 'components/ArtPieceMeta'
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -48,11 +48,6 @@ const Wrapper = styled(Flex)`
 const Meta = styled(Box)`
   background: #fff;
   padding: ${spacing('md')};
-
-  & span,
-  & small {
-    display: block;
-  }
 `
 
 const ArtPieceDetails = ({
@@ -62,80 +57,85 @@ const ArtPieceDetails = ({
   images,
   isModalEnabled,
   childContentfulArtPieceDimensionsJsonNode: dimensions,
-}) => {
-
-  const meta = formatArtMeta({title, date, media, dimensions})
-
-  return isModalEnabled
-    ? (
-      <Wrapper onClick={(e) => {e.stopPropagation()}} >
-        <Meta>
-          <span>{meta.title}</span>
-          <small><em>{meta.media}</em></small>
-          <small>{meta.dimensions}</small>
-        </Meta>
-        <Row
-          childAspectRatioResolver={({fluid}) => fluid.aspectRatio}
-          height="75vh"
-          items={images}
-          >
-          {images.map(({id, sqip, fluid}) => (
-            <Box
-              key={id}
-              as="figure"
-              margin="0"
-              >
-              <GatsbyImage
-                fluid={{
-                  ...fluid,
-                  base64: sqip.dataURI,
-                }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-            </Box>
-          ))}
-        </Row>
-      </Wrapper>
-    )
-    : (
-      <StandardGrid>
-        <Meta
-          gridColumn={{
-            base: 'wideStart / wideEnd',
-            xl: 'contentStart / contentEnd',
+}) => (isModalEnabled
+  ? (
+    <Wrapper onClick={(e) => {e.stopPropagation()}} >
+      <Meta>
+        <ArtPieceMeta
+          {...{
+            title,
+            date,
+            media,
+            dimensions,
           }}
-          marginTop="xxl"
-          >
-          <span>{meta.title}</span>
-          <small><em>{meta.media}</em></small>
-          <small>{meta.dimensions}</small>
-        </Meta>
-        <Box
-          gridColumn={{
-            base: 'wideStart / wideEnd',
-            xl: 'contentStart / contentEnd',
-          }}
-          >
-          {images.map(({id, sqip, fluid}) => (
+        />
+      </Meta>
+      <Row
+        childAspectRatioResolver={({fluid}) => fluid.aspectRatio}
+        height="75vh"
+        items={images}
+        >
+        {images.map(({id, sqip, fluid}) => (
+          <Box
+            key={id}
+            as="figure"
+            margin="0"
+            >
             <GatsbyImage
-              key={id}
               fluid={{
                 ...fluid,
-                base64: sqip.dataURI
+                base64: sqip.dataURI,
               }}
               style={{
-                marginBottom: spacing('md')
+                width: '100%',
+                height: '100%',
               }}
             />
-          ))}
-        </Box>
-      </StandardGrid>
-    )
-}
-
+          </Box>
+        ))}
+      </Row>
+    </Wrapper>
+  )
+  : (
+    <StandardGrid>
+      <Meta
+        gridColumn={{
+          base: 'wideStart / wideEnd',
+          xl: 'contentStart / contentEnd',
+        }}
+        marginTop="xxl"
+        >
+        <ArtPieceMeta
+          {...{
+            title,
+            date,
+            media,
+            dimensions,
+          }}
+        />
+      </Meta>
+      <Box
+        gridColumn={{
+          base: 'wideStart / wideEnd',
+          xl: 'contentStart / contentEnd',
+        }}
+        >
+        {images.map(({id, sqip, fluid}) => (
+          <GatsbyImage
+            key={id}
+            fluid={{
+              ...fluid,
+              base64: sqip.dataURI
+            }}
+            style={{
+              marginBottom: spacing('md')
+            }}
+          />
+        ))}
+      </Box>
+    </StandardGrid>
+  )
+)
 
 ArtPieceDetails.propTypes = propTypes
 

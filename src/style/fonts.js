@@ -9,7 +9,7 @@ import interUIBlack from 'fonts/Inter-UI-Black.woff2'
 
 const sansSerif = `"Inter UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif`
 
-const serif = `"Tinos"`
+const serif = `Tinos, Merriweather, Georgia, serif`
 
 const sizes = {
   base: 4,
