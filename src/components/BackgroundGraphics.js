@@ -6,7 +6,7 @@ import useScrollPosition from 'hooks/useScrollPosition'
 import { colors } from 'style/constants'
 
 const defaultProps = {
-  speed: 0.5,
+  speed: 0.25,
   colors: [
     colors.brand[5],
     colors.brand[4]

@@ -72,11 +72,11 @@ const Piece = ({
   const [ { inset }, set ] = useSpring(() => ({
     inset: '0px',
     config: {
-      tension: 420,
-      friction: 12,
+      tension: 540,
+      friction: 16,
     }
   }));
-  const shrink = useCallback(() => set({ inset: spacing('sm') }));
+  const shrink = useCallback(() => set({ inset: spacing('xs') }));
   const grow = useCallback(() => set({ inset: '0px' }));
 
   return (
@@ -106,6 +106,7 @@ const Piece = ({
         style={{
           height: '100%',
           clipPath: inset.interpolate(i => `inset(${i})`),
+          webkitClipPath: inset.interpolate(i => `inset(${i})`),
         }}
         alt={artMetaString({title, date, dimensions, media})}
       />

@@ -38,4 +38,7 @@ function useScrollPosition(options = {}) {
   return y;
 }
 
-export default useScrollPosition;
+export {
+  useScrollPosition as default,
+  useScrollPosition
+}
