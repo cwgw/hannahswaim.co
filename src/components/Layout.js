@@ -8,12 +8,7 @@ import Background from 'components/BackgroundGraphics'
 import Head from 'components/Head'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
-
-let Modal = null
-
-import('components/Modal').then(modal => {
-  Modal = modal.default
-})
+import Modal from 'components/Modal'
 
 const propTypes = {
   children: PropTypes.node.isRequired,

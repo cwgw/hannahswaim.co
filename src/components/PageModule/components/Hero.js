@@ -5,7 +5,7 @@ import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
 
 import { style as fontStyle } from 'style/fonts'
-import { media } from 'style/layout'
+import { media, spacing } from 'style/layout'
 import { colors, breakpoints } from 'style/constants'
 import { withUIProps } from 'components/UIContext'
 import { StandardGrid } from 'components/Grid'
@@ -33,7 +33,17 @@ const Wrapper = styled(StandardGrid)`
 `
 
 const Figure = styled(Box)`
-  margin-bottom: 0;
+  overflow: hidden;
+  position: relative;
+  z-index: -2;
+  max-height: 400px;
+  margin-bottom: ${spacing('lg')};
+
+  ${media.min.lg`
+    max-height: none;
+    margin-bottom: 0;
+    border-bottom-left-radius: ${spacing(12)};
+  `}
 `
 
 const TextBox = styled(Box)`
@@ -76,43 +86,35 @@ const Hero = ({
       gridRow="2"
       dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
     />
-    {isViewport[breakpoint] && (
-      <Figure
-        gridColumn={{
-          base: 'wideStart / wideEnd',
-          lg: 'col4Start / bleedEnd',
+    <Figure
+      gridColumn={{
+        base: 'wideStart / wideEnd',
+        lg: 'col4Start / bleedEnd',
+      }}
+      gridRow={{
+        lg: "1 / span 3",
+      }}
+      as="figure"
+      marginTop="sm"
+      >
+      <GatsbyImage
+        fixed={image.fixed && {
+          ...image.fixed,
+          base64: image.sqip.dataURI
         }}
-        gridRow={{
-          lg: "1 / span 3",
+        fluid={image.fluid && {
+          ...image.fluid,
+          base64: image.sqip.dataURI
         }}
-        as="figure"
-        paddingY="xl"
-        >
-        <GatsbyImage
-          {...(image.fixed
-            ? {
-              fixed: {
-                ...image.fixed,
-                base64: image.sqip.dataURI,
-              }
-            }
-            : {
-              fluid: {
-                ...image.fluid,
-                base64: image.sqip.dataURI,
-              }
-            }
-          )}
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
-          imgStyle={{
-            objectPosition: 'left center'
-          }}
-        />
-      </Figure>
-    )}
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
+        imgStyle={{
+          objectPosition: 'left center'
+        }}
+      />
+    </Figure>
   </Wrapper>
 )
 

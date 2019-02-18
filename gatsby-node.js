@@ -4,7 +4,7 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-const Promise = require('bluebird')
+// const Promise = require('bluebird')
 const path = require('path');
 
 const makeArtPieceSlug = ({title, date, media, contentful_id}) => {

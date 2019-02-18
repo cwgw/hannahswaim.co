@@ -49,7 +49,7 @@ class Modal extends React.Component {
   })
 
   componentDidMount () {
-    console.log('Modal did mount')
+    // console.log('Modal did mount')
   }
 
   render () {

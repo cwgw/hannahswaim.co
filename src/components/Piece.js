@@ -89,7 +89,7 @@ const Piece = ({
     as={DefaultLink}
     {...props}
     >
-    <span class="sr-only">{formatArtTitle({title, date})}</span>
+    <span className="sr-only">{formatArtTitle({title, date})}</span>
     <GatsbyImage
       className="Piece__Image"
       fluid={{
