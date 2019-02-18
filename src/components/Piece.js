@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import GatsbyImage from 'gatsby-image'
+import { useSpring, animated } from 'react-spring'
 
 import { spacing } from 'style/layout'
-import { ease } from 'style/constants'
 import { formatArtTitle, artMetaString } from 'utils/formatting'
 import DefaultLink from 'components/Link'
 import Box from 'components/Box'
@@ -48,17 +48,9 @@ const defaultProps = {
 
 const Link = styled(Box)`
   display: block;
-
-  .Piece__Image {
-    clip-path: inset(0);
-    transition: clip-path 75ms ${ease.out};
-  }
-
-  &:focus .Piece__Image,
-  &:hover .Piece__Image {
-    clip-path: inset(${spacing('xs')});
-  }
 `
+
+const AnimatedImage = animated(GatsbyImage)
 
 const Piece = ({
   location,
@@ -76,33 +68,50 @@ const Piece = ({
   childContentfulArtPieceDimensionsJsonNode: dimensions,
   className,
   ...props
-}) => (
-  <Link
-    to={slug}
-    state={{
-      enableModal: true,
-      origin: location.pathname,
-      siblings: siblings,
-      index: siblingIndex,
-    }}
-    className={className}
-    as={DefaultLink}
-    {...props}
-    >
-    <span className="sr-only">{formatArtTitle({title, date})}</span>
-    <GatsbyImage
-      className="Piece__Image"
-      fluid={{
-        ...images[0].fluid,
-        base64: images[0].sqip.dataURI
+}) => {
+  const [ { inset }, set ] = useSpring(() => ({
+    inset: '0px',
+    config: {
+      tension: 420,
+      friction: 12,
+    }
+  }));
+  const shrink = useCallback(() => set({ inset: spacing('sm') }));
+  const grow = useCallback(() => set({ inset: '0px' }));
+
+  return (
+    <Link
+      to={slug}
+      state={{
+        enableModal: true,
+        origin: location.pathname,
+        siblings: siblings,
+        index: siblingIndex,
       }}
-      style={{
-        height: '100%',
-      }}
-      alt={artMetaString({title, date, dimensions, media})}
-    />
-  </Link>
-)
+      className={className}
+      as={DefaultLink}
+      onFocus={shrink}
+      onBlur={grow}
+      onMouseEnter={shrink}
+      onMouseLeave={grow}
+      {...props}
+      >
+      <span className="sr-only">{formatArtTitle({title, date})}</span>
+      <AnimatedImage
+        className="Piece__Image"
+        fluid={{
+          ...images[0].fluid,
+          base64: images[0].sqip.dataURI
+        }}
+        style={{
+          height: '100%',
+          clipPath: inset.interpolate(i => `inset(${i})`),
+        }}
+        alt={artMetaString({title, date, dimensions, media})}
+      />
+    </Link>
+  )
+}
 
 Piece.propTypes = propTypes
 
