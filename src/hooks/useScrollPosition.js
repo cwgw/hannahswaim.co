@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useSpring } from 'react-spring'
+import _throttle from 'lodash/throttle'
 
 function useScrollPosition(options = {}) {
   const isWindowDefined = typeof window !== 'undefined'
@@ -10,18 +11,9 @@ function useScrollPosition(options = {}) {
   }));
 
   useEffect(() => {
-    let RAFId;
-
-    const handleScrollChange = () => {
-      if (RAFId) return;
-
-      console.log(typeof window.pageYOffset)
-
-      RAFId = window.requestAnimationFrame(() => {
-        setY({ y: window.pageYOffset })
-        RAFId = null;
-      });
-    }
+    const handleScrollChange = _throttle(() => {
+      setY({ y: window.pageYOffset })
+    }, 67, { leading: true, trailing: true });
 
     if (isWindowDefined) {
       window.addEventListener('scroll', handleScrollChange);
@@ -30,7 +22,6 @@ function useScrollPosition(options = {}) {
     return () => {
       if (isWindowDefined) {
         window.removeEventListener('scroll', handleScrollChange);
-        if (RAFId) window.cancelAnimationFrame(RAFId);
       }
     }
   });

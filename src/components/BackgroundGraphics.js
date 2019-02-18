@@ -62,7 +62,7 @@ const Background = ({
   let o2 = y.interpolate(o => clamp(1 - (o / 1600), 0, 1));
 
   return (
-    <React.Fragment>
+    <div>
       <Svg preserveAspectRatio="none" >
         <defs>
           <pattern id="squiggle-1" width="48" height="6" patternUnits="userSpaceOnUse" >
@@ -122,7 +122,7 @@ const Background = ({
           />
         </Svg>
       </AnimatedContainer>
-    </React.Fragment>
+    </div>
   )
 }
 
