@@ -57,6 +57,7 @@ export const pageQuery = graphql`
         ...PageText
         ...PageHero
         ...PageArtwork
+        ...PageInstagram
       }
     }
   }

@@ -23,12 +23,16 @@ const Button = styled(UnstyledButton)`
   padding: ${spacing('sm')} ${spacing('md')};
   border: 1px solid currentColor;
   border-radius: ${spacing('xs')};
-  color: inherit;
   cursor: pointer;
   text-decoration: none;
   text-align: center;
   white-space: nowrap;
   user-select: none;
+
+  ${({color}) => color
+    ? `color: ${color};`
+    : `color: inherit;`
+  }
 
   &:hover,
   &:focus {

@@ -109,14 +109,8 @@ const Hero = ({
         }}
         >
         <GatsbyImage
-          fixed={image.fixed && {
-            ...image.fixed,
-            base64: image.sqip.dataURI
-          }}
-          fluid={image.fluid && {
-            ...image.fluid,
-            base64: image.sqip.dataURI
-          }}
+          fixed={image.fixed}
+          fluid={image.fluid}
           style={{
             width: '100%',
             height: '100%',
@@ -145,12 +139,9 @@ export const pageQuery = graphql`
       }
     }
     image {
-      sqip (numberOfPrimitives: 6, mode: 4, blur: 10) {
-        dataURI
-      }
       fluid (maxHeight: 720, quality: 90) {
         aspectRatio
-        ...GatsbyContentfulFluid_withWebp_noBase64
+        ...GatsbyContentfulFluid_withWebp
       }
     }
   }

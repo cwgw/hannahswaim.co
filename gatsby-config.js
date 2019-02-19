@@ -26,6 +26,13 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'instagramPosts',
+        path: `${__dirname}/data/`,
+      },
+    },
+    {
       resolve: 'gatsby-plugin-manifest',
       options: {
         name: "hannah m. swaim",
@@ -65,8 +72,8 @@ module.exports = {
       },
     },
     'gatsby-transformer-sharp',
-    'gatsby-transformer-sqip',
-    'gatsby-image',
+    'gatsby-transformer-json',
+    // 'gatsby-transformer-sqip',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,

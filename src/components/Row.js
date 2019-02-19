@@ -14,7 +14,7 @@ const propTypes = {
     PropTypes.number,
     PropTypes.string,
   ]),
-  childAspectRatioResolver: PropTypes.func.isRequired,
+  childAspectRatioResolver: PropTypes.func,
   items: PropTypes.array.isRequired,
   isCentered: PropTypes.bool,
 }
@@ -23,17 +23,23 @@ const defaultProps = {
   height: 400,
   gap: null,
   isCentered: false,
+  childAspectRatioResolver: () => (1),
 }
 
 const Wrapper = styled(Box)`
-  overflow: hidden;
+  ${'' /* overflow: hidden; */}
 `
 
 const Scroller = styled.div`
   margin-bottom: -${spacing(2)};
   padding-bottom: ${spacing(2)};
-  overflow: hidden;
+  overflow: visible;
   overflow-x: auto;
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
 `
 
@@ -54,11 +60,11 @@ const Row = ({children, items, childAspectRatioResolver: ar, height: _height, pa
 
   const aspectRatio = items.reduce((sum,o) => sum + ar(o), 0)
 
-  const gap = typeof _gap === 'number' ? spacing(_gap) : _gap
+  const gap = spacing(_gap) || 0;
   const height = typeof _height === 'number' ? `${_height}px` : _height
 
   const Children = React.Children.map(children, (child,i) => React.cloneElement(child, {
-    flex: ar(items[i]),
+    flex: `${ar(items[i])}`,
     marginRight: gap && i < items.length - 1 ? gap : null,
   }))
 

@@ -1,213 +1,177 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { StaticQuery, graphql } from 'gatsby'
+import GatsbyImage from 'gatsby-image'
 import { transparentize } from 'polished'
-// import { graphql } from 'gatsby'
 
-import { spacing, media } from 'style/layout'
-import { sansSerif, size as fontSize } from 'style/fonts'
-import { colors, ease } from 'style/constants'
+import { spacing } from 'style/layout'
+import { colors } from 'style/constants'
+import { size, rem, sansSerif } from 'style/fonts'
 
 // import Row from 'components/Row'
 import Row from 'components/Row'
 import Icon from 'components/Icon'
+import Box from 'components/Box'
+import Flex from 'components/Flex'
+import Link from 'components/Link'
+import { StandardGrid } from 'components/Grid'
 
 const propTypes = {
-  posts: PropTypes.array,
+  posts: PropTypes.number,
+  localPosts: PropTypes.shape({
+    edges: PropTypes.array
+  }),
 }
 
 const defaultProps = {}
 
-const Link = styled.a`
-  display: block;
-  margin-right: ${spacing('md')};
-  flex: 1;
-  color: ${colors.white};
-  position: relative;
+const Container = styled(StandardGrid)`
+  color: ${colors.green[3]};
 
-  &:last-child {
-    margin-right: 0;
-  }
-
-  ${media.min.lg`
-    &:hover,
-    &:focus {
-
-      &:before,
-      &:after {
-        opacity: 1;
-      }
-
-      &:after {
-        transform: translate(-50%,-50%);
-      }
-    }
-
-    &:focus {
-      outline: none;
-
-      &:before {
-        border-color: ${colors.white};
-      }
-    }
-
-    &:before,
-    &:after {
-      position: absolute;
-      z-index: 1;
-      opacity: 0;
-      transition: opacity 175ms ${ease};
-    }
-
-    &:before {
-      left: ${spacing('xs')};
-      right: ${spacing('xs')};
-      top: ${spacing('xs')};
-      bottom: ${spacing('xs')};
-      background-color: ${transparentize(0.5, colors.gray[1])};
-      border: 1px solid transparent;
-      content: '';
-    }
-
-    &:after {
-      top: 50%;
-      left: 50%;
-      text-align: center;
-      content: 'View on Instagram';
-      transform: translate3d(-50%,calc(-50% + ${spacing('lg')}),0);
-      transition: transform 175ms ${ease} 100ms,
-                  opacity 350ms ${ease} 0ms;
-    }
-  `}
-`
-
-const Caption = styled.span`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
-  padding: ${spacing('sm')};
-  margin: ${spacing('xs')};
-  z-index: 1;
-
-  & > span {
-    display: inline-block;
-    padding-right: ${spacing('md')};
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: ${sansSerif};
-    font-size: ${fontSize('small')};
+  &:before {
+    content: '';
+    border: 2px solid ${colors.green[5]};
+    grid-column: contentStart / wideEnd;
+    grid-row: 2;
+    user-select: none;
+    pointer-events: none;
   }
 `
 
-const ImageWrapper = styled.span`
-  display: block;
-  width: 100%;
-  padding-bottom: 100%;
+const StyledLink = styled(Link)`
+  color: inherit;
+`
+
+const Item = styled(Box)`
+  border-radius: 4px;
   overflow: hidden;
-  position: relative;
+  box-shadow: 0px 3px 48px ${transparentize(0.75, colors.coolBlack)};
 `
 
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  object-fit: cover;
-  object-position: center center;
-`
-
-class Instagram extends React.Component {
-
-  constructor (props) {
-    super(props)
-    this.state = {
-      posts: [],
-    }
-  }
-
-  componentDidMount () {
-    this.props.posts.forEach(({url}) => {
-      fetch(`https://api.instagram.com/oembed?url=${url}&omitscript=true`, {method: 'get'})
-        .then(response => response.json())
-        .then(data => {
-          this.setState((prevState) => ({
-            posts: [...prevState.posts, {post_url: url, ...data}]
-          }))
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    })
-  }
-
-  render () {
-
-    const posts = this.state.posts.map(({media_id, thumbnail_url, thumbnail_width, thumbnail_height, post_url, title}) => (
-      <Link
-        key={media_id}
-        flex={thumbnail_width / thumbnail_height}
-        rel="noopener nofollow"
-        target="_blank"
-        href={post_url}
-        title="View on Instagram"
-        >
-        <ImageWrapper>
-          <Image
-            src={thumbnail_url}
-            alt={title}
-          />
-        </ImageWrapper>
-        <Caption>
-          <span>{title}</span>
-          <Icon
-            type="instagram"
-            inline
-            style={{
-              width: '1rem',
-              height: '1rem',
-              flex: '0 0 auto',
-            }}
-          />
-        </Caption>
-      </Link>
-    ))
-
+const Instagram = ({
+  id,
+  posts: limit,
+  localPosts: posts,
+  profile,
+  ...props
+}) => {
+    const images = posts.edges.map(({ node }) => node);
+    const username = `@${new URL(profile.url).pathname.replace(/\//g,'')}`;
     return (
-      <React.Fragment>
-        {posts ? (
-          <Row
-            childAspectRatioResolver={_ => 1}
-            items={posts}
-            height={400}
+      <Container {...props} >
+        <Flex
+          gridColumn="contentStart / wideEnd"
+          alignItems="baseline"
+          marginBottom="xs"
+          >
+          <StyledLink
+            to={profile.url}
             >
-            {posts}
-          </Row>
-        ) : (
-          <div>
-            Loading…
-          </div>
-        )}
-      </React.Fragment>
+            <Icon
+              type="instagram"
+              title="Instagram"
+              inline
+              style={{
+                fontSize: rem(size('display')),
+                marginRight: spacing('xs'),
+                verticalAlign: 'bottom',
+              }}
+            />
+            <span
+              style={{
+                fontSize: rem(size('lead')),
+              }}
+              >
+              {username}
+            </span>
+          </StyledLink>
+          <StyledLink
+            to={profile.url}
+            style={{
+              marginLeft: 'auto',
+              fontFamily: sansSerif,
+            }}
+            >
+            See more →
+          </StyledLink>
+        </Flex>
+        <Row
+          items={images}
+          gap={'lg'}
+          isCentered
+          gridColumn="bleedStart / bleedEnd"
+          gridRow="2"
+          height={300}
+          paddingY={'lg'}
+          // childAspectRatioResolver={o => o.image.childImageSharp.fluid.aspectRatio}
+          >
+          {images && images.map(({ id, url, image: { childImageSharp } }) => (
+            <Item key={id} >
+              <GatsbyImage
+                fluid={childImageSharp.fluid}
+                style={{
+                  width: '100%',
+                  height: '100%'
+                }}
+              />
+            </Item>
+          ))}
+        </Row>
+      </Container>
     )
-  }
 }
 
 Instagram.propTypes = propTypes
 
 Instagram.defaultProps = defaultProps
 
-export default Instagram
+export default (props) => (
+  <StaticQuery
+    query={graphql`
+      query Instagram {
+        localPosts: allInstagramPostsJson (
+          sort: {fields: time, order: DESC}
+          limit: 6
+        ) {
+          edges {
+            node {
+              id
+              url
+              image {
+                childImageSharp {
+                  fluid(maxWidth: 300) {
+                    aspectRatio
+                    ...GatsbyImageSharpFluid_withWebp
+                  }
+                }
+              }
+            }
+          }
+        }
+        profile: contentfulSocialMediaLink (service: {eq: "Instagram"}) {
+          id
+          service
+          url
+        }
+      }
+    `}
+    render={data => <Instagram {...props} {...data} />}
+  />
+)
 
-// export const pageQuery = graphql`
-//   fragment PageInstagram on ContentfulPageInstagramPosts {
-//     id
-//     posts {
+// allContentfulSocialMediaLink (filter: {service: {eq: "Instagram"}}) {
+//   edges {
+//     node {
+//       service
 //       url
 //     }
 //   }
-// `
+// }
+
+export const pageQuery = graphql`
+  fragment PageInstagram on ContentfulPageInstagram {
+    id
+    posts
+  }
+`

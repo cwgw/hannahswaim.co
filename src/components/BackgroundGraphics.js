@@ -13,14 +13,17 @@ const defaultProps = {
   ],
 }
 
+const Wrapper = styled.div`
+  user-select: none;
+  pointer-events: none;
+`
+
 const AnimatedContainer = animated(styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
   transform-origin: center top;
-  user-select: none;
-  pointer-events: none;
 `)
 
 const Svg = styled.svg.attrs({
@@ -62,7 +65,7 @@ const Background = ({
   let o2 = y.interpolate(o => clamp(1 - (o / 1600), 0, 1));
 
   return (
-    <div>
+    <Wrapper>
       <Svg preserveAspectRatio="none" >
         <defs>
           <pattern id="squiggle-1" width="48" height="6" patternUnits="userSpaceOnUse" >
@@ -122,7 +125,7 @@ const Background = ({
           />
         </Svg>
       </AnimatedContainer>
-    </div>
+    </Wrapper>
   )
 }
 

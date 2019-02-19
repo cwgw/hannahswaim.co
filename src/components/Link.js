@@ -31,6 +31,7 @@ const Link = ({
   onMouseLeave,
   rel,
   state,
+  style,
   target,
   to,
   title,
@@ -41,15 +42,18 @@ const Link = ({
   return /^\/(?!\/)/.test(to)
     ? (
       <GatsbyLink
-        to={to}
-        state={state}
-        activeClassName={activeClassName}
-        className={className}
-        title={title}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
+        {...{
+          activeClassName,
+          className,
+          onBlur,
+          onFocus,
+          onMouseEnter,
+          onMouseLeave,
+          state,
+          style,
+          title,
+          to,
+        }}
         >
         {children}
       </GatsbyLink>
@@ -57,14 +61,17 @@ const Link = ({
     : (
       <a
         href={to}
-        className={className}
-        rel={rel}
-        target={target}
-        title={title}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
+        {...{
+          className,
+          onBlur,
+          onFocus,
+          onMouseEnter,
+          onMouseLeave,
+          rel,
+          style,
+          target,
+          title,
+        }}
         >
         {children}
       </a>

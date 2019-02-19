@@ -29,6 +29,11 @@ exports.onCreateNode = (args) => {
     // This is pretty fragile.
     // It requires that all properties are set and truthy, and does no type checking.
     // Also, the date is expected to be in ISO 8601 format, with leading four-digit year
+
+    if (!node.date || !Array.isArray(node.media)) {
+      return;
+    }
+
     const slug = `/artwork/${makeArtPieceSlug({...node, date: node.date.slice(0,4)})}/`
 
     createNodeField({
