@@ -96,12 +96,12 @@ const Background = ({
         >
         <Svg>
           <circle
-            cx="25%"
-            r="110%"
+            cx="30%"
+            r="105%"
             fill={color1}
           />
           <circle
-            cx="25%"
+            cx="20%"
             r="100%"
             fill="url(#squiggle-2)"
           />
@@ -116,7 +116,7 @@ const Background = ({
         >
         <Svg>
           <circle
-            cx="20%"
+            cx="25%"
             r="100%"
             fill="url(#squiggle-1)"
           />
