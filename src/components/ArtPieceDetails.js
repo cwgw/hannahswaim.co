@@ -75,17 +75,14 @@ const ArtPieceDetails = ({
         height="75vh"
         items={images}
         >
-        {images.map(({id, sqip, fluid}) => (
+        {images.map(({id, fluid}) => (
           <Box
             key={id}
             as="figure"
             margin="0"
             >
             <GatsbyImage
-              fluid={{
-                ...fluid,
-                base64: sqip.dataURI,
-              }}
+              fluid={fluid}
               style={{
                 width: '100%',
                 height: '100%',
@@ -120,13 +117,10 @@ const ArtPieceDetails = ({
           xl: 'contentStart / contentEnd',
         }}
         >
-        {images.map(({id, sqip, fluid}) => (
+        {images.map(({id, fluid}) => (
           <GatsbyImage
             key={id}
-            fluid={{
-              ...fluid,
-              base64: sqip.dataURI
-            }}
+            fluid={fluid}
             style={{
               marginBottom: spacing('md')
             }}
@@ -157,16 +151,9 @@ export const artPieceDetailsFragments = graphql`
     media
     images {
       id
-      sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
-        dataURI
-      }
       fluid(quality: 90) {
         aspectRatio
-        src
-        srcSet
-        srcWebp
-        srcSetWebp
-        sizes
+        ...GatsbyContentfulFluid_withWebp
       }
     }
   }

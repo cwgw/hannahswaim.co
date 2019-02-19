@@ -82,16 +82,9 @@ export const pageQuery = graphql`
       }
       images {
         id
-        sqip(numberOfPrimitives: 6, mode: 4, blur: 10) {
-          dataURI
-        }
         fluid(maxWidth: 480, quality: 90) {
           aspectRatio
-          src
-          srcSet
-          srcWebp
-          srcSetWebp
-          sizes
+          ...GatsbyContentfulFluid_withWebp
         }
       }
     }

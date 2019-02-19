@@ -21,7 +21,7 @@ const propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       fluid: PropTypes.object,
-      sqip: PropTypes.object,
+      // sqip: PropTypes.object,
     })
   ).isRequired,
   childContentfulArtPieceDimensionsJsonNode: PropTypes.shape({
@@ -99,14 +99,11 @@ const Piece = ({
       <span className="sr-only">{formatArtTitle({title, date})}</span>
       <AnimatedImage
         className="Piece__Image"
-        fluid={{
-          ...images[0].fluid,
-          base64: images[0].sqip.dataURI
-        }}
+        fluid={images[0].fluid}
         style={{
           height: '100%',
           clipPath: inset.interpolate(i => `inset(${i})`),
-          webkitClipPath: inset.interpolate(i => `inset(${i})`),
+          WebkitClipPath: inset.interpolate(i => `inset(${i})`),
         }}
         alt={artMetaString({title, date, dimensions, media})}
       />
