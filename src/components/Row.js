@@ -27,20 +27,22 @@ const defaultProps = {
 }
 
 const Wrapper = styled(Box)`
-  ${'' /* overflow: hidden; */}
+  margin: -${spacing('xxl')} 0;
 `
 
 const Scroller = styled.div`
-  margin-bottom: -${spacing(2)};
-  padding-bottom: ${spacing(2)};
+  padding: ${spacing('xxl')} 0;
+
   overflow: visible;
   overflow-x: auto;
-  &::-webkit-scrollbar {
-    width: 0 !important;
-  }
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+  }
 `
 
 const Inner = styled.div`
@@ -56,26 +58,28 @@ const Inner = styled.div`
   }
 `
 
-const Row = ({children, items, childAspectRatioResolver: ar, height: _height, padding, isCentered, gap: _gap, ...props}) => {
-
-  const aspectRatio = items.reduce((sum,o) => sum + ar(o), 0)
+const Row = ({
+  children,
+  items,
+  childAspectRatioResolver: ar,
+  height: _height,
+  padding,
+  isCentered,
+  gap: _gap,
+  ...props
+}) => {
+  const aspectRatio = items.reduce((sum, o) => (sum + ar(o)), 0);
 
   const gap = spacing(_gap) || 0;
-  const height = typeof _height === 'number' ? `${_height}px` : _height
+  const height = typeof _height === 'number' ? `${_height}px` : _height;
 
-  const Children = React.Children.map(children, (child,i) => React.cloneElement(child, {
+  const Children = React.Children.map(children, (child, i) => React.cloneElement(child, {
     flex: `${ar(items[i])}`,
     marginRight: gap && i < items.length - 1 ? gap : null,
-  }))
+  }));
 
-  const paddingValues = typeof padding === 'string' ? padding.split(/\s+/) : []
-
-  const p = [
-    paddingValues[0] || '0',
-    paddingValues[1] || paddingValues[0] || (isCentered ? `calc(50% - (${ar(items[items.length - 1])} * ${height} / 2))` : '0'),
-    paddingValues[2] || paddingValues[0] || '0',
-    paddingValues[3] || paddingValues[1] || paddingValues[0] || (isCentered ? `calc(50% - (${ar(items[0])} * ${height} / 2))` : '0'),
-  ].join(' ')
+  const paddingLeft = `calc(50% - (${ar(items[0])} * ${height} / 2))`;
+  const paddingRight = `calc(50% - (${ar(items[items.length - 1])} * ${height} / 2))`;
 
   const width = gap
     ? `calc(${aspectRatio} * ${height} + ${gap} * ${items.length - 1})`
@@ -88,7 +92,7 @@ const Row = ({children, items, childAspectRatioResolver: ar, height: _height, pa
           style={{
             width: width,
             height: height,
-            padding: p,
+            padding: isCentered ? `0 ${paddingRight} 0 ${paddingLeft}` : null,
           }}
           >
           {Children}

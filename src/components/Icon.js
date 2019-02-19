@@ -63,19 +63,16 @@ const icons = {
   }
 }
 
-const Svg = styled(
-  ({style, ...props}) => <svg {...props} />
-)`
-  ${({style}) => style}
-`
+const Svg = styled.svg``
 
-const Icon = ({
+const Icon = React.forwardRef(({
+  atts,
   className,
   inline,
   style,
   title,
   type,
-}) => {
+}, ref) => {
 
   const name = type.slice().toLowerCase()
 
@@ -100,7 +97,7 @@ const Icon = ({
 
   if (_has(icons, name)) {
     const {
-      atts,
+      atts: iconAtts,
       paths,
     } = icons[name]
 
@@ -115,12 +112,14 @@ const Icon = ({
         className={className}
         {...{
           ...defaultAtts,
+          ...iconAtts,
           ...atts
         }}
         {...(title
           ? {'aria-labelledby': titleId}
           : {'aria-hidden': true}
         )}
+        ref={ref}
         >
         {title && (
           <title id={titleId} >{title}</title>
@@ -135,7 +134,7 @@ const Icon = ({
       </Svg>
     )
   } else return null
-}
+})
 
 Icon.propTypes = propTypes
 

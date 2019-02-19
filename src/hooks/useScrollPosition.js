@@ -12,7 +12,6 @@ function useScrollPosition(options = {}) {
 
   useEffect(() => {
     const handleScrollChange = _throttle(() => {
-      console.log('handling scroll');
       setY({ y: window.pageYOffset })
     }, 67, { leading: true, trailing: true });
 

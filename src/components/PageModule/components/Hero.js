@@ -103,7 +103,7 @@ const Hero = ({
           lg: "1 / span 3",
         }}
         as="figure"
-        marginTop="sm"
+        marginTop="md"
         style={{
           transform: y,
         }}

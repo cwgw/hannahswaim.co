@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StaticQuery, graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
 import { transparentize } from 'polished'
+import { useSpring, animated } from 'react-spring'
 
 import { spacing } from 'style/layout'
 import { colors } from 'style/constants'
 import { size, rem, sansSerif } from 'style/fonts'
 
-// import Row from 'components/Row'
 import Row from 'components/Row'
 import Icon from 'components/Icon'
 import Box from 'components/Box'
@@ -21,10 +21,13 @@ const propTypes = {
   posts: PropTypes.number,
   localPosts: PropTypes.shape({
     edges: PropTypes.array
-  }),
+  }).isRequired,
+  profile: PropTypes.object,
 }
 
-const defaultProps = {}
+const defaultProps = {
+  posts: 6,
+}
 
 const Container = styled(StandardGrid)`
   color: ${colors.green[3]};
@@ -43,11 +46,99 @@ const StyledLink = styled(Link)`
   color: inherit;
 `
 
-const Item = styled(Box)`
-  border-radius: 4px;
+const ItemCover = animated(styled.p`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+  background: ${transparentize(0.5, colors.gray[3])};
+  color: ${colors.white};
+`)
+
+const StyledItem = styled(Box)`
+  position: relative;
+  border-radius: ${spacing('xs')};
+  box-shadow: 0px 3px 64px ${transparentize(0.8, colors.coolBlack)};
   overflow: hidden;
-  box-shadow: 0px 3px 48px ${transparentize(0.75, colors.coolBlack)};
 `
+
+const AnimatedIcon = animated(Icon)
+
+const Item = ({
+  id,
+  url,
+  image: {
+    childImageSharp: {
+      fluid,
+    },
+  },
+  ...props
+}) => {
+  const [ { o, s }, set ] = useSpring(() => ({
+    o: 0,
+    s: 1.1,
+    config: (key) => key === 's'
+      ? {
+        tension: 540,
+        friction: 16,
+      }
+      : {
+        tension: 320,
+        friction: 36,
+      }
+  }));
+  const show = useCallback(() => set({ o: 1, s: 1 }));
+  const hide = useCallback(() => set({ o: 0, s: 1.1 }));
+  const translate = s.interpolate(s => `scale3d(${s}, ${s}, 1)`);
+
+  return (
+    <StyledItem
+      as={Link}
+      to={url}
+      onFocus={show}
+      onBlur={hide}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      {...props}
+      >
+      <GatsbyImage
+        fluid={fluid}
+        style={{
+          width: '100%',
+          height: '100%'
+        }}
+      />
+      <ItemCover
+        style={{
+          opacity: o,
+        }}
+        >
+        <AnimatedIcon
+          type="instagram"
+          inline
+          style={{
+            fontSize: rem(size('lead')),
+            transform: translate,
+          }}
+        />
+        <animated.span
+          style={{
+            transform: translate,
+          }}
+          >
+          {'View on Instagram'}
+        </animated.span>
+      </ItemCover>
+    </StyledItem>
+  )
+}
 
 const Instagram = ({
   id,
@@ -56,7 +147,7 @@ const Instagram = ({
   profile,
   ...props
 }) => {
-    const images = posts.edges.map(({ node }) => node);
+    const images = posts.edges.slice(0, limit).map(({ node }) => node);
     const username = `@${new URL(profile.url).pathname.replace(/\//g,'')}`;
     return (
       <Container {...props} >
@@ -73,14 +164,14 @@ const Instagram = ({
               title="Instagram"
               inline
               style={{
-                fontSize: rem(size('display')),
+                fontSize: rem(size('lead')),
                 marginRight: spacing('xs'),
                 verticalAlign: 'bottom',
               }}
             />
             <span
               style={{
-                fontSize: rem(size('lead')),
+                fontFamily: sansSerif,
               }}
               >
               {username}
@@ -90,7 +181,6 @@ const Instagram = ({
             to={profile.url}
             style={{
               marginLeft: 'auto',
-              fontFamily: sansSerif,
             }}
             >
             See more →
@@ -104,18 +194,12 @@ const Instagram = ({
           gridRow="2"
           height={300}
           paddingY={'lg'}
-          // childAspectRatioResolver={o => o.image.childImageSharp.fluid.aspectRatio}
           >
-          {images && images.map(({ id, url, image: { childImageSharp } }) => (
-            <Item key={id} >
-              <GatsbyImage
-                fluid={childImageSharp.fluid}
-                style={{
-                  width: '100%',
-                  height: '100%'
-                }}
-              />
-            </Item>
+          {images && images.map((node) => (
+            <Item
+              key={node.id}
+              {...node}
+            />
           ))}
         </Row>
       </Container>
@@ -132,7 +216,7 @@ export default (props) => (
       query Instagram {
         localPosts: allInstagramPostsJson (
           sort: {fields: time, order: DESC}
-          limit: 6
+          limit: 8
         ) {
           edges {
             node {
@@ -159,15 +243,6 @@ export default (props) => (
     render={data => <Instagram {...props} {...data} />}
   />
 )
-
-// allContentfulSocialMediaLink (filter: {service: {eq: "Instagram"}}) {
-//   edges {
-//     node {
-//       service
-//       url
-//     }
-//   }
-// }
 
 export const pageQuery = graphql`
   fragment PageInstagram on ContentfulPageInstagram {

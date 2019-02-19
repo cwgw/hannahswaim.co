@@ -4,9 +4,10 @@ import styled from 'styled-components'
 import GatsbyImage from 'gatsby-image'
 import { useSpring, animated } from 'react-spring'
 
+import { colors, ease } from 'style/constants'
 import { spacing } from 'style/layout'
 import { formatArtTitle, artMetaString } from 'utils/formatting'
-import DefaultLink from 'components/Link'
+import Link from 'components/Link'
 import Box from 'components/Box'
 
 const propTypes = {
@@ -46,8 +47,22 @@ const defaultProps = {
   enableModal: false,
 }
 
-const Link = styled(Box)`
+const StyledLink = styled(Box)`
   display: block;
+  border-radius: ${spacing('xs')};
+  overflow: hidden;
+
+  & .Piece__Image {
+    background: ${colors.gray[3]};
+  }
+
+  &:hover .Piece__Image picture {
+    transition: opacity 100ms ${ease.out};
+  }
+
+  &:hover .Piece__Image picture {
+    opacity: 0.5;
+  }
 `
 
 const AnimatedImage = animated(GatsbyImage)
@@ -76,11 +91,11 @@ const Piece = ({
       friction: 16,
     }
   }));
-  const shrink = useCallback(() => set({ inset: spacing('xs') }));
+  const shrink = useCallback(() => set({ inset: spacing(0) }));
   const grow = useCallback(() => set({ inset: '0px' }));
 
   return (
-    <Link
+    <StyledLink
       to={slug}
       state={{
         enableModal: true,
@@ -89,7 +104,7 @@ const Piece = ({
         index: siblingIndex,
       }}
       className={className}
-      as={DefaultLink}
+      as={Link}
       onFocus={shrink}
       onBlur={grow}
       onMouseEnter={shrink}
@@ -107,7 +122,7 @@ const Piece = ({
         }}
         alt={artMetaString({title, date, dimensions, media})}
       />
-    </Link>
+    </StyledLink>
   )
 }
 
