@@ -17,7 +17,9 @@ const propTypes = {
   description: PropTypes.string,
   image: PropTypes.string,
   locale: PropTypes.string,
-  socialMedia: PropTypes.array,
+  socialMedia: PropTypes.shape({
+    edges: PropTypes.array,
+  }),
 }
 
 const defaultProps = {
@@ -25,9 +27,10 @@ const defaultProps = {
   image: null,
   description: '',
   locale: 'en-US',
-  socialMedia: [],
+  socialMedia: {
+    edges: [],
+  },
 }
-
 
 function Head (props) {
 
@@ -64,7 +67,7 @@ function Head (props) {
     '@type': 'website',
     url: siteUrl,
     logo: defaultImage,
-    sameAs: socialMedia.map(({url}) => url),
+    sameAs: socialMedia.edges.map(({ node }) => node.url),
   }
 
   return (

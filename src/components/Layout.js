@@ -86,7 +86,7 @@ const Layout = ({
             <Head
               location={location}
               siteMetadata={siteMetadata}
-              socialMedia={socialMedia.edges.map(({node}) => node)}
+              socialMedia={socialMedia}
             />
             <Header
               siteTitle={siteMetadata.siteTitle}
