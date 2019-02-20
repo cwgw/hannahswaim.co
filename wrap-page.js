@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Provider } from 'components/UIContext'
+import { Provider } from 'context/UI'
 import Layout from 'components/Layout'
 
 export default ({element, props}) => (

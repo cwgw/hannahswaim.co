@@ -10,7 +10,6 @@ import useScrollPosition from 'hooks/useScrollPosition'
 import { style as fontStyle } from 'style/fonts'
 import { media, spacing } from 'style/layout'
 import { colors, breakpoints } from 'style/constants'
-import { withUIProps } from 'components/UIContext'
 import { StandardGrid } from 'components/Grid'
 import Box from 'components/Box'
 
@@ -70,7 +69,6 @@ const Hero = ({
     childMarkdownRemark
   },
   image,
-  isViewport,
   breakpoint,
   location,
   id,
@@ -128,7 +126,7 @@ Hero.propTypes = propTypes
 
 Hero.defaultProps = defaultProps
 
-export default withUIProps(Hero)
+export default Hero
 
 export const pageQuery = graphql`
   fragment PageHero on ContentfulPageHero {

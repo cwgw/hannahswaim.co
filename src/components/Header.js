@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { spacing, media } from 'style/layout'
 import { acronymize } from 'utils/formatting'
 import { colors, navBreakpoint } from 'style/constants'
-import { withUIProps } from 'components/UIContext'
+import UIContext from 'context/UI'
 import { StandardGrid } from 'components/Grid'
 import Flex from 'components/Flex'
 import Link from 'components/Link'
@@ -65,55 +65,57 @@ const Nameplate = styled(NavLink)`
 const Header = ({
   siteTitle,
   menuItems,
-  isViewport,
-}) => (
-  <Wrapper
-    role="banner"
-    as="header"
-    >
-    <Nav
-      gridColumn="contentStart / contentEnd"
-      justifyContent={isViewport[navBreakpoint] ? 'space-between' : 'flex-start'}
-      flexFlow="row nowrap"
-      alignItems="baseline"
-      marginRight="auto"
-      paddingY="md"
-      as="nav"
-      role="navigation"
+}) => {
+  const { isViewport } = React.useContext(UIContext);
+  return (
+    <Wrapper
+      role="banner"
+      as="header"
       >
-      <Nameplate
-        to={'/'}
-        as={Link}
-        title="Home"
+      <Nav
+        gridColumn="contentStart / contentEnd"
+        justifyContent={isViewport[navBreakpoint] ? 'space-between' : 'flex-start'}
+        flexFlow="row nowrap"
+        alignItems="baseline"
+        marginRight="auto"
+        paddingY="md"
+        as="nav"
+        role="navigation"
         >
-        {isViewport.xs ? siteTitle : acronymize(siteTitle)}
-      </Nameplate>
-      {menuItems.map(({
-        id,
-        slug,
-        url,
-        service,
-        title,
-        __typename
-      }) => (
-        <NavLink
-          key={id}
-          to={url || '/' + slug}
-          title={title || service}
-          activeClassName="MenuItem--active"
+        <Nameplate
+          to={'/'}
+          as={Link}
+          title="Home"
           >
-          {__typename === 'ContentfulSocialMediaLink'
-            ? <Icon type={service} inline />
-            : title
-          }
-        </NavLink>
-      ))}
-    </Nav>
-  </Wrapper>
-)
+          {isViewport.xs ? siteTitle : acronymize(siteTitle)}
+        </Nameplate>
+        {menuItems.map(({
+          id,
+          slug,
+          url,
+          service,
+          title,
+          __typename
+        }) => (
+          <NavLink
+            key={id}
+            to={url || '/' + slug}
+            title={title || service}
+            activeClassName="MenuItem--active"
+            >
+            {__typename === 'ContentfulSocialMediaLink'
+              ? <Icon type={service} inline />
+              : title
+            }
+          </NavLink>
+        ))}
+      </Nav>
+    </Wrapper>
+  )
+}
 
 Header.propTypes = propTypes
 
 Header.defaultProps = defaultProps
 
-export default withUIProps(Header)
+export default Header
