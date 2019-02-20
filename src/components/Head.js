@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
+import { withPrefix } from 'gatsby'
 
 import { fontFaces } from 'style/fonts'
-import defaultImage from 'images/icon.png'
+import siteIcon from 'images/icon.png'
 
 const propTypes = {
   location: PropTypes.object.isRequired,
@@ -32,22 +33,20 @@ const defaultProps = {
   },
 }
 
-function Head (props) {
-
-  const {
-    pageTitle,
-    siteMetadata: {
-      siteName,
-      siteTitle,
-      siteTitleSeparator,
-      siteUrl,
-    },
-    image,
-    description,
-    location,
-    locale,
-    socialMedia,
-  } = props
+const Head = ({
+  pageTitle,
+  siteMetadata: {
+    siteName,
+    siteTitle,
+    siteTitleSeparator,
+    siteUrl,
+  },
+  image,
+  description,
+  location,
+  locale,
+  socialMedia,
+}) => {
 
   const title = pageTitle ? pageTitle + siteTitleSeparator + siteTitle : siteTitle
 
@@ -56,7 +55,7 @@ function Head (props) {
     ['og:type', 'website'],
     ['og:title', title],
     ['og:url', location.pathname || siteUrl],
-    ['og:image', image || defaultImage],
+    ['og:image', image || withPrefix(siteIcon)],
     description ? ['og:description', description] : null,
     ['og:site_name', siteName],
     ['og:locale', locale.replace(/-+/,'_')],
@@ -66,15 +65,13 @@ function Head (props) {
     '@context': 'http://schema.org',
     '@type': 'website',
     url: siteUrl,
-    logo: defaultImage,
+    logo: withPrefix(siteIcon),
     sameAs: socialMedia.edges.map(({ node }) => node.url),
   }
 
   return (
     <Helmet>
-      <html
-        lang={locale}
-      />
+      <html lang={locale} />
       <title>{title}</title>
       {metaTags.map(tag => {
         if (tag) {
