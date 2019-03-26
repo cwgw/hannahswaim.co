@@ -23,6 +23,7 @@ const defaultProps = {
   height: 400,
   gap: null,
   isCentered: false,
+  innerProps: {},
   childAspectRatioResolver: () => (1),
 }
 

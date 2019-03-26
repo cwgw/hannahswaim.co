@@ -5,8 +5,6 @@ import { graphql } from 'gatsby'
 import ImageWall from 'components/ImageWall'
 import Piece from 'components/Piece'
 
-import { Dummy } from 'hooks/useIntersectionObserver'
-
 const propTypes = {
   artwork: PropTypes.array.isRequired,
   location: PropTypes.oneOfType([
