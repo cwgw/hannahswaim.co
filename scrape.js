@@ -15,8 +15,8 @@ Run this command like:
 
 node scrape.js INSTAGRAM_USERNAME
     `
-  )
-  process.exit()
+  );
+  process.exit();
 }
 
 const posts = [];
@@ -25,11 +25,11 @@ const bail = (err) => {
   console.error(err);
   process.exit(0);
   return false;
-}
+};
 
-const toISO8601 = timestamp => new Date(timestamp * 1000).toJSON()
+const toISO8601 = timestamp => new Date(timestamp * 1000).toJSON();
 
-const saveJSON = () => fs.writeFileSync(`./data/instagramPosts.json`, JSON.stringify(posts, ``, 2))
+const saveJSON = () => fs.writeFileSync(`./data/instagramPosts.json`, JSON.stringify(posts, ``, 2));
 
 fs.ensureDirSync('./data/images');
 
@@ -55,7 +55,7 @@ const getPosts = () => {
       return bail(err);
     }
 
-    const edges = get(obj, 'entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges', [])
+    const edges = get(obj, 'entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges', []);
 
     const images = edges
       .map(({

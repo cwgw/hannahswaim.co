@@ -73,7 +73,6 @@ module.exports = {
     },
     'gatsby-transformer-sharp',
     'gatsby-transformer-json',
-    // 'gatsby-transformer-sqip',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,

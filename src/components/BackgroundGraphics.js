@@ -58,12 +58,10 @@ const Background = ({
     color3
   ],
 }) => {
-
-  const [ { y }, setY ] = useSpring(() => ({ y: 0 }));
+  const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
   const ref = React.useRef(null);
 
   useIntersectionObserver(({offset}) => {
-    // console.log(offset)
     setY({ y: offset });
   }, ref);
 
