@@ -30,11 +30,13 @@ const defaultProps = {
 }
 
 const Container = styled(StandardGrid)`
-  color: ${colors.green[3]};
+  // color: ${colors.green[3]};
+  color: ${colors.brand[3]};
 
   &:before {
     content: '';
-    border: 2px solid ${colors.green[5]};
+    // border: 2px solid ${colors.green[5]};
+    border: 2px solid ${colors.brand[5]};
     grid-column: contentStart / wideEnd;
     grid-row: 2;
     user-select: none;
