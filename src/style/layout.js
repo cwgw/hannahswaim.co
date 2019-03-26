@@ -75,7 +75,7 @@ const spacingConstants = {
 
 const spacing = (i = 3, units = 'px') => {
   if (typeof i === 'string') {
-    return spacingConstants[i]
+    return !_isNil(spacingConstants[i])
       ? spacing(spacingConstants[i], units)
       : 0;
   }

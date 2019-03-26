@@ -63,7 +63,10 @@ const Row = ({
   items,
   childAspectRatioResolver: ar,
   height: _height,
-  padding,
+  innerProps: {
+    innerStyle,
+    ...innerProps
+  },
   isCentered,
   gap: _gap,
   ...props
@@ -89,7 +92,9 @@ const Row = ({
     <Wrapper {...props} >
       <Scroller>
         <Inner
+          {...innerProps}
           style={{
+            ...(innerStyle || {}),
             width: width,
             height: height,
             padding: isCentered ? `0 ${paddingRight} 0 ${paddingLeft}` : null,

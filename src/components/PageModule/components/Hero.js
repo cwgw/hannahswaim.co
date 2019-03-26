@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
-import { animated } from 'react-spring'
 import { transparentize } from 'polished'
+import { useSpring, animated } from 'react-spring'
 
-import useScrollPosition from 'hooks/useScrollPosition'
+import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { style as fontStyle } from 'style/fonts'
 import { media, spacing } from 'style/layout'
 import { colors, breakpoints } from 'style/constants'
@@ -74,10 +74,15 @@ const Hero = ({
   id,
   ...props
 }) => {
-  const scrollY = useScrollPosition();
-  const y = scrollY.interpolate(y => `translate3d(0, ${y * -0.1}px, 0) scale3d(1, 1, 1)`);
+  const ref = React.useRef();
+  const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
+  useIntersectionObserver(({ offset }) => {
+    setY({y: offset})
+  }, ref);
+  const transform = y.interpolate(y => `translate3d(0, ${(y - 0.5) * -20}%, 0) scale3d(1, 1, 1)`);
   return (
     <Wrapper
+      ref={ref}
       {...props}
       >
       <TextBox
@@ -103,7 +108,7 @@ const Hero = ({
         as="figure"
         marginTop="md"
         style={{
-          transform: y,
+          transform
         }}
         >
         <GatsbyImage

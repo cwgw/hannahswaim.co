@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import _debounce from 'lodash/debounce'
 
 import { breakpoints } from 'style/constants'
 
-const UIContext = React.createContext({})
+const UIContext = React.createContext({});
+
+const isWindowDefined = () => (typeof window !== 'undefined');
 
 function getViewportWidth() {
-  const viewportWidth = typeof window === 'undefined' ? 0 : window.innerWidth;
+  const viewportWidth = isWindowDefined() ? window.innerWidth : 0;
   let state = {};
   for (let [key, value] of breakpoints.entries()) {
     state[key] = value < viewportWidth
@@ -15,35 +17,32 @@ function getViewportWidth() {
 }
 
 function Provider({ children }) {
-  const isWindowDefined = typeof window !== 'undefined'
-  const [ {isViewport}, set ] = useState({isViewport: getViewportWidth()})
+  const [ isViewport, setViewportState ] = React.useState(() => getViewportWidth())
+  const isResizeListenerAdded = React.useRef(false);
 
-  const setViewportWidth = _debounce(() => {
-    set({isViewport: getViewportWidth()});
+  const handleResize = _debounce(() => {
+    setViewportState(getViewportWidth());
   }, 50, {trailing: true});
 
-  useEffect(() => {
-    if (isWindowDefined) {
-      window.addEventListener('resize', setViewportWidth);
+  React.useEffect(() => {
+    if (isWindowDefined() && !isResizeListenerAdded.current) {
+      window.addEventListener('resize', handleResize);
+      isResizeListenerAdded.current = true
     }
-
     return () => {
-      if (isWindowDefined) {
-        window.removeEventListener('resize', setViewportWidth);
+      if (isResizeListenerAdded.current) {
+        window.removeEventListener('resize', handleResize);
       }
     }
-  });
+  }, []);
 
   return (
     <UIContext.Provider value={{ isViewport }} >{children}</UIContext.Provider>
   )
 }
 
-const Consumer = UIContext.Consumer
-
 export {
   UIContext as default,
   UIContext,
-  Consumer,
   Provider
 }

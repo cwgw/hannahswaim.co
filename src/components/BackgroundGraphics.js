@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { animated } from 'react-spring'
+import { useSpring, animated } from 'react-spring'
 
 import useScrollPosition from 'hooks/useScrollPosition'
+import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { colors } from 'style/constants'
 
 const defaultProps = {
@@ -58,15 +59,22 @@ const Background = ({
   ],
 }) => {
 
-  let y = useScrollPosition();
-  let y1 = y.interpolate(y => `translate3d(0px, ${clamp(y * speed, -200, 600)}px, 0px) scale3d(1, 1, 1)`);
-  let y2 = y.interpolate(y => `translate3d(0px, ${clamp(y * speed * 0.9, -200, 600)}px, 0px) scale3d(1, 1, 1)`);
-  let o1 = y.interpolate(o => clamp(1 - (o / 300), 0, 1));
-  let o2 = y.interpolate(o => clamp(1 - (o / 1600), 0, 1));
+  const [ { y }, setY ] = useSpring(() => ({ y: 0 }));
+  const ref = React.useRef(null);
+
+  useIntersectionObserver(({offset}) => {
+    // console.log(offset)
+    setY({ y: offset });
+  }, ref);
+
+  let y1 = y.interpolate(y => `translate3d(0, ${(y - 0.5) * 30}%, 0) scale3d(1, 1, 1)`);
+  let y2 = y.interpolate(y => `translate3d(0, ${(y - 0.5) * 60}%, 0) scale3d(1, 1, 1)`);
+  let o1 = y.interpolate([0, 1], [1, 0]);
+  let o2 = y.interpolate([0, 0.5, 1], [1, 1, 0]);
 
   return (
     <Wrapper>
-      <Svg preserveAspectRatio="none" >
+      <Svg preserveAspectRatio="none" ref={ref} >
         <defs>
           <pattern id="squiggle-1" width="48" height="6" patternUnits="userSpaceOnUse" >
             <path
