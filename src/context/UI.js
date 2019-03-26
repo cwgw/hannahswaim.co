@@ -1,43 +1,37 @@
 import React from 'react'
-import _debounce from 'lodash/debounce'
+import { em } from 'polished'
 
-import { breakpoints } from 'style/constants'
+import { breakpoints, breakpointKeys } from 'style/constants'
 
-const UIContext = React.createContext({});
+const UIContext = React.createContext({})
 
 const isWindowDefined = () => (typeof window !== 'undefined');
 
-function getViewportWidth() {
-  const viewportWidth = isWindowDefined() ? window.innerWidth : 0;
-  let state = {};
-  for (let [key, value] of breakpoints.entries()) {
-    state[key] = value < viewportWidth
-  }
-  return state
-}
-
 function Provider({ children }) {
-  const [ isViewport, setViewportState ] = React.useState(() => getViewportWidth())
-  const isResizeListenerAdded = React.useRef(false);
-
-  const handleResize = _debounce(() => {
-    setViewportState(getViewportWidth());
-  }, 50, {trailing: true});
+  const [ isViewport, setViewportState ] = React.useState(breakpointKeys.reduce((o, key) => ({ ...o, [key]: false }), {}));
 
   React.useEffect(() => {
-    if (isWindowDefined() && !isResizeListenerAdded.current) {
-      window.addEventListener('resize', handleResize);
-      isResizeListenerAdded.current = true
-    }
-    return () => {
-      if (isResizeListenerAdded.current) {
-        window.removeEventListener('resize', handleResize);
+    if (isWindowDefined()) {
+      let initialState = {}
+      for (let [key, width] of breakpoints.entries()) {
+        let query = window.matchMedia(`(min-width: ${em(width)})`);
+        initialState[key] = query.matches;
+        query.addListener((e) => {
+          let matches = e.matches;
+          setViewportState((prev) => ({
+            ...prev,
+            [key]: matches
+          }));
+        })
       }
+      setViewportState(initialState);
     }
   }, []);
 
   return (
-    <UIContext.Provider value={{ isViewport }} >{children}</UIContext.Provider>
+    <UIContext.Provider value={{ isViewport }} >
+      {children}
+    </UIContext.Provider>
   )
 }
 
