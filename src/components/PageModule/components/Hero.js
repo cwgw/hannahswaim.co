@@ -74,12 +74,15 @@ const Hero = ({
   id,
   ...props
 }) => {
-  const ref = React.useRef();
   const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
-  useIntersectionObserver(({ offset }) => {
-    setY({y: offset})
+  const ref = React.useRef();
+
+  useIntersectionObserver((y) => {
+    setY({y})
   }, ref);
+
   const transform = y.interpolate(y => `translate3d(0, ${(y - 0.5) * -20}%, 0) scale3d(1, 1, 1)`);
+
   return (
     <Wrapper
       ref={ref}

@@ -61,8 +61,8 @@ const Background = ({
   const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
   const ref = React.useRef(null);
 
-  useIntersectionObserver(({offset}) => {
-    setY({ y: offset });
+  useIntersectionObserver((y) => {
+    setY({y});
   }, ref);
 
   let y1 = y.interpolate(y => `translate3d(0, ${(y - 0.5) * 30}%, 0) scale3d(1, 1, 1)`);
