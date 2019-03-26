@@ -2,12 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 
-import useScrollPosition from 'hooks/useScrollPosition'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { colors } from 'style/constants'
 
 const defaultProps = {
-  speed: 0.25,
   colors: [
     colors.brand[5],
     colors.brand[4]
@@ -38,20 +36,7 @@ const Svg = styled.svg.attrs({
   overflow: visible;
 `
 
-const clamp = (
-  num,
-  min = Number.NEGATIVE_INFINITY,
-  max = Number.POSITIVE_INFINITY
-) => {
-  return num <= min
-    ? min
-    : num >= max
-      ? max
-      : num
-};
-
 const Background = ({
-  speed,
   colors: [
     color1,
     color2,
