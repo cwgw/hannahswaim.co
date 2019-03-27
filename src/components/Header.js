@@ -1,25 +1,26 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import { spacing, media } from 'style/layout'
-import { acronymize } from 'utils/formatting'
-import { colors, navBreakpoint } from 'style/constants'
-import UIContext from 'context/UI'
-import { StandardGrid } from 'components/Grid'
-import Flex from 'components/Flex'
-import Link from 'components/Link'
-import Icon from 'components/Icon'
+import { spacing } from 'style/sizing';
+import { media } from 'style/layout';
+import { acronymize } from 'utils/formatting';
+import { colors, navBreakpoint } from 'style/constants';
+import UIContext from 'context/UI';
+import { StandardGrid } from 'components/Grid';
+import Flex from 'components/Flex';
+import Link from 'components/Link';
+import Icon from 'components/Icon';
 
 const propTypes = {
   siteTitle: PropTypes.string.isRequired,
   pages: PropTypes.array,
-}
+};
 
 const defaultProps = {
   pages: [],
   isAboveHero: false,
-}
+};
 
 const Wrapper = styled(StandardGrid)`
   width: 100%;
@@ -29,10 +30,9 @@ const Wrapper = styled(StandardGrid)`
   ${media.min.lg`
     position: absolute;
   `}
-`
+`;
 
-const Nav = styled(Flex)`
-`
+const Nav = styled(Flex)``;
 
 const NavLink = styled(Link)`
   display: inline-block;
@@ -54,13 +54,13 @@ const NavLink = styled(Link)`
   &:focus {
     position: relative;
   }
-`
+`;
 
 const Nameplate = styled(NavLink)`
   background-color: ${colors.brand[4]};
   color: ${colors.brand[2]};
   font-weight: 700;
-`
+`;
 
 const Header = ({
   siteTitle,
@@ -111,11 +111,11 @@ const Header = ({
         ))}
       </Nav>
     </Wrapper>
-  )
-}
+  );
+};
 
-Header.propTypes = propTypes
+Header.propTypes = propTypes;
 
-Header.defaultProps = defaultProps
+Header.defaultProps = defaultProps;
 
-export default Header
+export default Header;

@@ -1,31 +1,53 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { PageRenderer, StaticQuery, graphql } from 'gatsby'
-import _get from 'lodash/get'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { PageRenderer, useStaticQuery, graphql } from 'gatsby';
+import get from 'lodash/get';
 
-import GlobalStyle from 'components/GlobalStyle'
-import Background from 'components/BackgroundGraphics'
-import Head from 'components/Head'
-import Header from 'components/Header'
-import Footer from 'components/Footer'
-import Modal from 'components/Modal'
+import UIContext from 'context/UI';
+
+import GlobalStyle from 'components/GlobalStyle';
+import Background from 'components/BackgroundGraphics';
+import Head from 'components/Head';
+import Header from 'components/Header';
+import Footer from 'components/Footer';
+import Modal from 'components/Modal';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
   location: PropTypes.object.isRequired,
-}
+};
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
+`;
+
+const Main = styled.main`
+  display: flex;
+  flex-flow: column nowrap;
+  flex: 1;
+`;
 
 const Layout = ({
   children,
   location,
 }) => {
-  const isModalEnabled = typeof window !== 'undefined' && window.___HMS_INITIAL_RENDER_COMPLETE && _get(location, 'state.enableModal', false)
-  return isModalEnabled
-    ? (
+  const { isViewport } = React.useContext(UIContext);
+  const isInitialRender = React.useRef(typeof window !== 'undefined' && !!!window.___IS_INITIAL_RENDER_COMPLETE);
+  const isModalEnabled = (
+    isInitialRender
+    && get(location, 'state.enableModal', false)
+    && isViewport.lg
+  );
+
+  if (isModalEnabled) {
+    return (
       <React.Fragment>
         <PageRenderer
           location={{
-            pathname: _get(location, 'state.origin', location.pathname)
+            pathname: get(location, 'state.origin', location.pathname)
           }}
         />
         <Modal
@@ -35,74 +57,77 @@ const Layout = ({
           {React.Children.map(children, child => React.cloneElement(child, {isModalEnabled}))}
         </Modal>
       </React.Fragment>
-    )
-    : (
-      <StaticQuery
-        query={graphql`
-          query Layout {
-            site {
-              siteMetadata {
-                siteTitle
-                siteTitleSeparator
-                siteUrl
-              }
-            }
-            socialMedia: allContentfulSocialMediaLink {
-              edges {
-                node {
-                  service
-                  url
-                }
-              }
-            }
-            menu: contentfulMenu {
-              menuItems {
-                ... on ContentfulPage {
-                  id
-                  title
-                  slug
-                }
-                ... on ContentfulSocialMediaLink {
-                  id
-                  service
-                  url
-                }
-              }
+    );
+  }
+
+  const {
+    menu: {
+      menuItems,
+    },
+    socialMedia,
+    site: {
+      siteMetadata,
+    },
+  } = useStaticQuery(
+    graphql`
+      query Layout {
+        site {
+          siteMetadata {
+            siteTitle
+            siteTitleSeparator
+            siteUrl
+          }
+        }
+        socialMedia: allContentfulSocialMediaLink {
+          edges {
+            node {
+              service
+              url
             }
           }
-        `}
-        render={({
-          site: {
-            siteMetadata
-          },
-          menu: {
-            menuItems
-          },
-          socialMedia
-        }) => (
-          <React.Fragment>
-            <GlobalStyle />
-            <Background />
-            <Head
-              location={location}
-              siteMetadata={siteMetadata}
-              socialMedia={socialMedia}
-            />
-            <Header
-              siteTitle={siteMetadata.siteTitle}
-              menuItems={menuItems}
-            />
-            <main role="main" >
-              {children}
-            </main>
-            <Footer siteTitle={siteMetadata.siteTitle} />
-            <Modal />
-          </React.Fragment>
-        )}
+        }
+        menu: contentfulMenu {
+          menuItems {
+            ... on ContentfulPage {
+              id
+              title
+              slug
+            }
+            ... on ContentfulSocialMediaLink {
+              id
+              service
+              url
+            }
+          }
+        }
+      }
+    `
+  );
+
+  return (
+    <React.Fragment>
+      <GlobalStyle />
+      <Background />
+      <Head
+        location={location}
+        siteMetadata={siteMetadata}
+        socialMedia={socialMedia}
       />
-    )
-}
+      <Wrapper>
+        <Header
+          siteTitle={siteMetadata.siteTitle}
+          menuItems={menuItems}
+        />
+        <Main role="main" >
+          {children}
+        </Main>
+        <Footer siteTitle={siteMetadata.siteTitle} />
+      </Wrapper>
+      <Modal />
+    </React.Fragment>
+  );
+};
 
-Layout.propTypes = propTypes
+Layout.propTypes = propTypes;
 
-export default Layout
+export default Layout;

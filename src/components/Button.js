@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { spacing } from 'style/layout'
+import { spacing } from 'style/sizing'
 import { sansSerif } from 'style/fonts'
 import Link from 'components/Link'
 
@@ -22,7 +22,7 @@ const Button = styled(UnstyledButton)`
   vertical-align: middle;
   padding: ${spacing('sm')} ${spacing('md')};
   border: 1px solid currentColor;
-  border-radius: ${spacing('xs')};
+  border-radius: ${spacing('xxs')};
   cursor: pointer;
   text-decoration: none;
   text-align: center;

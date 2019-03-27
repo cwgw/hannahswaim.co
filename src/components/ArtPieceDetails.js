@@ -3,14 +3,18 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
+import { Location } from '@reach/router'
 
-import { spacing, media } from 'style/layout'
+import { spacing } from 'style/sizing'
+import { media } from 'style/layout'
 import { modalBreakpoint } from 'style/constants'
+
+import ArtPieceMeta from 'components/ArtPieceMeta'
+import Box from 'components/Box'
 import Flex from 'components/Flex'
 import Row from 'components/Row'
-import Box from 'components/Box'
 import { StandardGrid } from 'components/Grid'
-import ArtPieceMeta from 'components/ArtPieceMeta'
+import PostNavigation from 'components/PostNavigation'
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -47,7 +51,8 @@ const Wrapper = styled(Flex)`
 
 const Meta = styled(Box)`
   background: #fff;
-  padding: ${spacing('md')};
+  padding: ${spacing('lg')};
+  width: 100%;
 `
 
 const ArtPieceDetails = ({
@@ -57,79 +62,111 @@ const ArtPieceDetails = ({
   images,
   isModalEnabled,
   childContentfulArtPieceDimensionsJsonNode: dimensions,
-}) => (isModalEnabled
-  ? (
-    <Wrapper onClick={(e) => {e.stopPropagation()}} >
-      <Meta>
-        <ArtPieceMeta
-          {...{
-            title,
-            date,
-            media,
-            dimensions,
-          }}
-        />
-      </Meta>
-      <Row
-        childAspectRatioResolver={({fluid}) => fluid.aspectRatio}
-        height="75vh"
-        items={images}
-        >
-        {images.map(({id, fluid}) => (
-          <Box
-            key={id}
-            as="figure"
-            margin="0"
-            >
-            <GatsbyImage
-              fluid={fluid}
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-            />
-          </Box>
-        ))}
-      </Row>
-    </Wrapper>
-  )
-  : (
-    <StandardGrid>
-      <Meta
-        gridColumn={{
-          base: 'wideStart / wideEnd',
-          xl: 'contentStart / contentEnd',
-        }}
-        marginTop="xxl"
-        >
-        <ArtPieceMeta
-          {...{
-            title,
-            date,
-            media,
-            dimensions,
-          }}
-        />
-      </Meta>
-      <Box
-        gridColumn={{
-          base: 'wideStart / wideEnd',
-          xl: 'contentStart / contentEnd',
-        }}
-        >
-        {images.map(({id, fluid}) => (
-          <GatsbyImage
-            key={id}
-            fluid={fluid}
-            style={{
-              marginBottom: spacing('md')
+  ...props
+}) => {
+  if (isModalEnabled) {
+    return (
+      <Wrapper onClick={(e) => {e.stopPropagation()}} >
+        <Meta>
+          <ArtPieceMeta
+            {...{
+              title,
+              date,
+              media,
+              dimensions,
             }}
           />
-        ))}
-      </Box>
-    </StandardGrid>
-  )
-)
+        </Meta>
+        <Row
+          childAspectRatioResolver={({ fluid }) => fluid.aspectRatio}
+          height="75vh"
+          items={images}
+          >
+          {images.map(({ id, fluid }) => (
+            <Box
+              key={id}
+              as="figure"
+              margin="0"
+              >
+              <GatsbyImage
+                fluid={fluid}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </Box>
+          ))}
+        </Row>
+      </Wrapper>
+    );
+  }
+  
+  return (
+    <Location>
+      {({ location }) => {
+        const {
+          siblings = [],
+          index = 0,
+        } = location.state || {}
+
+        const navigation = {
+          next: {
+            pathname: siblings[index + 1] || null,
+            state: {
+              ...location.state,
+              index: index + 1,
+            },
+          },
+          previous: {
+            pathname: siblings[index - 1] || null,
+            state: {
+              ...location.state,
+              index: index - 1,
+            },
+          },
+        };
+
+        return (
+          <StandardGrid
+            marginBottom={10}
+            >
+            <PostNavigation
+              {...navigation}
+              gridColumn="contentStart / contentEnd"
+              marginTop={{ lg: 10 }}
+              isModal={false}
+              >
+              <Meta>
+                <ArtPieceMeta
+                  {...{
+                    title,
+                    date,
+                    media,
+                    dimensions,
+                  }}
+                />
+              </Meta>
+            </PostNavigation>
+            <Box
+              gridColumn="contentStart / contentEnd"
+              >
+              {images.map(({id, fluid}) => (
+                <GatsbyImage
+                  key={id}
+                  fluid={fluid}
+                  style={{
+                    marginBottom: spacing('md')
+                  }}
+                />
+              ))}
+            </Box>
+          </StandardGrid>
+        );
+      }}
+    </Location>
+  );
+};
 
 ArtPieceDetails.propTypes = propTypes
 

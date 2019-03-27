@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { spacing } from 'style/layout'
+import { spacing } from 'style/sizing'
 import Box from 'components/Box'
 
 const propTypes = {
@@ -28,14 +28,17 @@ const defaultProps = {
 }
 
 const Wrapper = styled(Box)`
-  margin: -${spacing('xxl')} 0;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  margin: ${spacing(-15)} 0;
 `
 
 const Scroller = styled.div`
-  padding: ${spacing('xxl')} 0;
-
-  overflow: visible;
-  overflow-x: auto;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  overflow-x: scroll;
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
@@ -47,10 +50,13 @@ const Scroller = styled.div`
 `
 
 const Inner = styled.div`
+  position: relative;
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
   justify-content: space-between;
+  padding-top: ${spacing(15)};
+  padding-bottom: ${spacing(15)};
   box-sizing: content-box;
   flex: 1;
 
@@ -98,7 +104,8 @@ const Row = ({
             ...(innerStyle || {}),
             width: width,
             height: height,
-            padding: isCentered ? `0 ${paddingRight} 0 ${paddingLeft}` : null,
+            paddingLeft: isCentered ? paddingLeft : null,
+            paddingRight: isCentered ? paddingRight : null,
           }}
           >
           {Children}

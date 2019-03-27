@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import GatsbyImage from 'gatsby-image'
-import { useSpring, animated } from 'react-spring'
 
 import { colors, ease } from 'style/constants'
-import { spacing } from 'style/layout'
+import { spacing } from 'style/sizing'
 import { formatArtTitle, artMetaString } from 'utils/formatting'
 import Link from 'components/Link'
 import Box from 'components/Box'
@@ -22,7 +21,6 @@ const propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       fluid: PropTypes.object,
-      // sqip: PropTypes.object,
     })
   ).isRequired,
   childContentfulArtPieceDimensionsJsonNode: PropTypes.shape({
@@ -65,8 +63,6 @@ const StyledLink = styled(Box)`
   }
 `
 
-const AnimatedImage = animated(GatsbyImage)
-
 const Piece = ({
   location,
   siblings,
@@ -84,16 +80,6 @@ const Piece = ({
   className,
   ...props
 }) => {
-  const [ { inset }, set ] = useSpring(() => ({
-    inset: '0px',
-    config: {
-      tension: 540,
-      friction: 16,
-    }
-  }));
-  const shrink = useCallback(() => set({ inset: spacing(0) }));
-  const grow = useCallback(() => set({ inset: '0px' }));
-
   return (
     <StyledLink
       to={slug}
@@ -105,20 +91,14 @@ const Piece = ({
       }}
       className={className}
       as={Link}
-      onFocus={shrink}
-      onBlur={grow}
-      onMouseEnter={shrink}
-      onMouseLeave={grow}
       {...props}
       >
       <span className="sr-only">{formatArtTitle({title, date})}</span>
-      <AnimatedImage
+      <GatsbyImage
         className="Piece__Image"
         fluid={images[0].fluid}
         style={{
           height: '100%',
-          clipPath: inset.interpolate(i => `inset(${i})`),
-          WebkitClipPath: inset.interpolate(i => `inset(${i})`),
         }}
         alt={artMetaString({title, date, dimensions, media})}
       />

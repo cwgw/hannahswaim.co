@@ -8,7 +8,8 @@ import { useSpring, animated } from 'react-spring'
 
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { style as fontStyle } from 'style/fonts'
-import { media, spacing } from 'style/layout'
+import { spacing } from 'style/sizing'
+import { media } from 'style/layout'
 import { colors, breakpoints } from 'style/constants'
 import { StandardGrid } from 'components/Grid'
 import Box from 'components/Box'
@@ -23,6 +24,7 @@ const propTypes = {
 }
 
 const defaultProps = {
+  alignment: 'left',
   breakpoint: 'lg',
 }
 
@@ -36,14 +38,18 @@ const Wrapper = styled(StandardGrid)`
 
 const Figure = animated(styled(Box)`
   overflow: hidden;
-  position: relative;
-  z-index: -2;
   max-height: 400px;
   margin-bottom: ${spacing('lg')};
   box-shadow: 0px 4px 72px ${transparentize(0.75, colors.coolBlack)};
   transform-style: preserve-3d;
 
+  ${media.min.md`
+    max-height: 500px;
+  `}
+  
   ${media.min.lg`
+    position: relative;
+    z-index: -2;
     max-height: none;
     margin-bottom: 0;
   `}
@@ -65,13 +71,13 @@ const TextBox = styled(Box)`
 `
 
 const Hero = ({
+  breakpoint,
+  image,
+  id,
+  location,
   text: {
     childMarkdownRemark
   },
-  image,
-  breakpoint,
-  location,
-  id,
   ...props
 }) => {
   const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
@@ -81,7 +87,7 @@ const Hero = ({
     setY({y})
   }, ref);
 
-  const transform = y.interpolate(y => `translate3d(0, ${(y - 0.5) * -20}%, 0) scale3d(1, 1, 1)`);
+  const transform = y.interpolate(y => `translate3d(0, ${(y - 0.5) * y * -10}%, 0) scale3d(1, 1, 1)`);
 
   return (
     <Wrapper
@@ -102,7 +108,7 @@ const Hero = ({
       />
       <Figure
         gridColumn={{
-          base: 'wideStart / wideEnd',
+          base: 'contentStart / contentEnd',
           lg: 'col4Start / bleedEnd',
         }}
         gridRow={{

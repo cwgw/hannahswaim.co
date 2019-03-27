@@ -16,8 +16,6 @@ const PageTemplate = ({
   data: {
     page: {
       contentModules,
-      // title,
-      // node_locale,
     },
   },
 }) => (
@@ -29,10 +27,10 @@ const PageTemplate = ({
           <Module
             key={content.id}
             marginBottom={{
-              base: 'lg',
-              md: 'xl',
+              base: 10,
+              lg: 13,
             }}
-            paddingTop={(index === 0 && __typename !== 'ContentfulPageHero') ? 8 : null}
+            paddingTop={(index === 0 && __typename !== 'ContentfulPageHero') ? { lg: 10 } : null}
             location={location}
             {...content}
           />
@@ -54,10 +52,10 @@ export const pageQuery = graphql`
       slug
       node_locale
       contentModules {
-        ...PageText
         ...PageHero
         ...PageArtwork
         ...PageInstagram
+        ...PageFeature
       }
     }
   }

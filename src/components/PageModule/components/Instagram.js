@@ -6,9 +6,9 @@ import GatsbyImage from 'gatsby-image'
 import { transparentize } from 'polished'
 import { useSpring, animated } from 'react-spring'
 
-import { spacing } from 'style/layout'
+import { spacing, fontSizes, rem } from 'style/sizing'
 import { colors } from 'style/constants'
-import { size, rem, sansSerif } from 'style/fonts'
+import { sansSerif } from 'style/fonts'
 
 import Row from 'components/Row'
 import Icon from 'components/Icon'
@@ -36,8 +36,8 @@ const Container = styled(StandardGrid)`
   &:before {
     content: '';
     // border: 2px solid ${colors.green[5]};
-    border: 2px solid ${colors.brand[5]};
-    grid-column: contentStart / wideEnd;
+    border: 2px solid ${colors.brand[4]};
+    grid-column: contentStart / contentEnd;
     grid-row: 2;
     user-select: none;
     pointer-events: none;
@@ -66,9 +66,18 @@ const ItemCover = animated(styled.p`
 
 const StyledItem = styled(Box)`
   position: relative;
-  border-radius: ${spacing('xs')};
-  box-shadow: 0px 3px 64px ${transparentize(0.8, colors.coolBlack)};
-  overflow: hidden;
+
+  &:before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    border-radius: ${spacing('xs')};
+    box-shadow: 0px 3px 64px ${transparentize(0.8, colors.coolBlack)};
+  }
 `
 
 const AnimatedIcon = animated(Icon)
@@ -114,19 +123,21 @@ const Item = ({
         fluid={fluid}
         style={{
           width: '100%',
-          height: '100%'
+          height: '100%',
+          borderRadius: spacing('xs'),
         }}
-      />
+        />
       <ItemCover
         style={{
           opacity: o,
+          borderRadius: spacing('xs'),
         }}
         >
         <AnimatedIcon
           type="instagram"
           inline
           style={{
-            fontSize: rem(size('lead')),
+            fontSize: rem(fontSizes.lead),
             transform: translate,
           }}
         />
@@ -154,7 +165,7 @@ const Instagram = ({
     return (
       <Container {...props} >
         <Flex
-          gridColumn="contentStart / wideEnd"
+          gridColumn="contentStart / contentEnd"
           alignItems="baseline"
           marginBottom="xs"
           >
@@ -166,7 +177,7 @@ const Instagram = ({
               title="Instagram"
               inline
               style={{
-                fontSize: rem(size('lead')),
+                fontSize: rem(fontSizes.lead),
                 marginRight: spacing('xs'),
                 verticalAlign: 'bottom',
               }}
@@ -185,7 +196,7 @@ const Instagram = ({
               marginLeft: 'auto',
             }}
             >
-            See more →
+            {'See more →'}
           </StyledLink>
         </Flex>
         <Row

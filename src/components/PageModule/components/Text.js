@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { graphql } from 'gatsby'
+// import { graphql } from 'gatsby'
 
-import { spacing, media } from 'style/layout'
+import { spacing } from 'style/sizing'
+import { media } from 'style/layout'
 import Box from 'components/Box'
 import { StandardGrid } from 'components/Grid'
 
@@ -23,24 +24,23 @@ const Content = styled(Box)`
   `}
 `
 
-const Text = ({
+const Text = React.forwardRef(({
   text: {
     childMarkdownRemark
   },
-  location,
-  id,
   ...props
-}) => (
-  <StandardGrid {...props} >
+}, ref) => (
+  <StandardGrid {...props} ref={ref} >
     <Content
-      gridColumn={{
+      col={{
         base: 'contentStart / contentEnd',
-        xl: 'col2Start / col5End',
+        xl: 'contentStart / col4End',
       }}
       dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
+      row="1"
     />
   </StandardGrid>
-)
+));
 
 Text.propTypes = propTypes
 
@@ -48,13 +48,13 @@ Text.defaultProps = defaultProps
 
 export default Text
 
-export const pageQuery = graphql`
-  fragment PageText on ContentfulPageText {
-    id
-    text {
-      childMarkdownRemark {
-        html
-      }
-    }
-  }
-`
+// export const pageQuery = graphql`
+//   fragment PageText on ContentfulPageText {
+//     id
+//     text {
+//       childMarkdownRemark {
+//         html
+//       }
+//     }
+//   }
+// `

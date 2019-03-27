@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce'
+
+import { spacing } from 'style/sizing'
 
 import { Grid, StandardGrid } from 'components/Grid'
 
@@ -14,97 +16,76 @@ const propTypes = {
 }
 
 const defaultProps = {
-  columnWidth: 300,
-  gap: 18,
+  columnWidth: spacing(20, false),
+  gap: spacing('lg', false),
   minColumns: 2,
 }
 
 // masonry-styles image layout using css grid
 // @see https://medium.com/@andybarefoot/a-masonry-style-layout-using-css-grid-8c663d355ebb
-class ImageWall extends React.Component {
+const ImageWall = ({
+  childAspectRatioResolver,
+  children,
+  columnWidth,
+  gap,
+  items,
+  minColumns,
+  ...props
+}) => {
+  const [ containerWidth, setContainerWidth ] = React.useState(0);
+  const container = React.useRef();
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      containerWidth: null
-    }
-    this.windowExists = typeof window !== 'undefined'
-    this.container = React.createRef()
+  const setState = () => {
+    const rect = container.current.getBoundingClientRect();
+    setContainerWidth(() => rect.width);
+  };
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined' || typeof container.current === 'undefined') return;
+    setState();
+    const debouncedSetState = debounce(setState, 50, {trailing: true});
+    window.addEventListener('resize', debouncedSetState);
+    return () => {
+      window.removeEventListener('resize', debouncedSetState);
+    };
+  }, container);
+
+  const rowBaseHeight = Math.ceil(columnWidth / 5);
+  let columnWidthActual = columnWidth;
+
+  if (containerWidth > 0) {
+    let columnCount = Math.floor(containerWidth / columnWidth);
+    columnCount = Math.max(minColumns, (containerWidth % columnWidth > gap * columnCount - gap) ? columnCount : columnCount - 1);
+    columnWidthActual = (containerWidth - gap * columnCount - gap) / columnCount;
   }
 
-  componentDidMount () {
-    if (this.windowExists && typeof this.container.current !== 'undefined') {
-      this.setContainerWidth()
-      this.debouncedSetContainerWidth = _debounce(this.setContainerWidth, 50, {trailing: true}).bind(this)
-      window.addEventListener('resize', this.debouncedSetContainerWidth)
-    }
-  }
+  const Children = React.Children.map(children, (child, i) => {
+    const itemHeight = columnWidthActual / childAspectRatioResolver(items[i]);
+    return React.cloneElement(child, {
+      gridRowEnd: `span ${Math.ceil((itemHeight + gap) / (rowBaseHeight + gap))}`,
+      marginBottom: '0',
+    });
+  });
 
-  componentWillUnmount () {
-    if (this.windowExists) {
-      window.removeEventListener('resize', this.debouncedSetContainerWidth)
-    }
-  }
-
-  setContainerWidth = () => {
-    const rect = this.container.current.getBoundingClientRect()
-    this.setState(prevState => ({
-      containerWidth: rect.width,
-    }))
-  }
-
-  render () {
-
-    const {
-      childAspectRatioResolver,
-      children,
-      columnWidth,
-      gap,
-      items,
-      minColumns,
-      ...props
-    } = this.props
-    const { containerWidth } = this.state
-
-    const rowBaseHeight = Math.ceil(columnWidth / 5)
-    let columnWidthActual = columnWidth
-
-    if (containerWidth > 0) {
-      let columnCount = Math.floor(containerWidth / columnWidth)
-      columnCount = Math.max(minColumns, (containerWidth % columnWidth > gap * columnCount - gap) ? columnCount : columnCount - 1)
-      columnWidthActual = (containerWidth - gap * columnCount - gap) / columnCount
-    }
-
-    const Children = React.Children.map(children, (child, i) => {
-      const itemHeight = columnWidthActual / childAspectRatioResolver(items[i])
-      return React.cloneElement(child, {
-        gridRowEnd: `span ${Math.ceil((itemHeight + gap) / (rowBaseHeight + gap))}`,
-        marginBottom: '0',
-      })
-    })
-
-    return (
-      <StandardGrid
-        {...props}
+  return (
+    <StandardGrid {...props} >
+      <Grid
+        columnGap={`${gap}px`}
+        gridAutoRows={`${rowBaseHeight}px`}
+        gridColumn="bleedStart / bleedEnd"
+        gridTemplateColumns={`repeat(auto-fill, minmax(${columnWidthActual}px, 1fr))`}
+        paddingX="lg"
+        ref={container}
+        rowGap={`${gap}px`}
         >
-        <Grid
-          gridColumn="wideStart / wideEnd"
-          gridRow="contentStart / contentEnd"
-          gridTemplateColumns={`repeat(auto-fill, minmax(${columnWidthActual}px, 1fr))`}
-          gridAutoRows={`${rowBaseHeight}px`}
-          columnGap={`${gap}px`}
-          rowGap={`${gap}px`}
-          ref={this.container}
-          >
-          {Children}
-        </Grid>
-      </StandardGrid>
-    )
-  }
-}
+        {Children}
+      </Grid>
+    </StandardGrid>
+  );
+};
 
-ImageWall.propTypes = propTypes
+ImageWall.propTypes = propTypes;
 
-ImageWall.defaultProps = defaultProps
+ImageWall.defaultProps = defaultProps;
 
-export default ImageWall
+export default ImageWall;

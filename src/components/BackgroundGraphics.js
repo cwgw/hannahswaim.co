@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
+import { Location } from '@reach/router'
 
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { colors } from 'style/constants'
@@ -42,18 +43,21 @@ const Background = ({
     color2,
     color3
   ],
+  location,
 }) => {
   const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
   const ref = React.useRef(null);
+
+  const isHome = location.pathname === '/';
 
   useIntersectionObserver((y) => {
     setY({y});
   }, ref);
 
-  let y1 = y.interpolate(y => `translate3d(0, ${(y - 0.5) * 30}%, 0) scale3d(1, 1, 1)`);
-  let y2 = y.interpolate(y => `translate3d(0, ${(y - 0.5) * 60}%, 0) scale3d(1, 1, 1)`);
-  let o1 = y.interpolate([0, 1], [1, 0]);
-  let o2 = y.interpolate([0, 0.5, 1], [1, 1, 0]);
+  let y1 = y.interpolate(y => `translate3d(0, ${ isHome ? (y - 0.5) * 30 : 0}%, 0) scale3d(1, 1, 1)`);
+  let y2 = y.interpolate(y => `translate3d(0, ${ isHome ? (y - 0.5) * 60 : 0}%, 0) scale3d(1, 1, 1)`);
+  let o1 = y.interpolate([0, 1], [1, 0]).interpolate(o => isHome ? o : 0);
+  let o2 = y.interpolate([0, 0.5, 1], [1, 1, 0]).interpolate(o => isHome ? o : 0);
 
   return (
     <Wrapper>
@@ -122,4 +126,13 @@ const Background = ({
 
 Background.defaultProps = defaultProps
 
-export default Background
+export default (props) => (
+  <Location>
+    {({ location }) => (
+      <Background
+        location={location}
+        {...props}
+      />
+    )}
+  </Location>
+)

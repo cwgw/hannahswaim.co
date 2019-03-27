@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { spacing } from 'style/layout'
+import { spacing } from 'style/sizing'
 import { colors } from 'style/constants'
 import * as fonts from 'style/fonts'
 
@@ -67,7 +67,7 @@ const GlobalStyle = createGlobalStyle`
     const printHeadingStyles = (n) => n > 0
       ? {
         [`h${n}`]: {
-          ...(fonts[`h${n}`] || {}),
+          ...(fonts.style[`h${n}`] || {}),
         },
         ...printHeadingStyles(n - 1)
       }

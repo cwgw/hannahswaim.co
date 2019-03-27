@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import mousetrap from "mousetrap"
 import { navigate } from 'gatsby'
 
+import { Location } from '@reach/router'
+
 import { style as fontStyle } from 'style/fonts'
 import { colors } from 'style/constants'
 import Flex from 'components/Flex'
@@ -15,107 +17,139 @@ const propTypes = {
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
   ]),
+  isModal: PropTypes.bool,
   next: PropTypes.object,
   previous: PropTypes.object,
 }
 
 const defaultProps = {
   children: null,
+  isModal: true,
   next: null,
   previous: null,
 }
 
-const NavContainer = styled(Flex)`
-  position: fixed;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  transform: translate(0,-50%);
-  align-items: center;
-`
-
 const NavItem = styled(Button)`
-  color: ${colors.white};
+  color: inherit;
   background-color: transparent;
   border: none;
   font-size: ${fontStyle.lead.fontSize};
+`
 
-  &:hover,
-  &:focus {
-    background-color: ${colors.gray[0]};
+const NavContainer = styled(Flex)`
+  ${({ isModal }) => isModal
+    ? `
+      color: ${colors.white};
+      position: fixed;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translate(0,-50%);
+      align-items: center;
+
+      ${NavItem}:hover,
+      ${NavItem}:focus {
+        background-color: ${colors.gray[0]};
+      }
+    `
+    : `
+      justify-content: space-between;
+
+      ${NavItem}:hover,
+      ${NavItem}:focus {
+        color: ${colors.brand[6]};
+        background-color: ${colors.gray[3]};
+      }
+    `
   }
 `
 
+const PostNavigation = ({
+  children,
+  location,
+  ...props
+}) => {
+  const {
+    siblings = [],
+    index = 0,
+  } = location.state || {}
 
-class PostNavigation extends React.Component {
+  const next = {
+    pathname: siblings[index + 1] || null,
+    state: {
+      ...location.state,
+      index: index + 1,
+    },
+  };
 
-  componentDidMount () {
-    mousetrap.bind('left', this.toPrevious)
-    mousetrap.bind('right', this.toNext)
-  }
+  const prev = {
+    pathname: siblings[index - 1] || null,
+    state: {
+      ...location.state,
+      index: index - 1,
+    },
+  };
+  
+  const toNext = React.useCallback((e) => {
+    if (e) e.stopPropagation();
+    if (!next.pathname) return;
+    navigate(next.pathname, { state: next.state });
+  });
 
-  componentWillUnmount () {
-    mousetrap.unbind('left')
-    mousetrap.unbind('right')
-  }
+  const toPrevious = React.useCallback((e) => {
+    if (e) e.stopPropagation();
+    if (!prev.pathname) return;
+    navigate(prev.pathname, { state: prev.state });
+  });
 
-  toNext = (e) => {
-    if (e) {
-      e.stopPropagation()
+  React.useEffect(() => {
+    mousetrap.bind('left', toPrevious);
+    mousetrap.bind('right', toNext);
+
+    return () => {
+      mousetrap.unbind('left');
+      mousetrap.unbind('right');
     }
-    this.to(this.props.next)
-  }
+  }, [location]);
 
-  toPrevious = (e) => {
-    if (e) {
-      e.stopPropagation()
-    }
-    this.to(this.props.previous)
-  }
+  return (
+    <NavContainer {...props} >
+      <NavItem
+        aria-label="Previous"
+        onClick={toPrevious}
+        disabled={!prev.pathname}
+        >
+        <Icon
+          type="previous"
+          inline
+        />
+      </NavItem>
+      {children}
+      <NavItem
+        aria-label="Next"
+        onClick={toNext}
+        disabled={!next.pathname}
+        >
+        <Icon
+          type="next"
+          inline
+        />
+      </NavItem>
+    </NavContainer>
+  );
+};
 
-  to (location) {
-    if (location.pathname) {
-      navigate(location.pathname, {state: location.state})
-    }
-  }
+PostNavigation.propTypes = propTypes;
 
-  render () {
-    const {
-      next,
-      previous,
-      children,
-    } = this.props
+PostNavigation.defaultProps = defaultProps;
 
-    return (
-      <NavContainer>
-        <NavItem
-          aria-label="Previous"
-          onClick={this.toPrevious}
-          disabled={!previous.pathname}
-          >
-          <Icon
-            type="previous"
-            inline
-          />
-        </NavItem>
-        {children}
-        <NavItem
-          aria-label="Next"
-          onClick={this.toNext}
-          disabled={!next.pathname}
-          >
-          <Icon
-            type="next"
-            inline
-          />
-        </NavItem>
-      </NavContainer>
-    )
-  }
-}
-
-PostNavigation.propTypes = propTypes
-
-PostNavigation.defaultProps = defaultProps
-
-export default PostNavigation
+export default (props) => (
+  <Location>
+    {({ location }) => (
+      <PostNavigation
+        location={location}
+        {...props}
+      />
+    )}
+  </Location>
+);

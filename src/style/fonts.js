@@ -1,4 +1,8 @@
-import _has from 'lodash/has'
+import {
+  lineHeight,
+  rem,
+  fontSizes,
+} from 'style/sizing'
 
 import tinosRegular from 'fonts/Tinos-Regular.woff2'
 import tinosRegularItalic from 'fonts/Tinos-Italic.woff2'
@@ -11,91 +15,60 @@ const sansSerif = `"Inter UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
 
 const serif = `Tinos, Merriweather, Georgia, serif`
 
-const sizes = {
-  base: 4,
-  small: 3,
-  large: 5,
-  display: 11,
-  lead: 7,
-  h1: 13,
-  h2: 10,
-  h3: 7,
-  h4: 6,
-  h5: 5,
-  h6: 4,
-}
-
-const step = (n) => (Math.trunc((n - 2) / 4) + 1) * 2
-const size = (n) => {
-  if (typeof n === 'string' && _has(sizes, n)) {
-    return size(sizes[n])
-  }
-  return (Number.isInteger(n) && n > 0)
-    ? size(n - 1) + step(n - 1)
-    : 8
-}
-const snapToGrid = (n, base = 8) => Math.ceil((n + (0.5 * base)) / base) * base
-const lineHeight = (n) =>  snapToGrid(n) / n
-
-const toRem = (n) => n / size('base')
-const rem = (n) => `${toRem(n)}rem`
-const px = (n) => `${n}px`
-
 const style = {
   html: {
-    fontSize: px(size('base')),
+    fontSize: `${fontSizes.base}px`,
   },
   body: {
     fontFamily: serif,
-    fontSize: rem(size('base')),
+    fontSize: rem(fontSizes.base),
     fontWeight: 400,
-    lineHeight: lineHeight(size('base')),
+    lineHeight: lineHeight(fontSizes.base),
   },
   h1: {
-    fontFamily: sansSerif,
     fontWeight: 700,
-    fontSize: rem(size('h1')),
-    lineHeight: lineHeight(size('h1')),
-    marginBottom: `${lineHeight(size('h1')) / 2}em`,
+    fontSize: rem(fontSizes.h1),
+    lineHeight: lineHeight(fontSizes.h1),
+    marginBottom: `${lineHeight(fontSizes.h1) / 2}em`,
   },
   h2: {
-    fontSize: rem(size('h2')),
-    fontWeight: 400,
-    lineHeight: lineHeight(size('h2')),
-    marginBottom: `${lineHeight(size('h2')) / 2}em`,
+    fontSize: rem(fontSizes.h2),
+    fontWeight: 700,
+    lineHeight: lineHeight(fontSizes.h2),
+    marginBottom: `${lineHeight(fontSizes.h2) / 2}em`,
   },
   h3: {
-    fontSize: rem(size('h3')),
+    fontSize: rem(fontSizes.h3),
     fontWeight: 700,
-    lineHeight: lineHeight(size('h3')),
-    marginBottom: `${lineHeight(size('h3')) / 2}em`,
+    lineHeight: lineHeight(fontSizes.h3),
+    marginBottom: `${lineHeight(fontSizes.h3) / 2}em`,
   },
   h4: {
-    fontSize: rem(size('h4')),
+    fontSize: rem(fontSizes.h4),
     fontWeight: 700,
-    lineHeight: lineHeight(size('h4')),
-    marginBottom: `${lineHeight(size('h4')) / 2}em`,
+    lineHeight: lineHeight(fontSizes.h4),
+    marginBottom: `${lineHeight(fontSizes.h4) / 2}em`,
   },
   h5: {
-    fontSize: rem(size('h5')),
+    fontSize: rem(fontSizes.h5),
     fontWeight: 700,
-    lineHeight: lineHeight(size('h5')),
-    marginBottom: `${lineHeight(size('h5')) / 2}em`,
+    lineHeight: lineHeight(fontSizes.h5),
+    marginBottom: `${lineHeight(fontSizes.h5) / 2}em`,
   },
   h6: {
-    fontSize: rem(size('h6')),
+    fontSize: rem(fontSizes.h6),
     fontWeight: 700,
-    lineHeight: lineHeight(size('h6')),
-    marginBottom: `${lineHeight(size('h6')) / 2}em`,
+    lineHeight: lineHeight(fontSizes.h6),
+    marginBottom: `${lineHeight(fontSizes.h6) / 2}em`,
   },
   hero: {
     fontWeight: 700,
-    fontSize: rem(size('display')),
-    lineHeight: lineHeight(size('display')),
+    fontSize: rem(fontSizes.display),
+    lineHeight: lineHeight(fontSizes.display),
   },
   lead: {
-    fontSize: rem(size('lead')),
-    lineHeight: lineHeight(size('lead')),
+    fontSize: rem(fontSizes.lead),
+    lineHeight: lineHeight(fontSizes.lead),
   }
 }
 
@@ -151,11 +124,7 @@ const fontFaceDeclarations = () => fontFaces.map((font) => (`
 export {
   fontFaces,
   fontFaceDeclarations,
-  lineHeight,
-  px,
-  rem,
   sansSerif,
   serif,
-  size,
   style,
 }
