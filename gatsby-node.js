@@ -95,8 +95,8 @@ exports.createPages = ({ graphql, actions }) => {
 
         artwork.forEach(({node}, index) => {
 
-          const next = index + 1 < artwork.length ? artwork[index + 1].node.fields.slug : null
-          const prev = index - 1 >= 0 ? artwork[index - 1].node.fields.slug : null
+          const next = index + 1 < artwork.length ? artwork[index + 1].node.fields.slug : artwork[0].node.fields.slug;
+          const prev = index - 1 >= 0 ? artwork[index - 1].node.fields.slug : artwork[artwork.length - 1].node.fields.slug;
 
           createPage({
             path: node.fields.slug,
