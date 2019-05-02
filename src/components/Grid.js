@@ -8,7 +8,7 @@ const Grid = styled(Box)`
   ${makeGrid}
 `
 
-const makeColumns = (n = 6) => {
+const makeColumns = (n = 6, { includeGutters } = { includeGutters: true }) => {
   let gutter = `minmax(${spacing('lg')}, 2fr)`;
   let column = `minmax(auto, ${spacing(14)})`;
   let columns= [];
@@ -20,19 +20,21 @@ const makeColumns = (n = 6) => {
     if (i === n + 1) line.push('contentEnd');
     columns.push(`[${line.join(' ')}]`);
   }
-  return `[bleedStart] ${gutter} ${columns.join(` ${column} `)} ${gutter} [bleedEnd]`;
+  return includeGutters
+    ? `[bleedStart] ${gutter} ${columns.join(` ${column} `)} ${gutter} [bleedEnd]`
+    : columns.join(` ${column} `);
 }
 
-const StandardGrid = styled(Box)
-  .attrs({
-    gridTemplateColumns: makeColumns(6),
-    gap: 'lg'
-  })`
-    ${makeGrid}
-  `
+const StandardGrid = styled(Box).attrs({
+  gridTemplateColumns: makeColumns(),
+  gap: 'lg'
+})`
+  ${makeGrid}
+`
 
 export {
   Grid as default,
   Grid,
-  StandardGrid
+  StandardGrid,
+  makeColumns,
 }
