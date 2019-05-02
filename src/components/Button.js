@@ -1,23 +1,29 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { media } from 'style/layout'
 import { spacing } from 'style/sizing'
 import { sansSerif } from 'style/fonts'
-import Link from 'components/Link'
 
-const UnstyledButton = ({to, className, ...props}) => to
-  ? <Link
-      className={className}
-      to={to}
-      {...props}
-    />
-  : <button
-      className={className}
-      {...props}
-    />
+import Link from 'components/Link'
+import Box from 'components/Box'
+
+const UnstyledButton = ({to, className, ...props}) => to ? (
+  <Link
+    className={className}
+    to={to}
+    {...props}
+  />
+) : (
+  <Box
+    className={className}
+    as="button"
+    {...props}
+  />
+);
 
 const Button = styled(UnstyledButton)`
-  font-family: ${sansSerif};
+  font-family: inerit;
   display: inline-block;
   vertical-align: middle;
   padding: ${spacing('sm')} ${spacing('md')};
@@ -34,9 +40,15 @@ const Button = styled(UnstyledButton)`
     : `color: inherit;`
   }
 
-  &:hover,
-  &:focus {
-    background-color: currentColor;
+  ${media.min.md`
+    &:hover,
+    &:focus {
+      background-color: currentColor;
+    }
+  `}
+
+  &:active {
+    transform: translate(0, ${spacing('xxs')});
   }
 `
 

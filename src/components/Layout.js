@@ -54,7 +54,7 @@ const Layout = ({
           isOpen={isModalEnabled}
           location={location}
           >
-          {React.Children.map(children, child => React.cloneElement(child, {isModalEnabled}))}
+          {React.Children.map(children, child => React.cloneElement(child, { isModalEnabled }))}
         </Modal>
       </React.Fragment>
     );

@@ -27,11 +27,8 @@ const defaultProps = {
 
 const Wrapper = styled(StandardGrid)`
   flex: 1;
-
-  &:only-child {
-    height: 100%;
-    align-content: center;
-  }
+  flex-basis: 100%;
+  align-content: center;
 `
 
 const Figure = styled(Box)`
@@ -52,6 +49,10 @@ const Figure = styled(Box)`
 `
 
 const TextBox = styled(Box)`
+  ${media.min.md`
+    padding: 0 ${spacing('xxl')};
+  `}
+
   & > p:last-child {
     margin-bottom: 0;
   }

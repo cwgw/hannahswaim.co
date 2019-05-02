@@ -3,8 +3,6 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 
-import { spacing } from 'style/sizing'
-import { media } from 'style/layout'
 import { colors } from 'style/constants'
 
 import Box from 'components/Box'
@@ -24,21 +22,10 @@ const propTypes = {
 const defaultProps = {}
 
 const StyledText = styled(Text)`
-  color: ${colors.brand[3]};
 
-  ${media.min.md`
-
-    &:before {
-      position: relative;
-      z-index: -1;
-      height: ${spacing(6)};
-      grid-column: contentStart / contentEnd;
-      grid-row: 1;
-      margin: ${spacing('sm')} 0 ${spacing('lg')} ${spacing('lg')};
-      background: ${colors.brand[6]};
-      content: '';
-    }
-  `}
+  & h2 {
+    border-bottom: 8px solid ${colors.brand[5]};
+  }
 `
 
 const Gallery = ({

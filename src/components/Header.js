@@ -9,7 +9,7 @@ import { colors, navBreakpoint } from 'style/constants';
 import UIContext from 'context/UI';
 import { StandardGrid } from 'components/Grid';
 import Flex from 'components/Flex';
-import Link from 'components/Link';
+import Button from 'components/Button';
 import Icon from 'components/Icon';
 
 const propTypes = {
@@ -34,13 +34,14 @@ const Wrapper = styled(StandardGrid)`
 
 const Nav = styled(Flex)``;
 
-const NavLink = styled(Link)`
+const NavLink = styled(Button)`
   display: inline-block;
   min-width: ${spacing('xl')};
   padding: ${spacing('sm')} ${spacing('md')};
   margin: 0 1px;
   background-color: ${colors.white};
   border-radius: 3px;
+  border: none;
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
@@ -49,10 +50,6 @@ const NavLink = styled(Link)`
   &:focus:not(.MenuItem--active) {
     background-color: ${colors.gray[3]};
     color: ${colors.brand[6]};
-  }
-
-  &:focus {
-    position: relative;
   }
 `;
 
@@ -84,7 +81,6 @@ const Header = ({
         >
         <Nameplate
           to={'/'}
-          as={Link}
           title="Home"
           >
           {isViewport.xs ? siteTitle : acronymize(siteTitle)}
