@@ -32,6 +32,8 @@ const defaultProps = {
 const Container = styled(StandardGrid)`
   // color: ${colors.green[3]};
   color: ${colors.brand[3]};
+  position: relative;
+  z-index: 0;
 
   &:before {
     content: '';
@@ -42,6 +44,14 @@ const Container = styled(StandardGrid)`
     user-select: none;
     pointer-events: none;
   }
+`
+
+const TextContainer = styled(Box)`
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-flow: row rap;
+  alignItems: baseline;
 `
 
 const StyledLink = styled(Link)`
@@ -164,9 +174,8 @@ const Instagram = ({
     const username = `@${new URL(profile.url).pathname.replace(/\//g,'')}`;
     return (
       <Container {...props} >
-        <Flex
+        <TextContainer
           gridColumn="contentStart / contentEnd"
-          alignItems="baseline"
           marginBottom="xs"
           >
           <StyledLink
@@ -198,7 +207,7 @@ const Instagram = ({
             >
             {'See more →'}
           </StyledLink>
-        </Flex>
+        </TextContainer>
         <Row
           items={images}
           gap={'lg'}

@@ -31,7 +31,7 @@ const Wrapper = styled(Box)`
   position: relative;
   z-index: 0;
   overflow: hidden;
-  margin: ${spacing(-15)} 0;
+  margin: ${spacing(-10)} 0;
 `
 
 const Scroller = styled.div`
@@ -55,10 +55,11 @@ const Inner = styled.div`
   flex-flow: row nowrap;
   align-items: stretch;
   justify-content: space-between;
-  padding-top: ${spacing(15)};
-  padding-bottom: ${spacing(15)};
+  padding-top: ${spacing(10)};
+  padding-bottom: ${spacing(10)};
   box-sizing: content-box;
   flex: 1;
+  pointer-events: none;
 
   & > * {
     box-sizing: border-box;
@@ -86,6 +87,9 @@ const Row = ({
   const Children = React.Children.map(children, (child, i) => React.cloneElement(child, {
     flex: `${ar(items[i])}`,
     marginRight: gap && i < items.length - 1 ? gap : null,
+    style: {
+      pointerEvents: 'all',
+    },
   }));
 
   const paddingLeft = `calc(50% - (${ar(items[0])} * ${height} / 2))`;
