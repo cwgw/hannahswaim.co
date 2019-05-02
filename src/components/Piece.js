@@ -1,19 +1,17 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import GatsbyImage from 'gatsby-image'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import GatsbyImage from 'gatsby-image';
 
-import { colors, ease } from 'style/constants'
-import { spacing } from 'style/sizing'
-import { formatArtTitle, artMetaString } from 'utils/formatting'
-import Link from 'components/Link'
-import Box from 'components/Box'
+import { colors, ease } from 'style/constants';
+import { spacing } from 'style/sizing';
+import { formatArtTitle, artMetaString } from 'utils/formatting';
+import Link from 'components/Link';
+import Box from 'components/Box';
 
 const propTypes = {
-  location: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]).isRequired,
+  location: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+    .isRequired,
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
@@ -34,7 +32,7 @@ const propTypes = {
   siblings: PropTypes.array,
   siblingIndex: PropTypes.number,
   enableModal: PropTypes.bool,
-}
+};
 
 const defaultProps = {
   className: null,
@@ -43,7 +41,7 @@ const defaultProps = {
   siblingIndex: 0,
   style: {},
   enableModal: false,
-}
+};
 
 const StyledLink = styled(Box)`
   display: block;
@@ -61,7 +59,7 @@ const StyledLink = styled(Box)`
   &:hover .Piece__Image picture {
     opacity: 0.5;
   }
-`
+`;
 
 const Piece = ({
   location,
@@ -72,9 +70,7 @@ const Piece = ({
   date,
   media,
   images,
-  fields: {
-    slug,
-  },
+  fields: { slug },
   captionBreakpoint,
   childContentfulArtPieceDimensionsJsonNode: dimensions,
   className,
@@ -92,22 +88,22 @@ const Piece = ({
       className={className}
       as={Link}
       {...props}
-      >
-      <span className="sr-only">{formatArtTitle({title, date})}</span>
+    >
+      <span className="sr-only">{formatArtTitle({ title, date })}</span>
       <GatsbyImage
         className="Piece__Image"
         fluid={images[0].fluid}
         style={{
           height: '100%',
         }}
-        alt={artMetaString({title, date, dimensions, media})}
+        alt={artMetaString({ title, date, dimensions, media })}
       />
     </StyledLink>
-  )
-}
+  );
+};
 
-Piece.propTypes = propTypes
+Piece.propTypes = propTypes;
 
-Piece.defaultProps = defaultProps
+Piece.defaultProps = defaultProps;
 
-export default Piece
+export default Piece;

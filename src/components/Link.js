@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link as GatsbyLink } from 'gatsby'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link as GatsbyLink } from 'gatsby';
 
 const propTypes = {
   activeClassName: PropTypes.string,
@@ -10,16 +10,16 @@ const propTypes = {
   target: PropTypes.string,
   to: PropTypes.string.isRequired,
   title: PropTypes.string,
-}
+};
 
 const defaultProps = {
   activeClassName: null,
   children: null,
   className: null,
-  rel: "noreferrer",
-  target: "_blank",
+  rel: 'noreferrer',
+  target: '_blank',
   title: null,
-}
+};
 
 const Link = ({
   activeClassName,
@@ -39,47 +39,45 @@ const Link = ({
 }) => {
   // test for leading backslash
   // only matching strings get the GatsbyLink
-  return /^\/(?!\/)/.test(to)
-    ? (
-      <GatsbyLink
-        {...{
-          activeClassName,
-          className,
-          onBlur,
-          onFocus,
-          onMouseEnter,
-          onMouseLeave,
-          state,
-          style,
-          title,
-          to,
-        }}
-        >
-        {children}
-      </GatsbyLink>
-    )
-    : (
-      <a
-        href={to}
-        {...{
-          className,
-          onBlur,
-          onFocus,
-          onMouseEnter,
-          onMouseLeave,
-          rel,
-          style,
-          target,
-          title,
-        }}
-        >
-        {children}
-      </a>
-    )
-}
+  return /^\/(?!\/)/.test(to) ? (
+    <GatsbyLink
+      {...{
+        activeClassName,
+        className,
+        onBlur,
+        onFocus,
+        onMouseEnter,
+        onMouseLeave,
+        state,
+        style,
+        title,
+        to,
+      }}
+    >
+      {children}
+    </GatsbyLink>
+  ) : (
+    <a
+      href={to}
+      {...{
+        className,
+        onBlur,
+        onFocus,
+        onMouseEnter,
+        onMouseLeave,
+        rel,
+        style,
+        target,
+        title,
+      }}
+    >
+      {children}
+    </a>
+  );
+};
 
-Link.propTypes = propTypes
+Link.propTypes = propTypes;
 
-Link.defaultProps = defaultProps
+Link.defaultProps = defaultProps;
 
-export default Link
+export default Link;

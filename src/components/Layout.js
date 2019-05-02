@@ -30,44 +30,37 @@ const Main = styled.main`
   flex: 1;
 `;
 
-const Layout = ({
-  children,
-  location,
-}) => {
+const Layout = ({ children, location }) => {
   const { isViewport } = React.useContext(UIContext);
-  const isInitialRender = React.useRef(typeof window !== 'undefined' && !!!window.___IS_INITIAL_RENDER_COMPLETE);
-  const isModalEnabled = (
-    isInitialRender
-    && get(location, 'state.enableModal', false)
-    && isViewport.lg
+  const isInitialRender = React.useRef(
+    typeof window !== 'undefined' && !!!window.___IS_INITIAL_RENDER_COMPLETE
   );
+  const isModalEnabled =
+    isInitialRender &&
+    get(location, 'state.enableModal', false) &&
+    isViewport.lg;
 
   if (isModalEnabled) {
     return (
       <React.Fragment>
         <PageRenderer
           location={{
-            pathname: get(location, 'state.origin', location.pathname)
+            pathname: get(location, 'state.origin', location.pathname),
           }}
         />
-        <Modal
-          isOpen={isModalEnabled}
-          location={location}
-          >
-          {React.Children.map(children, child => React.cloneElement(child, { isModalEnabled }))}
+        <Modal isOpen={isModalEnabled} location={location}>
+          {React.Children.map(children, child =>
+            React.cloneElement(child, { isModalEnabled })
+          )}
         </Modal>
       </React.Fragment>
     );
   }
 
   const {
-    menu: {
-      menuItems,
-    },
+    menu: { menuItems },
     socialMedia,
-    site: {
-      siteMetadata,
-    },
+    site: { siteMetadata },
   } = useStaticQuery(
     graphql`
       query Layout {
@@ -114,13 +107,8 @@ const Layout = ({
         socialMedia={socialMedia}
       />
       <Wrapper>
-        <Header
-          siteTitle={siteMetadata.siteTitle}
-          menuItems={menuItems}
-        />
-        <Main role="main" >
-          {children}
-        </Main>
+        <Header siteTitle={siteMetadata.siteTitle} menuItems={menuItems} />
+        <Main role="main">{children}</Main>
         <Footer siteTitle={siteMetadata.siteTitle} />
       </Wrapper>
       <Modal />

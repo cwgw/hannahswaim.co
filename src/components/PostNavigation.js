@@ -1,50 +1,53 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import mousetrap from "mousetrap"
-import { navigate } from 'gatsby'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import mousetrap from 'mousetrap';
+import { navigate } from 'gatsby';
 
-import { Location } from '@reach/router'
+import { Location } from '@reach/router';
 
-import { media } from 'style/layout'
-import { spacing, fontSizes } from 'style/sizing'
-import { style as fontStyle } from 'style/fonts'
-import { colors, modalBreakpoint } from 'style/constants'
-import UIContext from 'context/UI'
+import { media } from 'style/layout';
+import { spacing, fontSizes } from 'style/sizing';
+import { style as fontStyle } from 'style/fonts';
+import { colors, modalBreakpoint } from 'style/constants';
+import UIContext from 'context/UI';
 
-import Box from 'components/Box'
-import Button from 'components/Button'
-import Icon from 'components/Icon'
+import Box from 'components/Box';
+import Button from 'components/Button';
+import Icon from 'components/Icon';
 
 const propTypes = {
   location: PropTypes.object.isRequired,
-}
+};
 
-const defaultProps = {}
+const defaultProps = {};
 
 const NavItem = styled(Button)`
   color: inherit;
   background-color: transparent;
   font-size: ${fontStyle.lead.fontSize};
 
-  ${({ direction }) => ({
-    prev: {
-      left: 0,
-      textAlign: 'left',
-    },
-    next: {
-      right: 0,
-      textAlign: 'right',
-    },
-  }[direction])}
-`
+  ${({ direction }) =>
+    ({
+      prev: {
+        left: 0,
+        textAlign: 'left',
+      },
+      next: {
+        right: 0,
+        textAlign: 'right',
+      },
+    }[direction])}
+`;
 
 const List = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
-  
-  ${({ isModal }) => isModal ? `
+
+  ${({ isModal }) =>
+    isModal
+      ? `
     display: contents
     color: ${colors.white};
     
@@ -60,7 +63,8 @@ const List = styled.ul`
     ${NavItem}:focus {
       background-color: ${colors.gray[0]};
     }
-  ` : `
+  `
+      : `
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: ${spacing('lg')};
@@ -86,21 +90,12 @@ const List = styled.ul`
       }
     `}
   `}
+`;
 
-`
-
-const PostNavigation = ({
-  children,
-  location,
-  ...props
-}) => {
+const PostNavigation = ({ children, location, ...props }) => {
   const { isViewport } = React.useContext(UIContext);
-  
-  const {
-    siblings = [],
-    index = 0,
-    enableModal,
-  } = location.state || {}  
+
+  const { siblings = [], index = 0, enableModal } = location.state || {};
 
   const isModal = enableModal && isViewport[modalBreakpoint];
 
@@ -119,14 +114,14 @@ const PostNavigation = ({
       index: index > 0 ? index - 1 : siblings.length - 1,
     },
   };
-  
-  const toNext = React.useCallback((e) => {
+
+  const toNext = React.useCallback(e => {
     if (e) e.stopPropagation();
     if (!next.pathname) return;
     navigate(next.pathname, { state: next.state });
   });
 
-  const toPrevious = React.useCallback((e) => {
+  const toPrevious = React.useCallback(e => {
     if (e) e.stopPropagation();
     if (!prev.pathname) return;
     navigate(prev.pathname, { state: prev.state });
@@ -139,22 +134,19 @@ const PostNavigation = ({
     return () => {
       mousetrap.unbind('left');
       mousetrap.unbind('right');
-    }
+    };
   }, [location]);
 
   return (
-    <Box
-      as="nav"
-      {...props}
-      >
-      <List isModal={isModal} >
+    <Box as="nav" {...props}>
+      <List isModal={isModal}>
         <li>
           <NavItem
             direction="prev"
             aria-label="Previous"
             onClick={toPrevious}
             disabled={!prev.pathname}
-            >
+          >
             <Icon inline type="previous" />
             {!isModal && <span>previous</span>}
           </NavItem>
@@ -165,7 +157,7 @@ const PostNavigation = ({
             aria-label="Next"
             onClick={toNext}
             disabled={!next.pathname}
-            >
+          >
             {!isModal && <span>next</span>}
             <Icon inline type="next" />
           </NavItem>
@@ -179,13 +171,8 @@ PostNavigation.propTypes = propTypes;
 
 PostNavigation.defaultProps = defaultProps;
 
-export default (props) => (
+export default props => (
   <Location>
-    {({ location }) => (
-      <PostNavigation
-        location={location}
-        {...props}
-      />
-    )}
+    {({ location }) => <PostNavigation location={location} {...props} />}
   </Location>
 );

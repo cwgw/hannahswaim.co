@@ -55,10 +55,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/cwgw/hannahswaim.co"
-  }
+  },
   "husky": {
     "hooks": {
       "pre-commit": "yarn run format"
     }
-  },
+  }
 }

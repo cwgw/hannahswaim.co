@@ -1,19 +1,15 @@
-import {
-  lineHeight,
-  rem,
-  fontSizes,
-} from 'style/sizing'
+import { lineHeight, rem, fontSizes } from 'style/sizing';
 
-import tinosRegular from 'fonts/Tinos-Regular.woff2'
-import tinosRegularItalic from 'fonts/Tinos-Italic.woff2'
-import tinosBold from 'fonts/Tinos-Bold.woff2'
-import interUIRegular from 'fonts/Inter-UI-Regular.woff2'
-import interUIRegularItalic from 'fonts/Inter-UI-Italic.woff2'
-import interUIBlack from 'fonts/Inter-UI-Black.woff2'
+import tinosRegular from 'fonts/Tinos-Regular.woff2';
+import tinosRegularItalic from 'fonts/Tinos-Italic.woff2';
+import tinosBold from 'fonts/Tinos-Bold.woff2';
+import interUIRegular from 'fonts/Inter-UI-Regular.woff2';
+import interUIRegularItalic from 'fonts/Inter-UI-Italic.woff2';
+import interUIBlack from 'fonts/Inter-UI-Black.woff2';
 
-const sansSerif = `"Inter UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif`
+const sansSerif = `"Inter UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif`;
 
-const serif = `Tinos, Merriweather, Georgia, serif`
+const serif = `Tinos, Merriweather, Georgia, serif`;
 
 const style = {
   html: {
@@ -69,49 +65,52 @@ const style = {
   lead: {
     fontSize: rem(fontSizes.lead),
     lineHeight: lineHeight(fontSizes.lead),
-  }
-}
+  },
+};
 
 const fontFaces = [
   {
-    "font-family": 'Tinos',
-    "font-style": 'normal',
-    "font-weight": '400',
+    'font-family': 'Tinos',
+    'font-style': 'normal',
+    'font-weight': '400',
     src: `local('Tinos-Regular'), url(${tinosRegular}) format('woff2')`,
   },
   {
-    "font-family": 'Tinos',
-    "font-style": 'italic',
-    "font-weight": '400',
+    'font-family': 'Tinos',
+    'font-style': 'italic',
+    'font-weight': '400',
     src: `local('Tinos-Italic'), url(${tinosRegularItalic}) format('woff2')`,
   },
   {
-    "font-family": 'Tinos',
-    "font-style": 'normal',
-    "font-weight": '700',
+    'font-family': 'Tinos',
+    'font-style': 'normal',
+    'font-weight': '700',
     src: `local('Tinos-Bold'), url(${tinosBold}) format('woff2')`,
   },
   {
-    "font-family": 'Inter UI',
-    "font-style":  'normal',
-    "font-weight": '400',
+    'font-family': 'Inter UI',
+    'font-style': 'normal',
+    'font-weight': '400',
     src: `url(${interUIRegular}) format('woff2')`,
   },
   {
-    "font-family": 'Inter UI',
-    "font-style":  'italic',
-    "font-weight": '400',
+    'font-family': 'Inter UI',
+    'font-style': 'italic',
+    'font-weight': '400',
     src: `url(${interUIRegularItalic}) format('woff2')`,
   },
   {
-    "font-family": 'Inter UI',
-    "font-style":  'normal',
-    "font-weight": '900',
+    'font-family': 'Inter UI',
+    'font-style': 'normal',
+    'font-weight': '900',
     src: `url(${interUIBlack}) format('woff2')`,
   },
-]
+];
 
-const fontFaceDeclarations = () => fontFaces.map((font) => (`
+const fontFaceDeclarations = () =>
+  fontFaces
+    .map(
+      font => `
   @font-face {
     font-family: ${font.family};
     font-style: ${font.style};
@@ -119,12 +118,8 @@ const fontFaceDeclarations = () => fontFaces.map((font) => (`
     src: ${font.src};
     font-display: swap;
   }
-`)).join('')
+`
+    )
+    .join('');
 
-export {
-  fontFaces,
-  fontFaceDeclarations,
-  sansSerif,
-  serif,
-  style,
-}
+export { fontFaces, fontFaceDeclarations, sansSerif, serif, style };

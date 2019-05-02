@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactModal from 'react-modal';
-import { navigate } from "gatsby";
+import { navigate } from 'gatsby';
 import { transparentize } from 'polished';
 
 import { style as fontStyle } from 'style/fonts';
@@ -39,11 +39,7 @@ const defaultProps = {
 
 ReactModal.setAppElement(`#___gatsby`);
 
-const Modal = ({
-  children,
-  location,
-  isOpen,
-}) => {
+const Modal = ({ children, location, isOpen }) => {
   const closeModal = React.useCallback(() => {
     let state = { origin: 'modal' };
     navigate(location.state.origin, { state });
@@ -62,7 +58,7 @@ const Modal = ({
           right: 0,
           bottom: 0,
           zIndex: 1000,
-          backgroundColor: transparentize(0.1,colors.gray[0]),
+          backgroundColor: transparentize(0.1, colors.gray[0]),
         },
         content: {
           position: `absolute`,
@@ -77,8 +73,8 @@ const Modal = ({
           WebkitOverflowScrolling: `touch`,
         },
       }}
-      >
-      <section onClick={closeModal} >
+    >
+      <section onClick={closeModal}>
         <Close
           aria-label="Close Modal"
           onClick={closeModal}
@@ -88,11 +84,8 @@ const Modal = ({
             right: 0,
             zIndex: 1000,
           }}
-          >
-          <Icon
-            type="close"
-            inline
-          />
+        >
+          <Icon type="close" inline />
         </Close>
         {children}
       </section>

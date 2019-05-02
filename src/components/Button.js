@@ -1,26 +1,19 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
-import { media } from 'style/layout'
-import { spacing } from 'style/sizing'
-import { sansSerif } from 'style/fonts'
+import { media } from 'style/layout';
+import { spacing } from 'style/sizing';
+import { sansSerif } from 'style/fonts';
 
-import Link from 'components/Link'
-import Box from 'components/Box'
+import Link from 'components/Link';
+import Box from 'components/Box';
 
-const UnstyledButton = ({to, className, ...props}) => to ? (
-  <Link
-    className={className}
-    to={to}
-    {...props}
-  />
-) : (
-  <Box
-    className={className}
-    as="button"
-    {...props}
-  />
-);
+const UnstyledButton = ({ to, className, ...props }) =>
+  to ? (
+    <Link className={className} to={to} {...props} />
+  ) : (
+    <Box className={className} as="button" {...props} />
+  );
 
 const Button = styled(UnstyledButton)`
   font-family: inerit;
@@ -35,10 +28,7 @@ const Button = styled(UnstyledButton)`
   white-space: nowrap;
   user-select: none;
 
-  ${({color}) => color
-    ? `color: ${color};`
-    : `color: inherit;`
-  }
+  ${({ color }) => (color ? `color: ${color};` : `color: inherit;`)}
 
   ${media.min.md`
     &:hover,
@@ -50,6 +40,6 @@ const Button = styled(UnstyledButton)`
   &:active {
     transform: translate(0, ${spacing('xxs')});
   }
-`
+`;
 
-export default Button
+export default Button;

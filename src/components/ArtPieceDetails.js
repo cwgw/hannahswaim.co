@@ -1,18 +1,18 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { graphql } from 'gatsby'
-import GatsbyImage from 'gatsby-image'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { graphql } from 'gatsby';
+import GatsbyImage from 'gatsby-image';
 
-import { spacing } from 'style/sizing'
-import { media } from 'style/layout'
-import { modalBreakpoint } from 'style/constants'
+import { spacing } from 'style/sizing';
+import { media } from 'style/layout';
+import { modalBreakpoint } from 'style/constants';
 
-import ArtPieceMeta from 'components/ArtPieceMeta'
-import Box from 'components/Box'
-import Row from 'components/Row'
-import { StandardGrid } from 'components/Grid'
-import PostNavigation from 'components/PostNavigation'
+import ArtPieceMeta from 'components/ArtPieceMeta';
+import Box from 'components/Box';
+import Row from 'components/Row';
+import { StandardGrid } from 'components/Grid';
+import PostNavigation from 'components/PostNavigation';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -27,11 +27,11 @@ const propTypes = {
     units: PropTypes.string,
   }).isRequired,
   isModalEnabled: PropTypes.bool,
-}
+};
 
 const defaultProps = {
   isModalEnabled: false,
-}
+};
 
 const Container = styled.div`
   display: flex;
@@ -39,7 +39,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   margin: ${spacing(8)};
-`
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -53,13 +53,13 @@ const Wrapper = styled.div`
   ${media.min[modalBreakpoint]`
     flex-direction: column-reverse;
   `}
-`
+`;
 
 const Meta = styled(Box)`
   background: #fff;
   padding: ${spacing('lg')};
   width: 100%;
-`
+`;
 
 const ArtPieceDetails = ({
   title,
@@ -74,7 +74,11 @@ const ArtPieceDetails = ({
       <React.Fragment>
         <PostNavigation />
         <Container>
-          <Wrapper onClick={(e) => {e.stopPropagation()}} >
+          <Wrapper
+            onClick={e => {
+              e.stopPropagation();
+            }}
+          >
             <Meta>
               <ArtPieceMeta
                 {...{
@@ -89,13 +93,9 @@ const ArtPieceDetails = ({
               childAspectRatioResolver={({ fluid }) => fluid.aspectRatio}
               height="75vh"
               items={images}
-              >
+            >
               {images.map(({ id, fluid }) => (
-                <Box
-                  key={id}
-                  as="figure"
-                  margin="0"
-                  >
+                <Box key={id} as="figure" margin="0">
                   <GatsbyImage
                     fluid={fluid}
                     style={{
@@ -113,17 +113,13 @@ const ArtPieceDetails = ({
   }
 
   return (
-    <StandardGrid
-      marginBottom={10}
-      >
+    <StandardGrid marginBottom={10}>
       <PostNavigation
         gridColumn="contentStart / contentEnd"
         marginTop={{ lg: 10 }}
         isModal={false}
       />
-      <Meta
-        col="contentStart / contentEnd"
-        >
+      <Meta col="contentStart / contentEnd">
         <ArtPieceMeta
           {...{
             title,
@@ -133,15 +129,13 @@ const ArtPieceDetails = ({
           }}
         />
       </Meta>
-      <Box
-        gridColumn="contentStart / contentEnd"
-        >
-        {images.map(({id, fluid}) => (
+      <Box gridColumn="contentStart / contentEnd">
+        {images.map(({ id, fluid }) => (
           <GatsbyImage
             key={id}
             fluid={fluid}
             style={{
-              marginBottom: spacing('md')
+              marginBottom: spacing('md'),
             }}
           />
         ))}

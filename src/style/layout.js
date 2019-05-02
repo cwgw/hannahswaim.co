@@ -1,34 +1,44 @@
-import { css } from 'styled-components'
-import { em } from 'polished'
-import isNil from 'lodash/isNil'
-import merge from 'lodash/merge'
-import has from 'lodash/has'
-import zipObject from 'lodash/zipObject'
+import { css } from 'styled-components';
+import { em } from 'polished';
+import isNil from 'lodash/isNil';
+import merge from 'lodash/merge';
+import has from 'lodash/has';
+import zipObject from 'lodash/zipObject';
 
-import * as constants from 'style/constants'
-import { spacing } from 'style/sizing'
+import * as constants from 'style/constants';
+import { spacing } from 'style/sizing';
 
 /**
  * media queries and related utilities
  *
  */
-const minWidth = (n) => `@media (min-width: ${em(n)})`
+const minWidth = n => `@media (min-width: ${em(n)})`;
 
-const maxWidth = (n) => `@media (max-width: ${em(n - 1)})`
+const maxWidth = n => `@media (max-width: ${em(n - 1)})`;
 
-const media = constants.breakpointKeys.reduce((acc, key) => {
-  const breakpoint = constants.breakpoints.get(key)
-  acc.min[key] = (...args) => css`${minWidth(breakpoint)} { ${css(...args)} }`
-  acc.max[key] = (...args) => css`${maxWidth(breakpoint)} { ${css(...args)} }`
-  return acc
-}, {min: {}, max: {}})
+const media = constants.breakpointKeys.reduce(
+  (acc, key) => {
+    const breakpoint = constants.breakpoints.get(key);
+    acc.min[key] = (...args) =>
+      css`
+        ${minWidth(breakpoint)} {
+          ${css(...args)}
+        }
+      `;
+    acc.max[key] = (...args) =>
+      css`
+        ${maxWidth(breakpoint)} {
+          ${css(...args)}
+        }
+      `;
+    return acc;
+  },
+  { min: {}, max: {} }
+);
 
-const returnValue = o => o
+const returnValue = o => o;
 
-const mediaQueryKeys = [
-  'base',
-  ...constants.breakpointKeys
-]
+const mediaQueryKeys = ['base', ...constants.breakpointKeys];
 
 const mapValuesToBreakpoints = (values, getValue = returnValue) => {
   // arrays of values get mapped to corresponding breakpoints in order
@@ -42,12 +52,12 @@ const mapValuesToBreakpoints = (values, getValue = returnValue) => {
     const parsedValue = isNil(value)
       ? {}
       : constants.breakpoints.has(key)
-        ? { [minWidth(constants.breakpoints.get(key))]: getValue(value) }
-        : getValue(value)
+      ? { [minWidth(constants.breakpoints.get(key))]: getValue(value) }
+      : getValue(value);
 
-    return merge({}, acc, parsedValue)
-  }, {})
-}
+    return merge({}, acc, parsedValue);
+  }, {});
+};
 
 /**
  * Padding and margin prop handling
@@ -55,44 +65,44 @@ const mapValuesToBreakpoints = (values, getValue = returnValue) => {
  * Adapted from Brent Jackson's styled-system.
  * See {@link https://github.com/jxnblk/styled-system/blob/master/src/space.js}
  */
- const spaceProperties = {
-   prefixes: {
-     margin: 'margin',
-     padding: 'padding',
-   },
-   suffixes: {
-     X: ['Left', 'Right'],
-     Y: ['Top', 'Bottom'],
-     Horizontal: ['Left', 'Right'],
-     Vertical: ['Top', 'Bottom'],
-     Top: 'Top',
-     Right: 'Right',
-     Bottom: 'Bottom',
-     Left: 'Left',
-   }
- }
+const spaceProperties = {
+  prefixes: {
+    margin: 'margin',
+    padding: 'padding',
+  },
+  suffixes: {
+    X: ['Left', 'Right'],
+    Y: ['Top', 'Bottom'],
+    Horizontal: ['Left', 'Right'],
+    Vertical: ['Top', 'Bottom'],
+    Top: 'Top',
+    Right: 'Right',
+    Bottom: 'Bottom',
+    Left: 'Left',
+  },
+};
 
-const getSpaceProperties = (propName) => {
+const getSpaceProperties = propName => {
   // split the propName on capital letters, e.g. ['padding', 'Top']
-  const [pre, ...post] = propName.split(/(?=[A-Z])/g)
+  const [pre, ...post] = propName.split(/(?=[A-Z])/g);
 
   // bail early if the given key isn't one of our space properties
-  if (!has(spaceProperties.prefixes, pre)) return null
+  if (!has(spaceProperties.prefixes, pre)) return null;
 
-  const prefix = spaceProperties.prefixes[pre]
-  const suffix = spaceProperties.suffixes[post[0]] || ''
+  const prefix = spaceProperties.prefixes[pre];
+  const suffix = spaceProperties.suffixes[post[0]] || '';
 
   // always returns an array
   return Array.isArray(suffix)
     ? suffix.map(suf => prefix + suf)
-    : [ prefix + suffix ]
-}
+    : [prefix + suffix];
+};
 
-const getSpaceValue = (value) => {
+const getSpaceValue = value => {
   if (Array.isArray(value)) return value.map(v => getSpaceValue(v));
   const parsedValue = spacing(value);
   return parsedValue || value;
-}
+};
 
 /**
  * Props
@@ -100,31 +110,39 @@ const getSpaceValue = (value) => {
 
 const assignPropertyValue = (property, value) => {
   return typeof value === 'object'
-    ? mapValuesToBreakpoints(value, (n) => ({[property]: getSpaceValue(n)}))
-    : {[property]: getSpaceValue(value)}
-}
+    ? mapValuesToBreakpoints(value, n => ({ [property]: getSpaceValue(n) }))
+    : { [property]: getSpaceValue(value) };
+};
 
 /**
- * Loop through props looking for those that match supplied 
-*/
-const mapProps = (propertyMap, staticStyles = {}) => (props) => {
+ * Loop through props looking for those that match supplied
+ */
+const mapProps = (propertyMap, staticStyles = {}) => props => {
   let styles = Object.assign({}, staticStyles);
   for (let key in props) {
-    const value = props[key]
-    const property = typeof propertyMap === 'function' ? propertyMap(key) : propertyMap[key]
+    const value = props[key];
+    const property =
+      typeof propertyMap === 'function' ? propertyMap(key) : propertyMap[key];
 
     if (isNil(value) || isNil(property)) continue;
 
     if (Array.isArray(property)) {
-      styles = merge(styles, property.reduce((properties, prop) => merge(properties, assignPropertyValue(prop, value)), {}));
+      styles = merge(
+        styles,
+        property.reduce(
+          (properties, prop) =>
+            merge(properties, assignPropertyValue(prop, value)),
+          {}
+        )
+      );
     } else {
       styles = merge(styles, assignPropertyValue(property, value));
     }
   }
   return styles;
-}
+};
 
-const space = mapProps(getSpaceProperties)
+const space = mapProps(getSpaceProperties);
 
 // Grid
 //
@@ -148,9 +166,9 @@ const gridProperties = {
   justifyContent: 'justify-content',
   alignContent: 'align-content',
   placeContent: 'place-content',
-}
+};
 
-const makeGrid = mapProps(gridProperties, {display: 'grid'})
+const makeGrid = mapProps(gridProperties, { display: 'grid' });
 
 // Flex
 //
@@ -161,9 +179,9 @@ const flexProperties = {
   justifyContent: 'justify-content',
   alignItems: 'align-items',
   alignContent: 'align-content',
-}
+};
 
-const makeFlex = mapProps(flexProperties, {display: 'flex'})
+const makeFlex = mapProps(flexProperties, { display: 'flex' });
 
 // Child
 //
@@ -174,7 +192,7 @@ const flexChildProperties = {
   flexShrink: 'flex-shrink',
   flexBasis: 'flex-basis',
   alignSelf: 'align-self',
-}
+};
 
 const gridChildProperties = {
   gridColumnStart: 'grid-column-start',
@@ -190,9 +208,9 @@ const gridChildProperties = {
   justifySelf: 'justify-self',
   alignSelf: 'align-self',
   placeSelf: 'place-self',
-}
+};
 
-const makeBox = mapProps({...flexChildProperties, ...gridChildProperties})
+const makeBox = mapProps({ ...flexChildProperties, ...gridChildProperties });
 
 export {
   makeBox,
@@ -203,4 +221,4 @@ export {
   media,
   minWidth,
   space,
-}
+};

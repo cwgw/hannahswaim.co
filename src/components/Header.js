@@ -59,50 +59,37 @@ const Nameplate = styled(NavLink)`
   font-weight: 700;
 `;
 
-const Header = ({
-  siteTitle,
-  menuItems,
-}) => {
+const Header = ({ siteTitle, menuItems }) => {
   const { isViewport } = React.useContext(UIContext);
   return (
-    <Wrapper
-      role="banner"
-      as="header"
-      >
+    <Wrapper role="banner" as="header">
       <Nav
         gridColumn="contentStart / contentEnd"
-        justifyContent={isViewport[navBreakpoint] ? 'space-between' : 'flex-start'}
+        justifyContent={
+          isViewport[navBreakpoint] ? 'space-between' : 'flex-start'
+        }
         flexFlow="row nowrap"
         alignItems="baseline"
         marginRight="auto"
         paddingY="md"
         as="nav"
         role="navigation"
-        >
-        <Nameplate
-          to={'/'}
-          title="Home"
-          >
+      >
+        <Nameplate to={'/'} title="Home">
           {isViewport.xs ? siteTitle : acronymize(siteTitle)}
         </Nameplate>
-        {menuItems.map(({
-          id,
-          slug,
-          url,
-          service,
-          title,
-          __typename
-        }) => (
+        {menuItems.map(({ id, slug, url, service, title, __typename }) => (
           <NavLink
             key={id}
             to={url || '/' + slug}
             title={title || service}
             activeClassName="MenuItem--active"
-            >
-            {__typename === 'ContentfulSocialMediaLink'
-              ? <Icon type={service} inline />
-              : title
-            }
+          >
+            {__typename === 'ContentfulSocialMediaLink' ? (
+              <Icon type={service} inline />
+            ) : (
+              title
+            )}
           </NavLink>
         ))}
       </Nav>

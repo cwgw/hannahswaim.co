@@ -1,38 +1,32 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import { spacing } from 'style/sizing'
-import Box from 'components/Box'
+import { spacing } from 'style/sizing';
+import Box from 'components/Box';
 
 const propTypes = {
-  height: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
-  gap: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   childAspectRatioResolver: PropTypes.func,
   items: PropTypes.array.isRequired,
   isCentered: PropTypes.bool,
-}
+};
 
 const defaultProps = {
   height: 400,
   gap: null,
   isCentered: false,
   innerProps: {},
-  childAspectRatioResolver: () => (1),
-}
+  childAspectRatioResolver: () => 1,
+};
 
 const Wrapper = styled(Box)`
   position: relative;
   z-index: 0;
   overflow: hidden;
   margin: ${spacing(-10)} 0;
-`
+`;
 
 const Scroller = styled.div`
   position: relative;
@@ -47,7 +41,7 @@ const Scroller = styled.div`
     width: 0 !important;
     height: 0 !important;
   }
-`
+`;
 
 const Inner = styled.div`
   position: relative;
@@ -64,43 +58,44 @@ const Inner = styled.div`
   & > * {
     box-sizing: border-box;
   }
-`
+`;
 
 const Row = ({
   children,
   items,
   childAspectRatioResolver: ar,
   height: _height,
-  innerProps: {
-    innerStyle,
-    ...innerProps
-  },
+  innerProps: { innerStyle, ...innerProps },
   isCentered,
   gap: _gap,
   ...props
 }) => {
-  const aspectRatio = items.reduce((sum, o) => (sum + ar(o)), 0);
+  const aspectRatio = items.reduce((sum, o) => sum + ar(o), 0);
 
   const gap = spacing(_gap) || 0;
   const height = typeof _height === 'number' ? `${_height}px` : _height;
 
-  const Children = React.Children.map(children, (child, i) => React.cloneElement(child, {
-    flex: `${ar(items[i])}`,
-    marginRight: gap && i < items.length - 1 ? gap : null,
-    style: {
-      pointerEvents: 'all',
-    },
-  }));
+  const Children = React.Children.map(children, (child, i) =>
+    React.cloneElement(child, {
+      flex: `${ar(items[i])}`,
+      marginRight: gap && i < items.length - 1 ? gap : null,
+      style: {
+        pointerEvents: 'all',
+      },
+    })
+  );
 
   const paddingLeft = `calc(50% - (${ar(items[0])} * ${height} / 2))`;
-  const paddingRight = `calc(50% - (${ar(items[items.length - 1])} * ${height} / 2))`;
+  const paddingRight = `calc(50% - (${ar(
+    items[items.length - 1]
+  )} * ${height} / 2))`;
 
   const width = gap
     ? `calc(${aspectRatio} * ${height} + ${gap} * ${items.length - 1})`
-    : `calc(${aspectRatio} * ${height})`
+    : `calc(${aspectRatio} * ${height})`;
 
   return (
-    <Wrapper {...props} >
+    <Wrapper {...props}>
       <Scroller>
         <Inner
           {...innerProps}
@@ -111,16 +106,16 @@ const Row = ({
             paddingLeft: isCentered ? paddingLeft : null,
             paddingRight: isCentered ? paddingRight : null,
           }}
-          >
+        >
           {Children}
         </Inner>
       </Scroller>
     </Wrapper>
-  )
-}
+  );
+};
 
-Row.propTypes = propTypes
+Row.propTypes = propTypes;
 
-Row.defaultProps = defaultProps
+Row.defaultProps = defaultProps;
 
-export default Row
+export default Row;

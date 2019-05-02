@@ -1,8 +1,8 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from 'styled-components';
 
-import { spacing } from 'style/sizing'
-import { colors } from 'style/constants'
-import * as fonts from 'style/fonts'
+import { spacing } from 'style/sizing';
+import { colors } from 'style/constants';
+import * as fonts from 'style/fonts';
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -64,15 +64,16 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ${() => {
-    const printHeadingStyles = (n) => n > 0
-      ? {
-        [`h${n}`]: {
-          ...(fonts.style[`h${n}`] || {}),
-        },
-        ...printHeadingStyles(n - 1)
-      }
-      : {}
-    return printHeadingStyles(6)
+    const printHeadingStyles = n =>
+      n > 0
+        ? {
+            [`h${n}`]: {
+              ...(fonts.style[`h${n}`] || {}),
+            },
+            ...printHeadingStyles(n - 1),
+          }
+        : {};
+    return printHeadingStyles(6);
   }}
 
   .sr-only {

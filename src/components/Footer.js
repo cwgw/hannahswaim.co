@@ -1,22 +1,22 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import { spacing, fontSizes, rem } from 'style/sizing'
-import { colors } from 'style/constants'
+import { spacing, fontSizes, rem } from 'style/sizing';
+import { colors } from 'style/constants';
 
-import Box from 'components/Box'
-import Flex from 'components/Flex'
-import Icon from 'components/Icon'
-import Link from 'components/Link'
+import Box from 'components/Box';
+import Flex from 'components/Flex';
+import Icon from 'components/Icon';
+import Link from 'components/Link';
 
 const propTypes = {
   siteTitle: PropTypes.string,
-}
+};
 
 const defaultProps = {
   siteTitle: null,
-}
+};
 
 const Wrapper = styled(Box)`
   text-align: center;
@@ -41,13 +41,13 @@ const Wrapper = styled(Box)`
   nav {
     padding: ${spacing('sm')} 0;
   }
-`
+`;
 
 const Nav = styled(Flex)`
   margin-bottom: ${spacing('lg')};
   align-items: center;
   justify-content: center;
-`
+`;
 
 const List = styled.ul`
   display: contents;
@@ -63,17 +63,17 @@ const List = styled.ul`
   & li + li {
     margin-left: -1px;
   }
-`
+`;
 
 const Footer = ({ siteTitle, ...props }) => (
-  <Wrapper {...props} >
+  <Wrapper {...props}>
     <Nav as="nav">
       <List>
         <li>
           <Link
             to="https://www.instagram.com/hannahswaimco/"
             title="follow me on Instagram"
-            >
+          >
             <Icon
               type="instagram"
               style={{
@@ -81,15 +81,12 @@ const Footer = ({ siteTitle, ...props }) => (
                 height: '2rem',
                 margin: '0 auto',
               }}
-              />
+            />
             {'@hannahswaimco'}
           </Link>
         </li>
         <li>
-          <Link
-            to="mailto:hannahswaimco@gmail.com"
-            title="send me an email"
-            >
+          <Link to="mailto:hannahswaimco@gmail.com" title="send me an email">
             <Icon
               type="mail"
               style={{
@@ -97,7 +94,7 @@ const Footer = ({ siteTitle, ...props }) => (
                 height: '2rem',
                 margin: '0 auto',
               }}
-              />
+            />
             {'get in touch'}
           </Link>
         </li>
@@ -105,10 +102,10 @@ const Footer = ({ siteTitle, ...props }) => (
     </Nav>
     <p>{siteTitle}</p>
   </Wrapper>
-)
+);
 
-Footer.propTypes = propTypes
+Footer.propTypes = propTypes;
 
-Footer.defaultProps = defaultProps
+Footer.defaultProps = defaultProps;
 
-export default Footer
+export default Footer;
