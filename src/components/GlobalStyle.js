@@ -85,6 +85,17 @@ const GlobalStyle = createGlobalStyle`
     white-space: nowrap;
     border: 0;
   }
-`
 
-export default GlobalStyle
+  ul.unstyled,
+  ul.display-contents {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .display-contents {
+    display: contents;
+  }
+`;
+
+export default GlobalStyle;
