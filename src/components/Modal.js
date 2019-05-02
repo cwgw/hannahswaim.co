@@ -7,7 +7,6 @@ import { transparentize } from 'polished';
 
 import { style as fontStyle } from 'style/fonts';
 import { colors } from 'style/constants';
-import PostNavigation from 'components/PostNavigation';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
 
@@ -95,9 +94,7 @@ const Modal = ({
             inline
           />
         </Close>
-        <PostNavigation>
-          {children}
-        </PostNavigation>
+        {children}
       </section>
     </ReactModal>
   );

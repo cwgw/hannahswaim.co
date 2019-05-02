@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
-import { Location } from '@reach/router'
 
 import { spacing } from 'style/sizing'
 import { media } from 'style/layout'
@@ -11,7 +10,6 @@ import { modalBreakpoint } from 'style/constants'
 
 import ArtPieceMeta from 'components/ArtPieceMeta'
 import Box from 'components/Box'
-import Flex from 'components/Flex'
 import Row from 'components/Row'
 import { StandardGrid } from 'components/Grid'
 import PostNavigation from 'components/PostNavigation'
@@ -35,7 +33,15 @@ const defaultProps = {
   isModalEnabled: false,
 }
 
-const Wrapper = styled(Flex)`
+const Container = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  margin: ${spacing(8)};
+`
+
+const Wrapper = styled.div`
   display: flex;
   max-width: 100%;
   overflow: hidden;
@@ -62,117 +68,93 @@ const ArtPieceDetails = ({
   images,
   isModalEnabled,
   childContentfulArtPieceDimensionsJsonNode: dimensions,
-  ...props
 }) => {
   if (isModalEnabled) {
     return (
-      <Wrapper onClick={(e) => {e.stopPropagation()}} >
-        <Meta>
-          <ArtPieceMeta
-            {...{
-              title,
-              date,
-              media,
-              dimensions,
-            }}
-          />
-        </Meta>
-        <Row
-          childAspectRatioResolver={({ fluid }) => fluid.aspectRatio}
-          height="75vh"
-          items={images}
-          >
-          {images.map(({ id, fluid }) => (
-            <Box
-              key={id}
-              as="figure"
-              margin="0"
-              >
-              <GatsbyImage
-                fluid={fluid}
-                style={{
-                  width: '100%',
-                  height: '100%',
+      <React.Fragment>
+        <PostNavigation />
+        <Container>
+          <Wrapper onClick={(e) => {e.stopPropagation()}} >
+            <Meta>
+              <ArtPieceMeta
+                {...{
+                  title,
+                  date,
+                  media,
+                  dimensions,
                 }}
               />
-            </Box>
-          ))}
-        </Row>
-      </Wrapper>
+            </Meta>
+            <Row
+              childAspectRatioResolver={({ fluid }) => fluid.aspectRatio}
+              height="75vh"
+              items={images}
+              >
+              {images.map(({ id, fluid }) => (
+                <Box
+                  key={id}
+                  as="figure"
+                  margin="0"
+                  >
+                  <GatsbyImage
+                    fluid={fluid}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </Box>
+              ))}
+            </Row>
+          </Wrapper>
+        </Container>
+      </React.Fragment>
     );
   }
-  
+
   return (
-    <Location>
-      {({ location }) => {
-        const {
-          siblings = [],
-          index = 0,
-        } = location.state || {}
-
-        const navigation = {
-          next: {
-            pathname: siblings[index + 1] || null,
-            state: {
-              ...location.state,
-              index: index + 1,
-            },
-          },
-          previous: {
-            pathname: siblings[index - 1] || null,
-            state: {
-              ...location.state,
-              index: index - 1,
-            },
-          },
-        };
-
-        return (
-          <StandardGrid
-            marginBottom={10}
-            >
-            <PostNavigation
-              {...navigation}
-              gridColumn="contentStart / contentEnd"
-              marginTop={{ lg: 10 }}
-              isModal={false}
-              >
-              <Meta>
-                <ArtPieceMeta
-                  {...{
-                    title,
-                    date,
-                    media,
-                    dimensions,
-                  }}
-                />
-              </Meta>
-            </PostNavigation>
-            <Box
-              gridColumn="contentStart / contentEnd"
-              >
-              {images.map(({id, fluid}) => (
-                <GatsbyImage
-                  key={id}
-                  fluid={fluid}
-                  style={{
-                    marginBottom: spacing('md')
-                  }}
-                />
-              ))}
-            </Box>
-          </StandardGrid>
-        );
-      }}
-    </Location>
+    <StandardGrid
+      marginBottom={10}
+      >
+      <PostNavigation
+        gridColumn="contentStart / contentEnd"
+        marginTop={{ lg: 10 }}
+        isModal={false}
+      />
+      <Meta
+        col="contentStart / contentEnd"
+        >
+        <ArtPieceMeta
+          {...{
+            title,
+            date,
+            media,
+            dimensions,
+          }}
+        />
+      </Meta>
+      <Box
+        gridColumn="contentStart / contentEnd"
+        >
+        {images.map(({id, fluid}) => (
+          <GatsbyImage
+            key={id}
+            fluid={fluid}
+            style={{
+              marginBottom: spacing('md')
+            }}
+          />
+        ))}
+      </Box>
+    </StandardGrid>
   );
 };
 
-ArtPieceDetails.propTypes = propTypes
+ArtPieceDetails.propTypes = propTypes;
 
-ArtPieceDetails.defaultProps = defaultProps
+ArtPieceDetails.defaultProps = defaultProps;
 
-export default ArtPieceDetails
+export default ArtPieceDetails;
 
 export const artPieceDetailsFragments = graphql`
   fragment ArtPieceDetailsFragment on ContentfulArtPiece {
@@ -194,4 +176,4 @@ export const artPieceDetailsFragments = graphql`
       }
     }
   }
-`
+`;
