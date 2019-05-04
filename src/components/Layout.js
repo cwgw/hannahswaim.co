@@ -111,7 +111,6 @@ const Layout = ({ children, location }) => {
         <Main role="main">{children}</Main>
         <Footer siteTitle={siteMetadata.siteTitle} />
       </Wrapper>
-      <Modal />
     </React.Fragment>
   );
 };
