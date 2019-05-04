@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 
 import { colors } from 'style/constants'
+import { spacing } from 'style/sizing';
 
 import Box from 'components/Box'
 import ImageWall from 'components/ImageWall'
@@ -22,9 +23,21 @@ const propTypes = {
 const defaultProps = {}
 
 const StyledText = styled(Text)`
-
   & h2 {
-    border-bottom: 8px solid ${colors.brand[5]};
+    position: relative;
+    display: inline-block;
+  }
+
+  & h2:before {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 75%;
+    transform: translate(${spacing(-2)}, ${spacing(-1)});
+    content: '';
+    background: ${colors.brand[5]};
   }
 `
 
