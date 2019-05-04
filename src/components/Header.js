@@ -32,7 +32,13 @@ const Wrapper = styled(StandardGrid)`
   `}
 `;
 
-const Nav = styled(Flex)``;
+const Nav = styled(Flex)`
+  flex-flow: row nowrap;
+  align-items: baseline;
+  margin-right: auto;
+  padding-top: ${spacing('md')};
+  padding-bottom: ${spacing('md')};
+`;
 
 const NavLink = styled(Button)`
   display: inline-block;
@@ -50,6 +56,7 @@ const NavLink = styled(Button)`
   &:focus:not(.MenuItem--active) {
     background-color: ${colors.gray[3]};
     color: ${colors.brand[6]};
+    z-index: 1;
   }
 `;
 
@@ -64,15 +71,11 @@ const Header = ({ siteTitle, menuItems }) => {
   return (
     <Wrapper role="banner" as="header">
       <Nav
+        as="nav"
         gridColumn="contentStart / contentEnd"
         justifyContent={
           isViewport[navBreakpoint] ? 'space-between' : 'flex-start'
         }
-        flexFlow="row nowrap"
-        alignItems="baseline"
-        marginRight="auto"
-        paddingY="md"
-        as="nav"
         role="navigation"
       >
         <Nameplate to={'/'} title="Home">
