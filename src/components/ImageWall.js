@@ -41,8 +41,10 @@ const ImageWall = ({
     if (
       typeof window === 'undefined' ||
       typeof container.current === 'undefined'
-    )
+    ) {
       return;
+    }
+
     setState();
     const debouncedSetState = debounce(setState, 50, { trailing: true });
     window.addEventListener('resize', debouncedSetState);
