@@ -59,7 +59,10 @@ const TextBox = styled(Box)`
   position: relative;
   ${fontStyle.lead}
   border: 2px solid ${colors.brand[4]};
-  min-width: 300px;
+
+  ${media.min.md`
+    min-width: 300px;
+  `}
 
   & > p:first-child {
     ${fontStyle.hero}

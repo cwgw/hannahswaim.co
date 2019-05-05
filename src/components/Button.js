@@ -54,7 +54,7 @@ const Button = styled(UnstyledButton)`
               borderColor: colors.link,
               color: colors.link,
             },
-          }
+          },
         });
       case 'dark':
         return css({
@@ -66,7 +66,7 @@ const Button = styled(UnstyledButton)`
               background: colors.gray[3],
               borderColor: colors.gray[3],
               color: colors.brand[5],
-            }
+            },
           },
         });
       default:
