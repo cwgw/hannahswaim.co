@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StaticQuery, graphql } from 'gatsby'
@@ -7,8 +7,9 @@ import { transparentize } from 'polished'
 import { useSpring, animated } from 'react-spring'
 
 import { spacing, fontSizes, rem } from 'style/sizing'
-import { colors } from 'style/constants'
+import { colors, navBreakpoint } from 'style/constants'
 import { sansSerif } from 'style/fonts'
+import { UIContext } from 'context/UI';
 
 import Row from 'components/Row'
 import Icon from 'components/Icon'
@@ -101,6 +102,7 @@ const Item = ({
   },
   ...props
 }) => {
+  const { isViewport } = React.useContext(UIContext);
   const [ { o, s }, set ] = useSpring(() => ({
     o: 0,
     s: 1.1,
@@ -114,8 +116,16 @@ const Item = ({
         friction: 36,
       }
   }));
-  const show = useCallback(() => set({ o: 1, s: 1 }));
-  const hide = useCallback(() => set({ o: 0, s: 1.1 }));
+  const show = React.useCallback(() => {
+    if (isViewport[navBreakpoint]) {
+      set({ o: 1, s: 1 });
+    }
+  }, [isViewport]);
+  const hide = React.useCallback(() => {
+    if (isViewport[navBreakpoint]) {
+      set({ o: 0, s: 1.1 });
+    }
+  }, [isViewport]);
   const translate = s.interpolate(s => `scale3d(${s}, ${s}, 1)`);
 
   return (
