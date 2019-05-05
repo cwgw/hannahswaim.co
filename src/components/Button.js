@@ -2,9 +2,9 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 
-import { media } from 'style/layout';
+import { media, mediaQueryString } from 'style/layout';
 import { spacing } from 'style/sizing';
-import { colors } from 'style/constants';
+import { colors, navBreakpoint } from 'style/constants';
 import { style as fontStyle } from 'style/fonts';
 
 import Link from 'components/Link';
@@ -33,7 +33,7 @@ const Button = styled(UnstyledButton)`
   user-select: none;
 
   &:active {
-    transform: translate(0, ${spacing(-1)});
+    transform: translate(0, 2px);
   }
 
   &:focus {
@@ -49,20 +49,24 @@ const Button = styled(UnstyledButton)`
           background: 'transparent',
           borderColor: transparentize(0.5, colors.brand[4]),
           color: colors.link,
-          ['&:hover, &:focus']: {
-            borderColor: colors.link,
-            color: colors.link,
-          },
+          [mediaQueryString('min', navBreakpoint)]: {
+            ['&:hover, &:focus']: {
+              borderColor: colors.link,
+              color: colors.link,
+            },
+          }
         });
       case 'dark':
         return css({
           background: colors.gray[0],
           borderColor: colors.gray[1],
           color: colors.gray[5],
-          ['&:hover, &:focus']: {
-            background: colors.gray[3],
-            borderColor: colors.gray[3],
-            color: colors.brand[5],
+          [mediaQueryString('min', navBreakpoint)]: {
+            ['&:hover, &:focus']: {
+              background: colors.gray[3],
+              borderColor: colors.gray[3],
+              color: colors.brand[5],
+            }
           },
         });
       default:
@@ -70,10 +74,12 @@ const Button = styled(UnstyledButton)`
           background: colors.brand[5],
           borderColor: colors.brand[5],
           color: colors.brand[2],
-          ['&:hover, &:focus']: {
-            background: colors.gray[3],
-            borderColor: colors.gray[3],
-            color: colors.brand[5],
+          [mediaQueryString('min', navBreakpoint)]: {
+            ['&:hover, &:focus']: {
+              background: colors.gray[3],
+              borderColor: colors.gray[3],
+              color: colors.brand[5],
+            },
           },
         });
     }
