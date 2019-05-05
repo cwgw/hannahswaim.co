@@ -7,10 +7,19 @@
 // const Promise = require('bluebird')
 const path = require('path');
 
+const artPieceSlugs = new Map([]);
+
 const makeArtPieceSlug = ({title, date, media, contentful_id}) => {
-  let str = [title, date, ...media, contentful_id].join('-')
+  let str = [title, date, ...media].join('-')
   // let str = `${title}-${date}-${media.join('-')}-${contentful_id}`
-  return str.replace(/[\s|#]+/g, '-').toLowerCase()
+  let slug = str.replace(/[\s|#]+/g, '-').toLowerCase();
+  if (artPieceSlugs.has(slug)) {
+    let i = artPieceSlugs.get(slug) + 1;
+    artPieceSlugs.set(slug, i);
+    return `${slug}-${i}`
+  }
+  artPieceSlugs.set(slug, 1);
+  return slug;
 }
 
 exports.onCreateWebpackConfig = ({ stage, actions }) => {
