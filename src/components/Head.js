@@ -99,7 +99,7 @@ const Head = ({
           .join(`\n`)}
       </style>
       {structuredData.map(data => (
-        <script key={data.type} type="application/ld+json">
+        <script key={data['@type']} type="application/ld+json">
           {JSON.stringify(data)}
         </script>
       ))}
