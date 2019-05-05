@@ -164,7 +164,7 @@ export const artPieceDetailsFragments = graphql`
     media
     images {
       id
-      fluid(quality: 90) {
+      fluid(maxWidth: 576, quality: 90) {
         aspectRatio
         ...GatsbyContentfulFluid_withWebp
       }

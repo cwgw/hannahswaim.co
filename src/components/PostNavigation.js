@@ -6,10 +6,8 @@ import { navigate } from 'gatsby';
 
 import { Location } from '@reach/router';
 
-// import { media } from 'style/layout';
 import { rem } from 'style/helpers';
 import { spacing, fontSizes } from 'style/sizing';
-// import { style as fontStyle } from 'style/fonts';
 import { colors, modalBreakpoint } from 'style/constants';
 import UIContext from 'context/UI';
 
@@ -60,7 +58,7 @@ const List = styled.ul`
       : `
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: ${spacing('lg')};
+    gap: ${spacing('md')};
     max-width: 100%;
 
     span {
