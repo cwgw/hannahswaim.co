@@ -36,7 +36,13 @@ const defaultProps = {
 
 const Head = ({
   pageTitle,
-  siteMetadata: { siteName, siteTitle, siteTitleSeparator, description: siteDescription, siteUrl },
+  siteMetadata: {
+    siteName,
+    siteTitle,
+    siteTitleSeparator,
+    description: siteDescription,
+    siteUrl,
+  },
   image,
   description,
   location,
@@ -59,51 +65,27 @@ const Head = ({
     ['og:locale', locale.replace(/-+/, '_')],
   ];
 
-  const structuredData = {
-    '@context': 'http://schema.org',
-    '@type': 'website',
-    url: siteUrl,
-    logo: withPrefix(siteIcon),
-    sameAs: socialMedia.edges.map(({ node }) => node.url),
-  };
+  const structuredData = [
+    {
+      '@context': 'http://schema.org',
+      '@type': 'Website',
+      url: siteUrl,
+      image: withPrefix(siteIcon),
+    },
+    {
+      '@context': 'http://schema.org',
+      '@type': 'Person',
+      url: siteUrl,
+      sameAs: socialMedia.edges.map(({ node }) => node.url),
+    },
+  ];
 
   return (
-    <Helmet>
-      <html lang={locale} />
-      <title>{title}</title>
-      {metaTags.map(tag => {
-        if (tag) {
-          const [name, content] = tag;
-          return <meta key={name} name={name} content={content} />;
-        }
-        return null;
-      })}
-      <meta name="msapplication-TileColor" content="#da532c" />
-      <meta name="msapplication-config" content="/static/browserconfig.xml" />
-      <meta name="theme-color" content="#ffffff" />
-      <link
-        rel="apple-touch-icon"
-        sizes="180x180"
-        href="/static/apple-touch-icon.png"
-      />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="32x32"
-        href="/static/favicon-32x32.png"
-      />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="16x16"
-        href="/static/favicon-16x16.png"
-      />
-      <link
-        rel="mask-icon"
-        href="/static/safari-pinned-tab.svg"
-        color="#b86e5c"
-      />
-      <link rel="shortcut icon" href="/static/favicon.ico" />
+    <Helmet
+      htmlAttributes={{ lang: locale }}
+      title={title}
+      meta={metaTags.map(([name, content]) => ({ name, content }))}
+      >
       <style type="text/css">
         {fontFaces
           .map(font =>
@@ -116,9 +98,11 @@ const Head = ({
           )
           .join(`\n`)}
       </style>
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      {structuredData.map(data => (
+        <script key={data.type} type="application/ld+json">
+          {JSON.stringify(data)}
+        </script>
+      ))}
     </Helmet>
   );
 };
