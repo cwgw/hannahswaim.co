@@ -36,7 +36,7 @@ const defaultProps = {
 
 const Head = ({
   pageTitle,
-  siteMetadata: { siteName, siteTitle, siteTitleSeparator, siteUrl },
+  siteMetadata: { siteName, siteTitle, siteTitleSeparator, description: siteDescription, siteUrl },
   image,
   description,
   location,
@@ -48,12 +48,13 @@ const Head = ({
     : siteTitle;
 
   const metaTags = [
+    ['description', description || siteDescription],
     ['twitter:card', 'summary'],
     ['og:type', 'website'],
     ['og:title', title],
     ['og:url', location.pathname || siteUrl],
     ['og:image', image || withPrefix(siteIcon)],
-    description ? ['og:description', description] : null,
+    ['og:description', description || siteDescription],
     ['og:site_name', siteName],
     ['og:locale', locale.replace(/-+/, '_')],
   ];

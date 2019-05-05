@@ -24,7 +24,7 @@ module.exports = {
     siteTitle: 'hannah m. swaim',
     siteTitleSeparator: ' | ',
     siteUrl: 'https://hannahswaim.co',
-    siteDescription: 'Website and portfolio of fiber artist Hannah M. Swaim',
+    description: 'Website and portfolio of fiber artist Hannah M. Swaim',
   },
   plugins: [
     {

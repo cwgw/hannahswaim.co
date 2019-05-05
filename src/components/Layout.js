@@ -70,6 +70,7 @@ const Layout = ({ children, location }) => {
             siteTitle
             siteTitleSeparator
             siteUrl
+            description
           }
         }
         socialMedia: allContentfulSocialMediaLink {
