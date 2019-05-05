@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
+import get from 'lodash/get';
 
 import { spacing } from 'style/sizing';
 import { media } from 'style/layout';
@@ -11,6 +12,7 @@ import { modalBreakpoint } from 'style/constants';
 import ArtPieceMeta from 'components/ArtPieceMeta';
 import Box from 'components/Box';
 import Row from 'components/Row';
+// import Row from 'components/AltRow';
 import { StandardGrid } from 'components/Grid';
 import PostNavigation from 'components/PostNavigation';
 
@@ -38,7 +40,9 @@ const Container = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  margin: ${spacing(8)};
+  padding: ${spacing(11)};
+  height: 100vh;
+  box-sizing: border-box;
 `;
 
 const Wrapper = styled.div`
@@ -46,6 +50,8 @@ const Wrapper = styled.div`
   max-width: 100%;
   overflow: hidden;
   justify-content: center;
+  align-items: stretcj;
+  height: 100%;
   margin: 0 auto;
   transition: width 300ms linear;
   flex-direction: column;
@@ -81,31 +87,26 @@ const ArtPieceDetails = ({
           >
             <Meta>
               <ArtPieceMeta
-                {...{
-                  title,
-                  date,
-                  media,
-                  dimensions,
-                }}
+                title={title}
+                date={date}
+                media={media}
+                dimensions={dimensions}
               />
             </Meta>
-            <Row
-              childAspectRatioResolver={({ fluid }) => fluid.aspectRatio}
-              height="75vh"
-              items={images}
+            <div
+              style={{
+                height: '100%',
+                // flex: 1,
+              }}
             >
-              {images.map(({ id, fluid }) => (
-                <Box key={id} as="figure" margin="0">
-                  <GatsbyImage
-                    fluid={fluid}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                    }}
-                  />
-                </Box>
-              ))}
-            </Row>
+              <Row items={images} height="auto">
+                {images.map(({ id, fluid, fixed }) => (
+                  <Box key={id} as="figure" margin="0">
+                    <GatsbyImage fluid={fluid} fixed={fixed} />
+                  </Box>
+                ))}
+              </Row>
+            </div>
           </Wrapper>
         </Container>
       </React.Fragment>
@@ -121,18 +122,17 @@ const ArtPieceDetails = ({
       />
       <Meta col="contentStart / contentEnd">
         <ArtPieceMeta
-          {...{
-            title,
-            date,
-            media,
-            dimensions,
-          }}
+          title={title}
+          date={date}
+          media={media}
+          dimensions={dimensions}
         />
       </Meta>
       <Box gridColumn="contentStart / contentEnd">
-        {images.map(({ id, fluid }) => (
+        {images.map(({ id, fluid, fixed }) => (
           <GatsbyImage
             key={id}
+            fixed={fixed}
             fluid={fluid}
             style={{
               marginBottom: spacing('md'),

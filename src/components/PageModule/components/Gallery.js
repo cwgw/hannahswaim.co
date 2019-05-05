@@ -26,18 +26,7 @@ const StyledText = styled(Text)`
   & h2 {
     position: relative;
     display: inline-block;
-  }
-
-  & h2:before {
-    position: absolute;
-    z-index: -1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 75%;
-    transform: translate(${spacing(-2)}, ${spacing(-1)});
-    content: '';
-    background: ${colors.brand[5]};
+    border-bottom: 2px solid ${colors.brand[4]};
   }
 `
 

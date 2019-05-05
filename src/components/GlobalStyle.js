@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-import { spacing } from 'style/sizing';
+import { spacing, fontSizes, lineHeight, rem } from 'style/sizing';
 import { colors } from 'style/constants';
 import * as fonts from 'style/fonts';
 
@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   *:focus {
-    outline: ${colors.link} auto 5px;
+    outline: ${colors.gray[2]} auto 5px;
   }
 
   body {
@@ -60,7 +60,7 @@ const GlobalStyle = createGlobalStyle`
   pre,
   table,
   ul {
-    margin: 0 0 ${spacing('md')};
+    margin: 0 0 ${lineHeight(fontSizes.base)}rem;
   }
 
   ${() => {
@@ -75,6 +75,10 @@ const GlobalStyle = createGlobalStyle`
         : {};
     return printHeadingStyles(6);
   }}
+
+  small {
+    font-size: ${rem(fontSizes.small)};
+  }
 
   .sr-only {
     position: absolute;

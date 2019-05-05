@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { sansSerif } from 'style/fonts';
+import { fontSizes } from 'style/sizing';
+import { rem } from 'style/helpers';
 import { formatArtMeta } from 'utils/formatting';
 
 const propTypes = {
@@ -14,11 +16,11 @@ const propTypes = {
 
 const Title = styled.span`
   display: block;
-  font-family: ${sansSerif};
-  font-weight: bold;
+  font-size: ${rem(fontSizes.large)};
 `;
 
 const Small = styled.small`
+  font-family: ${sansSerif};
   display: block;
 `;
 
@@ -26,10 +28,10 @@ const ArtPieceMeta = props => {
   const { dimensions, media, title } = formatArtMeta(props);
   return (
     <React.Fragment>
-      <Title>{title}</Title>
-      <Small>
-        <em>{media}</em>
-      </Small>
+      <Title>
+        <em>{title}</em>
+      </Title>
+      <Small>{media}</Small>
       <Small>{dimensions}</Small>
     </React.Fragment>
   );

@@ -24,8 +24,8 @@ const PageTemplate = ({
         <Module
           key={content.id}
           marginBottom={{
-            base: 10,
-            lg: 13,
+            base: 9,
+            lg: 11,
           }}
           paddingTop={
             index === 0 && __typename !== 'ContentfulPageHero'

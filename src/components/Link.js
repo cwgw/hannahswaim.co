@@ -25,54 +25,47 @@ const Link = ({
   activeClassName,
   children,
   className,
-  onFocus,
   onBlur,
+  onFocus,
   onMouseEnter,
   onMouseLeave,
   rel,
   state,
   style,
   target,
-  to,
   title,
-  ...props
+  to,
 }) => {
   // test for leading backslash
   // only matching strings get the GatsbyLink
   return /^\/(?!\/)/.test(to) ? (
     <GatsbyLink
-      {...{
-        activeClassName,
-        className,
-        onBlur,
-        onFocus,
-        onMouseEnter,
-        onMouseLeave,
-        state,
-        style,
-        title,
-        to,
-      }}
-    >
-      {children}
-    </GatsbyLink>
+      activeClassName={activeClassName}
+      className={className}
+      onBlur={onBlur}
+      onFocus={onFocus}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      state={state}
+      style={style}
+      title={title}
+      to={to}
+      children={children}
+    />
   ) : (
     <a
+      className={className}
+      children={children}
       href={to}
-      {...{
-        className,
-        onBlur,
-        onFocus,
-        onMouseEnter,
-        onMouseLeave,
-        rel,
-        style,
-        target,
-        title,
-      }}
-    >
-      {children}
-    </a>
+      onBlur={onBlur}
+      onFocus={onFocus}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      rel={rel}
+      style={style}
+      target={target}
+      title={title}
+    />
   );
 };
 

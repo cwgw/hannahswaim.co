@@ -6,11 +6,11 @@ const breakpoints = new Map([
   ['xl', 1200],
 ]);
 
-const breakpointKeys = Array.from(breakpoints.keys());
-const breakpointValues = Array.from(breakpoints.values());
-
 const navBreakpoint = 'sm';
+
 const modalBreakpoint = 'sm';
+
+const rootFontSize = 18;
 
 const grays = [
   '#191720',
@@ -50,7 +50,7 @@ const colors = {
   coolBlack: grays[0],
   gray: grays,
   green: greens,
-  link: brandColors[3],
+  link: brandColors[2],
   navbar: brandColors[2],
   white: brandColors[6],
 };
@@ -74,13 +74,12 @@ const ease = {
 export {
   boxShadow,
   brandColors,
-  breakpointKeys,
   breakpoints,
-  breakpointValues,
   colors,
   ease,
   grays,
   greens,
+  rootFontSize,
   modalBreakpoint,
   navBreakpoint,
 };

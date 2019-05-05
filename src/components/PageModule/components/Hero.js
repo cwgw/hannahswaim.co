@@ -40,7 +40,7 @@ const Figure = animated(styled(Box)`
   overflow: hidden;
   max-height: 400px;
   margin-bottom: ${spacing('lg')};
-  box-shadow: 0px 4px 72px ${transparentize(0.75, colors.coolBlack)};
+  box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
   transform-style: preserve-3d;
 
   ${media.min.md`

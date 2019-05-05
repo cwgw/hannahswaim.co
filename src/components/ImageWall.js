@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
+import isNil from 'lodash/isNil';
 
 import { spacing } from 'style/sizing';
+import { px, pxValue } from 'style/helpers';
 
 import { Grid, StandardGrid } from 'components/Grid';
 
@@ -13,8 +15,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  columnWidth: spacing(20, false),
-  gap: spacing('lg', false),
+  columnWidth: 270,
+  gap: 'md',
   minColumns: 2,
 };
 
@@ -32,47 +34,43 @@ const ImageWall = ({
   const [containerWidth, setContainerWidth] = React.useState(0);
   const container = React.useRef();
 
-  const setState = () => {
+  const setState = React.useCallback(() => {
+    if (isNil(container.current)) return;
     const rect = container.current.getBoundingClientRect();
     setContainerWidth(() => rect.width);
-  };
+  }, [container]);
 
   React.useEffect(() => {
-    if (
-      typeof window === 'undefined' ||
-      typeof container.current === 'undefined'
-    ) {
-      return;
-    }
-
+    if (window === 'undefined') return;
     setState();
     const debouncedSetState = debounce(setState, 50, { trailing: true });
     window.addEventListener('resize', debouncedSetState);
     return () => {
       window.removeEventListener('resize', debouncedSetState);
     };
-  }, container);
+  }, [container]);
 
   const rowBaseHeight = Math.ceil(columnWidth / 5);
   let columnWidthActual = columnWidth;
+  let gapActual = pxValue(spacing(gap));
 
   if (containerWidth > 0) {
     let columnCount = Math.floor(containerWidth / columnWidth);
     columnCount = Math.max(
       minColumns,
-      containerWidth % columnWidth > gap * columnCount - gap
+      containerWidth % columnWidth > gapActual * columnCount - gapActual
         ? columnCount
         : columnCount - 1
     );
     columnWidthActual =
-      (containerWidth - gap * columnCount - gap) / columnCount;
+      (containerWidth - gapActual * columnCount - gapActual) / columnCount;
   }
 
   const Children = React.Children.map(children, (child, i) => {
     const itemHeight = columnWidthActual / childAspectRatioResolver(items[i]);
     return React.cloneElement(child, {
       gridRowEnd: `span ${Math.ceil(
-        (itemHeight + gap) / (rowBaseHeight + gap)
+        (itemHeight + gapActual) / (rowBaseHeight + gapActual)
       )}`,
       marginBottom: '0',
     });
@@ -81,13 +79,12 @@ const ImageWall = ({
   return (
     <StandardGrid {...props}>
       <Grid
-        columnGap={`${gap}px`}
+        gap={gap}
         gridAutoRows={`${rowBaseHeight}px`}
         gridColumn="bleedStart / bleedEnd"
         gridTemplateColumns={`repeat(auto-fill, minmax(${columnWidthActual}px, 1fr))`}
-        paddingX="lg"
+        marginX="md"
         ref={container}
-        rowGap={`${gap}px`}
       >
         {Children}
       </Grid>

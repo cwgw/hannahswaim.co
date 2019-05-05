@@ -15,6 +15,7 @@ import Icon from 'components/Icon'
 import Box from 'components/Box'
 import Flex from 'components/Flex'
 import Link from 'components/Link'
+import Button from 'components/Button'
 import { StandardGrid } from 'components/Grid'
 
 const propTypes = {
@@ -30,14 +31,12 @@ const defaultProps = {
 }
 
 const Container = styled(StandardGrid)`
-  // color: ${colors.green[3]};
   color: ${colors.brand[3]};
   position: relative;
   z-index: 0;
 
   &:before {
     content: '';
-    // border: 2px solid ${colors.green[5]};
     border: 2px solid ${colors.brand[4]};
     grid-column: contentStart / contentEnd;
     grid-row: 2;
@@ -50,12 +49,12 @@ const TextContainer = styled(Box)`
   position: relative;
   z-index: 2;
   display: flex;
-  flex-flow: row rap;
-  alignItems: baseline;
+  flex-flow: row wrap;
+  align-items: baseline;
 `
 
 const StyledLink = styled(Link)`
-  color: inherit;
+  color: ${colors.brand[4]};
 `
 
 const ItemCover = animated(styled.p`
@@ -86,7 +85,7 @@ const StyledItem = styled(Box)`
     height: 100%;
     content: '';
     border-radius: ${spacing('xs')};
-    box-shadow: 0px 3px 64px ${transparentize(0.8, colors.coolBlack)};
+    box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
   }
 `
 
@@ -136,7 +135,7 @@ const Item = ({
           height: '100%',
           borderRadius: spacing('xs'),
         }}
-        />
+      />
       <ItemCover
         style={{
           opacity: o,
@@ -178,7 +177,7 @@ const Instagram = ({
           gridColumn="contentStart / contentEnd"
           marginBottom="xs"
           >
-          <StyledLink
+          <Button
             to={profile.url}
             >
             <Icon
@@ -187,18 +186,15 @@ const Instagram = ({
               inline
               style={{
                 fontSize: rem(fontSizes.lead),
-                marginRight: spacing('xs'),
-                verticalAlign: 'bottom',
+                marginRight: spacing('xxs'),
+                lineHeight: 1,
+                verticalAlign: 'text-bottom',
               }}
             />
-            <span
-              style={{
-                fontFamily: sansSerif,
-              }}
-              >
+            <span>
               {username}
             </span>
-          </StyledLink>
+          </Button>
           <StyledLink
             to={profile.url}
             style={{
@@ -210,12 +206,12 @@ const Instagram = ({
         </TextContainer>
         <Row
           items={images}
-          gap={'lg'}
+          gap={'md'}
           isCentered
           gridColumn="bleedStart / bleedEnd"
           gridRow="2"
           height={300}
-          paddingY={'lg'}
+          paddingY={'md'}
           >
           {images && images.map((node) => (
             <Item

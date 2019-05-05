@@ -37,14 +37,13 @@ const Wrapper = styled(Box)`
     color: ${colors.brand[5]};
   }
 
-  p,
-  nav {
-    padding: ${spacing('sm')} 0;
+  & > * {
+    padding: ${spacing('sm')} ${spacing('md')};
   }
 `;
 
-const Nav = styled(Flex)`
-  margin-bottom: ${spacing('lg')};
+const Nav = styled.nav`
+  display: flex;
   align-items: center;
   justify-content: center;
 `;
@@ -67,7 +66,7 @@ const List = styled.ul`
 
 const Footer = ({ siteTitle, ...props }) => (
   <Wrapper {...props}>
-    <Nav as="nav">
+    <Nav>
       <List>
         <li>
           <Link

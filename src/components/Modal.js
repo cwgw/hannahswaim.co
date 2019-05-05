@@ -11,15 +11,10 @@ import Button from 'components/Button';
 import Icon from 'components/Icon';
 
 const Close = styled(Button)`
-  color: ${colors.white};
-  background-color: transparent;
-  border: none;
-  font-size: ${fontStyle.lead.fontSize};
-
-  &:hover,
-  &:focus {
-    background-color: ${colors.gray[0]};
-  }
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1000;
 `;
 
 const propTypes = {
@@ -78,12 +73,8 @@ const Modal = ({ children, location, isOpen }) => {
         <Close
           aria-label="Close Modal"
           onClick={closeModal}
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            zIndex: 1000,
-          }}
+          variant="dark"
+          textStyle="icon"
         >
           <Icon type="close" inline />
         </Close>

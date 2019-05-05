@@ -32,25 +32,34 @@ const Wrapper = styled(StandardGrid)`
 `
 
 const Figure = styled(Box)`
-  overflow: hidden;
+  overflow: visible;
   height: 300px;
   width: 100%;
   margin-bottom: ${spacing('lg')};
-  box-shadow: 0px 4px 72px ${transparentize(0.75, colors.coolBlack)};
+  box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
+
+  .Feature__Image {
+    width: 100%;
+  }
 
   ${media.min.sm`
     height: 400px;
   `}
-
+  
   ${media.min.lg`
+    direction: rtl;
     max-height: none;
     margin-bottom: 0;
+
+    .Feature__Image {
+      width: 120%;
+    }
   `}
 `
 
 const TextBox = styled(Box)`
   ${media.min.md`
-    padding: 0 ${spacing('xxl')};
+    padding: 0 0 0 ${spacing('lg')};
   `}
 
   & > p:last-child {
@@ -74,15 +83,17 @@ const Feature = ({
         gridColumn={{
           base: 'bleedStart / bleedEnd',
           sm: 'contentStart / contentEnd',
-          lg: 'bleedStart / col3End',
+          lg: 'contentStart / col3End',
           // xl: 'contentStart / col3End',
         }}
+        row={{ lg: '1 / span 3'}}
         as="figure"
         >
         <GatsbyImage
           {...image}
+          className="Feature__Image"
           style={{
-            width: '100%',
+            width: null,
             height: '100%',
           }}
         />
@@ -92,6 +103,7 @@ const Feature = ({
           base: 'contentStart / contentEnd',
           lg: 'col4Start / contentEnd',
         }}
+        row={{ lg: '2 / span 3'}}
         dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
       />
     </Wrapper>

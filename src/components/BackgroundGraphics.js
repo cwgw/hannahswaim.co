@@ -7,7 +7,7 @@ import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import { colors } from 'style/constants';
 
 const defaultProps = {
-  colors: [colors.brand[5], colors.brand[4]],
+  colors: [colors.brand[6], colors.brand[5]],
 };
 
 const Wrapper = styled.div`
@@ -38,7 +38,8 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
   const [{ y }, setY] = useSpring(() => ({ y: 0 }));
   const ref = React.useRef(null);
 
-  const isHome = location.pathname === '/';
+  // const isHome = location.pathname === '/';
+  const isHome = true;
 
   useIntersectionObserver(y => {
     setY({ y });
@@ -50,8 +51,7 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
   let y2 = y.interpolate(
     y => `translate3d(0, ${isHome ? (y - 0.5) * 60 : 0}%, 0) scale3d(1, 1, 1)`
   );
-  let o1 = y.interpolate([0, 1], [1, 0]).interpolate(o => (isHome ? o : 0));
-  let o2 = y
+  let opacity = y
     .interpolate([0, 0.5, 1], [1, 1, 0])
     .interpolate(o => (isHome ? o : 0));
 
@@ -59,6 +59,10 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
     <Wrapper>
       <Svg preserveAspectRatio="none" ref={ref}>
         <defs>
+          <lineargradient id="gradient" gradientTransform="rotate(90)">
+            <stop offset="0%" stopColor={color1} />
+            <stop offset="100%" stopColor={color2} />
+          </lineargradient>
           <pattern
             id="squiggle-1"
             width="48"
@@ -68,6 +72,7 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
             <path
               fill="none"
               stroke={color2 || color1}
+              // stroke="url(#gradient)"
               strokeWidth="1"
               d="M 0,0 C 4 0, 4 1, 8 1 S 12 0, 16 0"
               transform="translate(0 1) scale(3)"
@@ -84,6 +89,7 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
             <path
               fill="none"
               stroke={color3 || color2 || color1}
+              // stroke="url(#gradient)"
               strokeWidth="1"
               d="M 0,0 C 4 0, 4 1, 8 1 S 12 0, 16 0"
               transform="translate(0 1) scale(3)"
@@ -95,7 +101,7 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
       <AnimatedContainer
         style={{
           transform: y1,
-          opacity: o1,
+          opacity,
           zIndex: -2,
         }}
       >
@@ -107,7 +113,7 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
       <AnimatedContainer
         style={{
           transform: y2,
-          opacity: o2,
+          opacity,
           zIndex: -1,
         }}
       >

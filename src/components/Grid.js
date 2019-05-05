@@ -8,30 +8,34 @@ const Grid = styled(Box)`
   ${makeGrid}
 `;
 
-const makeColumns = (n = 6, { includeGutters } = { includeGutters: true }) => {
-  let gutter = `minmax(${spacing('lg')}, 2fr)`;
-  let column = `minmax(auto, ${spacing(14)})`;
-  let columns = [];
-  for (let i = 1; i <= n + 1; i++) {
+const getColumns = (count = 6) => {
+  const templateColumns = [];
+  const colWidth = `minmax(0, ${spacing(12, 'rem')})`;
+  const gutterWidth = `minmax(0, 1fr)`;
+
+  for (let i = 0; i <= count; i++) {
     let line = [];
-    if (i === 1) line.push('contentStart');
-    if (i > 1) line.push(`col${i - 1}End`);
-    if (i <= n) line.push(`col${i}Start`);
-    if (i === n + 1) line.push('contentEnd');
-    columns.push(`[${line.join(' ')}]`);
+    if (i < count) line.push(`col${i + 1}Start`);
+    if (i > 0) line.push(`col${i}End`);
+    if (i === 0) line.push('contentStart');
+    if (i === count) line.push('contentEnd');
+    templateColumns.push(`[${line.join(' ')}]`);
   }
-  return includeGutters
-    ? `[bleedStart] ${gutter} ${columns.join(
-        ` ${column} `
-      )} ${gutter} [bleedEnd]`
-    : columns.join(` ${column} `);
+
+  return [
+    '[bleedStart]',
+    gutterWidth,
+    templateColumns.join(` ${colWidth} `),
+    gutterWidth,
+    '[bleedEnd]',
+  ].join(' ');
 };
 
 const StandardGrid = styled(Box).attrs({
-  gridTemplateColumns: makeColumns(),
-  gap: 'lg',
+  gridTemplateColumns: getColumns(),
+  gap: 'md',
 })`
   ${makeGrid}
 `;
 
-export { Grid as default, Grid, StandardGrid, makeColumns };
+export { Grid as default, Grid, StandardGrid, getColumns };

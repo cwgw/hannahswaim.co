@@ -1,31 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import debounce from 'lodash/debounce';
+import isNil from 'lodash/isNil';
 
 import { spacing } from 'style/sizing';
+import { px } from 'style/helpers';
+
 import Box from 'components/Box';
 
 const propTypes = {
+  as: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  childAspectRatioResolver: PropTypes.func,
+  getAspectRatio: PropTypes.func,
   items: PropTypes.array.isRequired,
   isCentered: PropTypes.bool,
+  more: PropTypes.string,
 };
 
 const defaultProps = {
-  height: 400,
+  as: null,
   gap: null,
+  getAspectRatio: getAspectRatio,
+  height: 180,
   isCentered: false,
-  innerProps: {},
-  childAspectRatioResolver: () => 1,
+  innerProps: {
+    marginX: 'md',
+  },
+  more: 'scroll →',
 };
+
+function getAspectRatio(o) {
+  if (o.aspectRatio) return o.aspectRatio;
+  if (o.fluid) return o.fluid.aspectRatio || 1;
+  if (o.fixed) {
+    return o.fixed.width / o.fixed.height;
+  }
+  return 1;
+}
 
 const Wrapper = styled(Box)`
   position: relative;
   z-index: 0;
   overflow: hidden;
-  margin: ${spacing(-10)} 0;
+  margin: -${spacing(9)} 0;
 `;
 
 const Scroller = styled.div`
@@ -48,12 +67,10 @@ const Inner = styled.div`
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
-  justify-content: space-between;
-  padding-top: ${spacing(10)};
-  padding-bottom: ${spacing(10)};
+  padding-top: ${spacing(9)};
+  padding-bottom: ${spacing(9)};
   box-sizing: content-box;
   flex: 1;
-  pointer-events: none;
 
   & > * {
     box-sizing: border-box;
@@ -63,7 +80,7 @@ const Inner = styled.div`
 const Row = ({
   children,
   items,
-  childAspectRatioResolver: ar,
+  getAspectRatio: ar,
   height: _height,
   innerProps: { innerStyle, ...innerProps },
   isCentered,
@@ -72,16 +89,37 @@ const Row = ({
 }) => {
   const aspectRatio = items.reduce((sum, o) => sum + ar(o), 0);
 
-  const gap = spacing(_gap) || 0;
-  const height = typeof _height === 'number' ? `${_height}px` : _height;
+  const [parentHeight, setParentHeight] = React.useState(0);
 
+  const ref = React.useRef();
+
+  const setState = React.useCallback(() => {
+    if (isNil(ref.current)) {
+      return;
+    }
+    const rect = ref.current.parentNode.getBoundingClientRect();
+    setParentHeight(() => rect.height);
+  }, [ref]);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setState();
+    const debouncedSetState = debounce(setState, 50, { trailing: true });
+    window.addEventListener('resize', debouncedSetState);
+    return () => {
+      window.removeEventListener('resize', debouncedSetState);
+    };
+  }, [ref]);
+
+  const gap = spacing(_gap) || 0;
+  const height =
+    isNil(_height) || _height === 'auto' ? px(parentHeight) : px(_height);
+
+  const childCount = React.Children.count(children);
   const Children = React.Children.map(children, (child, i) =>
     React.cloneElement(child, {
-      flex: `${ar(items[i])}`,
+      flex: childCount > 1 ? `${ar(items[i])}` : 1,
       marginRight: gap && i < items.length - 1 ? gap : null,
-      style: {
-        pointerEvents: 'all',
-      },
     })
   );
 
@@ -95,14 +133,14 @@ const Row = ({
     : `calc(${aspectRatio} * ${height})`;
 
   return (
-    <Wrapper {...props}>
+    <Wrapper ref={ref} {...props}>
       <Scroller>
         <Inner
           {...innerProps}
           style={{
             ...(innerStyle || {}),
-            width: width,
-            height: height,
+            width,
+            height,
             paddingLeft: isCentered ? paddingLeft : null,
             paddingRight: isCentered ? paddingRight : null,
           }}

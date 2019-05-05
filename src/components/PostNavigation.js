@@ -6,9 +6,10 @@ import { navigate } from 'gatsby';
 
 import { Location } from '@reach/router';
 
-import { media } from 'style/layout';
+// import { media } from 'style/layout';
+import { rem } from 'style/helpers';
 import { spacing, fontSizes } from 'style/sizing';
-import { style as fontStyle } from 'style/fonts';
+// import { style as fontStyle } from 'style/fonts';
 import { colors, modalBreakpoint } from 'style/constants';
 import UIContext from 'context/UI';
 
@@ -23,9 +24,8 @@ const propTypes = {
 const defaultProps = {};
 
 const NavItem = styled(Button)`
-  color: inherit;
-  background-color: transparent;
-  font-size: ${fontStyle.lead.fontSize};
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   ${({ direction }) =>
     ({
@@ -49,46 +49,29 @@ const List = styled.ul`
     isModal
       ? `
     display: contents
-    color: ${colors.white};
     
     ${NavItem} {
       position: fixed;
       top: 50%;
       z-index: 10;
       transform: translate(0, -50%);
-      border: none;
-    }
-
-    ${NavItem}:hover,
-    ${NavItem}:focus {
-      background-color: ${colors.gray[0]};
     }
   `
       : `
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: ${spacing('lg')};
+    max-width: 100%;
 
     span {
       margin: 0 ${spacing('xs')};
     }
     
     ${NavItem} {
-      color: ${colors.brand[3]};
-      border-color: ${colors.brand[4]};
       width: 100%;
-      font-size: ${fontSizes.small}px;
+      font-size: ${rem(fontSizes.small)};
       text-transform: uppercase;
     }
-
-    ${media.min.md`
-      ${NavItem}:hover,
-      ${NavItem}:focus {
-        color: ${colors.brand[6]};
-        background-color: ${colors.gray[3]};
-        border-color: ${colors.gray[3]};
-      }
-    `}
   `}
 `;
 
@@ -142,10 +125,12 @@ const PostNavigation = ({ children, location, ...props }) => {
       <List isModal={isModal}>
         <li>
           <NavItem
-            direction="prev"
             aria-label="Previous"
-            onClick={toPrevious}
+            direction="prev"
             disabled={!prev.pathname}
+            onClick={toPrevious}
+            variant={isModal ? 'dark' : 'outline'}
+            textStyle="icon"
           >
             <Icon inline type="previous" />
             {!isModal && <span>previous</span>}
@@ -153,10 +138,12 @@ const PostNavigation = ({ children, location, ...props }) => {
         </li>
         <li>
           <NavItem
-            direction="next"
             aria-label="Next"
-            onClick={toNext}
+            direction="next"
             disabled={!next.pathname}
+            onClick={toNext}
+            variant={isModal ? 'dark' : 'outline'}
+            textStyle="icon"
           >
             {!isModal && <span>next</span>}
             <Icon inline type="next" />

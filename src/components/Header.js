@@ -41,29 +41,21 @@ const Nav = styled(Flex)`
 `;
 
 const NavLink = styled(Button)`
-  display: inline-block;
   min-width: ${spacing('xl')};
-  padding: ${spacing('sm')} ${spacing('md')};
   margin: 0 1px;
-  background-color: ${colors.white};
-  border-radius: 3px;
-  border: none;
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
+  background: ${colors.white};
 
-  &:hover:not(.MenuItem--active),
-  &:focus:not(.MenuItem--active) {
-    background-color: ${colors.gray[3]};
-    color: ${colors.brand[6]};
-    z-index: 1;
+  &.MenuItem--active,
+  &.MenuItem--active:hover,
+  &.MenuItem--active:focus {
+    background: none;
+    color: ${colors.brand[2]};
+    border-color: transparent;
   }
 `;
 
-const Nameplate = styled(NavLink)`
-  background-color: ${colors.brand[4]};
-  color: ${colors.brand[2]};
-  font-weight: 700;
+const Nameplate = styled(Button)`
+  margin: 0 1px;
 `;
 
 const Header = ({ siteTitle, menuItems }) => {

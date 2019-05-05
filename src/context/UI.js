@@ -9,7 +9,10 @@ const isWindowDefined = () => typeof window !== 'undefined';
 
 function Provider({ children }) {
   const [isViewport, setViewportState] = React.useState(
-    breakpointKeys.reduce((o, key) => ({ ...o, [key]: false }), {})
+    Array.from(breakpoints.keys()).reduce(
+      (o, key) => ({ ...o, [key]: false }),
+      {}
+    )
   );
 
   React.useEffect(() => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { withPrefix } from 'gatsby';
@@ -103,14 +104,16 @@ const Head = ({
       />
       <link rel="shortcut icon" href="/static/favicon.ico" />
       <style type="text/css">
-        {fontFaces.reduce((acc, font) => {
-          return (
-            acc +
-            ` @font-face { ${Object.entries(font).reduce(
-              (a, [property, key]) => `${property}: ${key};`
-            )} font-display: swap; } `
-          );
-        }, '')}
+        {fontFaces
+          .map(font =>
+            css({
+              ['@font-face']: {
+                ...font,
+                fontDisplay: 'swap',
+              },
+            })
+          )
+          .join(`\n`)}
       </style>
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
