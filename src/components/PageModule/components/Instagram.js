@@ -178,6 +178,7 @@ const Instagram = ({
   profile,
   ...props
 }) => {
+  const { isViewport } = React.useContext(UIContext);
   const images = posts.edges.slice(0, limit).map(({ node }) => node);
   const username = `@${new URL(profile.url).pathname.replace(/\//g, '')}`;
   return (
@@ -197,14 +198,16 @@ const Instagram = ({
           />
           <span>{username}</span>
         </Button>
-        <StyledLink
-          to={profile.url}
-          style={{
-            marginLeft: 'auto',
-          }}
-        >
-          {'See more →'}
-        </StyledLink>
+        {isViewport[navBreakpoint] && (
+          <StyledLink
+            to={profile.url}
+            style={{
+              marginLeft: 'auto',
+            }}
+          >
+            {'See more →'}
+          </StyledLink>
+        )}
       </TextContainer>
       <Row
         items={images}
@@ -212,7 +215,7 @@ const Instagram = ({
         isCentered
         gridColumn="bleedStart / bleedEnd"
         gridRow="2"
-        height={300}
+        height={isViewport[navBreakpoint] ? 300 : 210}
         paddingY={'md'}
       >
         {images && images.map(node => <Item key={node.id} {...node} />)}

@@ -85,7 +85,7 @@ const Head = ({
       htmlAttributes={{ lang: locale }}
       title={title}
       meta={metaTags.map(([name, content]) => ({ name, content }))}
-      >
+    >
       <style type="text/css">
         {fontFaces
           .map(font =>
