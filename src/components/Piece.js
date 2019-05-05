@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GatsbyImage from 'gatsby-image';
 
-import { colors, ease } from 'style/constants';
+import { colors, ease, navBreakpoint } from 'style/constants';
+import { media } from 'style/layout';
 import { spacing } from 'style/sizing';
 import { formatArtTitle, artMetaString } from 'utils/formatting';
 import Link from 'components/Link';
@@ -52,13 +53,12 @@ const StyledLink = styled(Box)`
     background: ${colors.gray[3]};
   }
 
-  &:hover .Piece__Image picture {
-    transition: opacity 100ms ${ease.out};
-  }
-
-  &:hover .Piece__Image picture {
-    opacity: 0.5;
-  }
+  ${media.min[navBreakpoint]`
+    &:hover .Piece__Image picture {
+      transition: opacity 100ms ${ease.out};
+      opacity: 0.5;
+    }
+  `}
 `;
 
 const Piece = ({

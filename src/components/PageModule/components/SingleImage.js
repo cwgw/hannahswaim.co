@@ -1,29 +1,23 @@
-import React from 'react'
+import React from 'react';
 // import { graphql } from 'gatsby'
-import GatsbyImage from 'gatsby-image'
+import GatsbyImage from 'gatsby-image';
 
-import { StandardGrid } from 'components/Grid'
-import Box from 'components/Box'
+import { StandardGrid } from 'components/Grid';
+import Box from 'components/Box';
 
-const SingleImage = ({
-  id,
-  image,
-  ...props
-}) => {
+const SingleImage = ({ id, image, ...props }) => {
   // console.log(props);
   return (
-    <StandardGrid
-      {...props}
-      >
+    <StandardGrid {...props}>
       <Box
         gridColumn={{
-          base: 'wideStart / col3End'
+          base: 'wideStart / col3End',
         }}
-        >
+      >
         <GatsbyImage {...image} />
       </Box>
     </StandardGrid>
-  )
+  );
 };
 
 export default SingleImage;

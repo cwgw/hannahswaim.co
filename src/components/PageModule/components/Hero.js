@@ -1,18 +1,18 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { graphql } from 'gatsby'
-import GatsbyImage from 'gatsby-image'
-import { transparentize } from 'polished'
-import { useSpring, animated } from 'react-spring'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { graphql } from 'gatsby';
+import GatsbyImage from 'gatsby-image';
+import { transparentize } from 'polished';
+import { useSpring, animated } from 'react-spring';
 
-import useIntersectionObserver from 'hooks/useIntersectionObserver'
-import { style as fontStyle } from 'style/fonts'
-import { spacing } from 'style/sizing'
-import { media } from 'style/layout'
-import { colors, breakpoints } from 'style/constants'
-import { StandardGrid } from 'components/Grid'
-import Box from 'components/Box'
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
+import { style as fontStyle } from 'style/fonts';
+import { spacing } from 'style/sizing';
+import { media } from 'style/layout';
+import { colors, breakpoints } from 'style/constants';
+import { StandardGrid } from 'components/Grid';
+import Box from 'components/Box';
 
 const propTypes = {
   image: PropTypes.shape({
@@ -21,12 +21,12 @@ const propTypes = {
   text: PropTypes.shape({
     childMarkdownRemark: PropTypes.object,
   }).isRequired,
-}
+};
 
 const defaultProps = {
   alignment: 'left',
   breakpoint: 'lg',
-}
+};
 
 const Wrapper = styled(StandardGrid)`
   min-height: ${breakpoints.get('xs')}px;
@@ -34,7 +34,7 @@ const Wrapper = styled(StandardGrid)`
   ${media.min.lg`
     height: 80vh;
   `}
-`
+`;
 
 const Figure = animated(styled(Box)`
   overflow: hidden;
@@ -46,14 +46,14 @@ const Figure = animated(styled(Box)`
   ${media.min.md`
     max-height: 500px;
   `}
-  
+
   ${media.min.lg`
     position: relative;
     z-index: -2;
     max-height: none;
     margin-bottom: 0;
   `}
-`)
+`);
 
 const TextBox = styled(Box)`
   position: relative;
@@ -68,32 +68,29 @@ const TextBox = styled(Box)`
   & > p:last-child {
     margin-bottom: 0;
   }
-`
+`;
 
 const Hero = ({
   breakpoint,
   image,
   id,
   location,
-  text: {
-    childMarkdownRemark
-  },
+  text: { childMarkdownRemark },
   ...props
 }) => {
-  const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
+  const [{ y }, setY] = useSpring(() => ({ y: 0 }));
   const ref = React.useRef();
 
-  useIntersectionObserver((y) => {
-    setY({y})
+  useIntersectionObserver(y => {
+    setY({ y });
   }, ref);
 
-  const transform = y.interpolate(y => `translate3d(0, ${(y - 0.5) * y * -10}%, 0) scale3d(1, 1, 1)`);
+  const transform = y.interpolate(
+    y => `translate3d(0, ${(y - 0.5) * y * -10}%, 0) scale3d(1, 1, 1)`
+  );
 
   return (
-    <Wrapper
-      ref={ref}
-      {...props}
-      >
+    <Wrapper ref={ref} {...props}>
       <TextBox
         paddingX="lg"
         paddingY="xl"
@@ -104,7 +101,7 @@ const Hero = ({
           xl: 'col1Start / col2End',
         }}
         gridRow="2"
-        dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
+        dangerouslySetInnerHTML={{ __html: childMarkdownRemark.html }}
       />
       <Figure
         gridColumn={{
@@ -112,14 +109,14 @@ const Hero = ({
           lg: 'col4Start / bleedEnd',
         }}
         gridRow={{
-          lg: "1 / span 3",
+          lg: '1 / span 3',
         }}
         as="figure"
         marginTop="md"
         style={{
-          transform
+          transform,
         }}
-        >
+      >
         <GatsbyImage
           fixed={image.fixed}
           fluid={image.fluid}
@@ -128,19 +125,19 @@ const Hero = ({
             height: '100%',
           }}
           imgStyle={{
-            objectPosition: 'left center'
+            objectPosition: 'left center',
           }}
         />
       </Figure>
     </Wrapper>
-  )
-}
+  );
+};
 
-Hero.propTypes = propTypes
+Hero.propTypes = propTypes;
 
-Hero.defaultProps = defaultProps
+Hero.defaultProps = defaultProps;
 
-export default Hero
+export default Hero;
 
 export const pageQuery = graphql`
   fragment PageHero on ContentfulPageHero {
@@ -151,10 +148,10 @@ export const pageQuery = graphql`
       }
     }
     image {
-      fluid (maxHeight: 720, quality: 90) {
+      fluid(maxHeight: 720, quality: 90) {
         aspectRatio
         ...GatsbyContentfulFluid_withWebp
       }
     }
   }
-`
+`;

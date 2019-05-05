@@ -1,15 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { graphql } from 'gatsby'
-import GatsbyImage from 'gatsby-image'
-import { transparentize } from 'polished'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { graphql } from 'gatsby';
+import GatsbyImage from 'gatsby-image';
+import { transparentize } from 'polished';
 
-import { spacing } from 'style/sizing'
-import { media } from 'style/layout'
-import { colors } from 'style/constants'
-import { StandardGrid } from 'components/Grid'
-import Box from 'components/Box'
+import { spacing } from 'style/sizing';
+import { media } from 'style/layout';
+import { colors } from 'style/constants';
+import { StandardGrid } from 'components/Grid';
+import Box from 'components/Box';
 
 const propTypes = {
   image: PropTypes.shape({
@@ -18,18 +18,18 @@ const propTypes = {
   text: PropTypes.shape({
     childMarkdownRemark: PropTypes.object,
   }).isRequired,
-}
+};
 
 const defaultProps = {
   alignment: 'left',
   breakpoint: 'lg',
-}
+};
 
 const Wrapper = styled(StandardGrid)`
   flex: 1;
   flex-basis: 100%;
   align-content: center;
-`
+`;
 
 const Figure = styled(Box)`
   overflow: visible;
@@ -45,7 +45,7 @@ const Figure = styled(Box)`
   ${media.min.sm`
     height: 400px;
   `}
-  
+
   ${media.min.lg`
     direction: rtl;
     max-height: none;
@@ -55,7 +55,7 @@ const Figure = styled(Box)`
       width: 120%;
     }
   `}
-`
+`;
 
 const TextBox = styled(Box)`
   ${media.min.md`
@@ -65,20 +65,18 @@ const TextBox = styled(Box)`
   & > p:last-child {
     margin-bottom: 0;
   }
-`
+`;
 
 const Feature = ({
   breakpoint,
   image,
   id,
   location,
-  text: {
-    childMarkdownRemark
-  },
+  text: { childMarkdownRemark },
   ...props
 }) => {
   return (
-    <Wrapper {...props} >
+    <Wrapper {...props}>
       <Figure
         gridColumn={{
           base: 'bleedStart / bleedEnd',
@@ -86,9 +84,9 @@ const Feature = ({
           lg: 'contentStart / col3End',
           // xl: 'contentStart / col3End',
         }}
-        row={{ lg: '1 / span 3'}}
+        row={{ lg: '1 / span 3' }}
         as="figure"
-        >
+      >
         <GatsbyImage
           {...image}
           className="Feature__Image"
@@ -103,18 +101,18 @@ const Feature = ({
           base: 'contentStart / contentEnd',
           lg: 'col4Start / contentEnd',
         }}
-        row={{ lg: '2 / span 3'}}
-        dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
+        row={{ lg: '2 / span 3' }}
+        dangerouslySetInnerHTML={{ __html: childMarkdownRemark.html }}
       />
     </Wrapper>
-  )
-}
+  );
+};
 
-Feature.propTypes = propTypes
+Feature.propTypes = propTypes;
 
-Feature.defaultProps = defaultProps
+Feature.defaultProps = defaultProps;
 
-export default Feature
+export default Feature;
 
 export const pageQuery = graphql`
   fragment PageFeature on ContentfulPageFeature {
@@ -125,10 +123,10 @@ export const pageQuery = graphql`
       }
     }
     image {
-      fluid (maxHeight: 720, quality: 90) {
+      fluid(maxHeight: 720, quality: 90) {
         aspectRatio
         ...GatsbyContentfulFluid_withWebp
       }
     }
   }
-`
+`;
