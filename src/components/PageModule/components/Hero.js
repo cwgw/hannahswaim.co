@@ -1,128 +1,137 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inject, observer } from 'mobx-react'
-
+import { graphql } from 'gatsby'
 import GatsbyImage from 'gatsby-image'
+import { transparentize } from 'polished'
+import { useSpring, animated } from 'react-spring'
 
-import { colors, borderRadius, breakpoints, ease, containerWidth } from 'utils/constants'
-import media from 'utils/media'
-import spacing from 'utils/spacing'
-
-import Container from 'components/Container'
-
-import { Circle } from 'components/Graphics'
+import useIntersectionObserver from 'hooks/useIntersectionObserver'
+import { style as fontStyle } from 'style/fonts'
+import { spacing } from 'style/sizing'
+import { media } from 'style/layout'
+import { colors, breakpoints } from 'style/constants'
+import { StandardGrid } from 'components/Grid'
+import Box from 'components/Box'
 
 const propTypes = {
   image: PropTypes.shape({
     fluid: PropTypes.object,
-  }),
-  innerHTML: PropTypes.string.isRequired,
+  }).isRequired,
+  text: PropTypes.shape({
+    childMarkdownRemark: PropTypes.object,
+  }).isRequired,
 }
 
-const defaultProps = {}
+const defaultProps = {
+  alignment: 'left',
+  breakpoint: 'lg',
+}
 
-const Wrapper = styled.div`
-  border-radius: ${borderRadius};
+const Wrapper = styled(StandardGrid)`
+  min-height: ${breakpoints.get('xs')}px;
 
-  ${media.max.lg`
-    padding-bottom: 40%;
+  ${media.min.lg`
+    height: 80vh;
   `}
+`
 
+const Figure = animated(styled(Box)`
+  overflow: hidden;
+  max-height: 400px;
+  margin-bottom: ${spacing('lg')};
+  box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
+  transform-style: preserve-3d;
+
+  ${media.min.md`
+    max-height: 500px;
+  `}
+  
   ${media.min.lg`
     position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    min-height: calc(100vh - (${spacing(4)} * 2));
-    min-height: 50vh;
-    background-color: ${colors.gray[3]};
-    overflow: hidden;
+    z-index: -2;
+    max-height: none;
+    margin-bottom: 0;
   `}
-`
+`)
 
-const ImageContainer = styled.div`
-  position: absolute;
-  top: -${spacing(2)};
-  bottom: 0;
-  right: 0;
-  max-width: ${containerWidth};
-  width: calc(100% - ${spacing(4)});
-  transition: left 350ms ${ease};
-
-  ${media.min.lg`
-    left: calc(50vw - 100px);
-    width: auto;
-    max-width: none;
-  `}
-`
-
-const TextContainer = styled.div`
+const TextBox = styled(Box)`
   position: relative;
-  font-size: ${spacing(1)};
+  ${fontStyle.lead}
+  border: 2px solid ${colors.brand[4]};
+  min-width: 300px;
 
-  h1,
-  h2 {
-    font-size: ${spacing(4,'em')};
+  & > p:first-child {
+    ${fontStyle.hero}
   }
 
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: ${spacing(2,'em')};
+  & > p:last-child {
+    margin-bottom: 0;
   }
-
-  ${media.min.sm`
-    font-size: ${spacing(2)};
-  `}
-
-  ${media.min.lg`
-    padding: ${spacing(10)} 50% ${spacing(12)} 0;
-    font-size: ${spacing(2)};
-  `}
-
-  ${media.max.lg`
-    padding: ${spacing(4)};
-    border-radius: ${borderRadius};
-    background-color: white;
-    width: 70%;
-    min-width: 300px;
-    border-bottom: 1px solid ${colors.brand[4]};
-    border-left: 1px solid ${colors.brand[4]};
-  `}
-
 `
 
-function Hero (props) {
+const Hero = ({
+  breakpoint,
+  image,
+  id,
+  location,
+  text: {
+    childMarkdownRemark
+  },
+  ...props
+}) => {
+  const [{ y }, setY ] = useSpring(() => ({ y: 0 }));
+  const ref = React.useRef();
 
-  const {
-    innerHTML,
-    image,
-    UIStore,
-  } = props
+  useIntersectionObserver((y) => {
+    setY({y})
+  }, ref);
+
+  const transform = y.interpolate(y => `translate3d(0, ${(y - 0.5) * y * -10}%, 0) scale3d(1, 1, 1)`);
 
   return (
-    <Wrapper>
-      <ImageContainer>
+    <Wrapper
+      ref={ref}
+      {...props}
+      >
+      <TextBox
+        paddingX="lg"
+        paddingY="xl"
+        alignSelf="start"
+        gridColumn={{
+          base: 'contentStart / contentEnd',
+          lg: 'col1Start / col3End',
+          xl: 'col1Start / col2End',
+        }}
+        gridRow="2"
+        dangerouslySetInnerHTML={{__html: childMarkdownRemark.html}}
+      />
+      <Figure
+        gridColumn={{
+          base: 'contentStart / contentEnd',
+          lg: 'col4Start / bleedEnd',
+        }}
+        gridRow={{
+          lg: "1 / span 3",
+        }}
+        as="figure"
+        marginTop="md"
+        style={{
+          transform
+        }}
+        >
         <GatsbyImage
+          fixed={image.fixed}
           fluid={image.fluid}
           style={{
-            position: 'absolute',
             width: '100%',
             height: '100%',
           }}
+          imgStyle={{
+            objectPosition: 'left center'
+          }}
         />
-      </ImageContainer>
-      {UIStore.viewportWidth >= breakpoints.lg && (
-        <Circle
-          fill="white"
-          // style={{transform: `translate(-${spacing(4)}, -${spacing(4)})`}}
-          style={{transform: `translate(${spacing(4)}, -${spacing(4)})`}}
-        />
-      )}
-      <Container>
-        <TextContainer dangerouslySetInnerHTML={{__html: innerHTML}} />
-      </Container>
+      </Figure>
     </Wrapper>
   )
 }
@@ -131,4 +140,21 @@ Hero.propTypes = propTypes
 
 Hero.defaultProps = defaultProps
 
-export default inject('UIStore')(observer(Hero))
+export default Hero
+
+export const pageQuery = graphql`
+  fragment PageHero on ContentfulPageHero {
+    id
+    text {
+      childMarkdownRemark {
+        html
+      }
+    }
+    image {
+      fluid (maxHeight: 720, quality: 90) {
+        aspectRatio
+        ...GatsbyContentfulFluid_withWebp
+      }
+    }
+  }
+`

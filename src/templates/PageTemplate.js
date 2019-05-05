@@ -1,123 +1,62 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { graphql } from 'gatsby'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { graphql } from 'gatsby';
 
-import Layout from 'components/Layout'
-import PageModule from 'components/PageModule'
-
-import { isSet } from 'utils/helpers'
+import * as PageModule from 'components/PageModule';
 
 const propTypes = {
-  location: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  data: PropTypes.object,
-}
+  location: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    page: PropTypes.object,
+  }).isRequired,
+};
 
-const defaultProps = {}
+const PageTemplate = ({
+  location,
+  data: {
+    page: { contentModules },
+  },
+}) => (
+  <React.Fragment>
+    {contentModules.map(({ __typename, ...content }, index) => {
+      const Module = PageModule[__typename];
+      return Module ? (
+        <Module
+          key={content.id}
+          marginBottom={{
+            base: 9,
+            lg: 11,
+          }}
+          paddingTop={
+            index === 0 && __typename !== 'ContentfulPageHero'
+              ? { lg: 10 }
+              : null
+          }
+          location={location}
+          {...content}
+        />
+      ) : null;
+    })}
+  </React.Fragment>
+);
 
-function PageTemplate (props) {
+PageTemplate.propTypes = propTypes;
 
-  const {
-    location,
-    data: {
-      page: {
-        contentModules,
-        title,
-        node_locale,
-      },
-      ...data
-    },
-  } = props
-
-  const renderContentModules = (content) => {
-    const pageModule = {...content}
-    delete pageModule['__typename']
-    return (
-      <PageModule
-        key={content.id}
-        location={location}
-        type={content['__typename']}
-        {...pageModule}
-      />
-    )
-  }
-
-  const hasHero = isSet(contentModules)
-    && contentModules.length > 0
-    && 'ContentfulPageHero' === contentModules[0]['__typename']
-    && isSet(contentModules[0].image)
-
-  return (
-    <Layout
-      location={location}
-      title={title}
-      hasHero={hasHero}
-      data={data}
-      locale={node_locale}
-    >
-      {contentModules && contentModules.map(renderContentModules)}
-    </Layout>
-  )
-}
-
-PageTemplate.propTypes = propTypes
-
-PageTemplate.defaultProps = defaultProps
-
-export default PageTemplate
+export default PageTemplate;
 
 export const pageQuery = graphql`
   query singlePage($id: String!) {
-    site {
-      siteMetadata {
-        siteTitle
-        siteTitleSeparator
-        siteUrl
-        siteDescription
-      }
-    }
-    socialMedia: allContentfulSocialMediaLink {
-      edges {
-        node {
-          service
-          url
-        }
-      }
-    }
-    menu: contentfulMenu {
-      menuItems {
-        ... on ContentfulPage {
-          ...MenuItemPage
-        }
-        ... on ContentfulSocialMediaLink {
-          ...MenuItemSocialMediaLink
-        }
-      }
-    }
-    page: contentfulPage(contentful_id: {eq: $id}) {
+    page: contentfulPage(contentful_id: { eq: $id }) {
       id
       title
       slug
       node_locale
       contentModules {
-        ... on ContentfulPageText {
-          ...PageText
-        }
-        ... on ContentfulPageHero {
-          ...PageHero
-        }
-        ... on ContentfulPageArtworkGallery {
-          ...PageArtwork
-        }
-        ... on ContentfulPageFeatureRow {
-          ...PageFeatureRow
-        }
-        ... on ContentfulPageInstagramPosts {
-          ...PageInstagram
-        }
+        ...PageHero
+        ...PageArtwork
+        ...PageInstagram
+        ...PageFeature
       }
     }
   }
-`
+`;

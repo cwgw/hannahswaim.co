@@ -5,36 +5,39 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "babel-plugin-styled-components": "^1.5.1",
-    "clean-tag": "^2.0.0",
-    "dom-helpers": "^3.3.1",
-    "gatsby": "^2.0.0-beta.2",
-    "gatsby-image": "^2.0.0-beta.1",
-    "gatsby-plugin-catch-links": "^1.0.24",
-    "gatsby-plugin-google-analytics": "^1.0.31",
-    "gatsby-plugin-manifest": "^1.0.27",
-    "gatsby-plugin-offline": "^1.0.18",
-    "gatsby-plugin-react-helmet": "^3.0.0-beta.1",
-    "gatsby-plugin-sharp": "^2.0.0-beta.1",
-    "gatsby-plugin-sitemap": "^1.2.25",
-    "gatsby-plugin-styled-components": "^3.0.0-beta.1",
+    "cheerio": "^1.0.0-rc.2",
+    "fs-extra": "^7.0.1",
+    "gatsby": "^2.1.4",
+    "gatsby-image": "^2.0.29",
+    "gatsby-plugin-catch-links": "^2.0.11",
+    "gatsby-plugin-google-analytics": "^2.0.19",
+    "gatsby-plugin-manifest": "^2.0.17",
+    "gatsby-plugin-offline": "^2.0.23",
+    "gatsby-plugin-react-helmet": "^3.0.6",
+    "gatsby-plugin-sharp": "^2.0.20",
+    "gatsby-plugin-sitemap": "^2.0.5",
+    "gatsby-plugin-styled-components": "^3.0.5",
     "gatsby-remark-external-links": "^0.0.4",
-    "gatsby-remark-images-contentful": "^1.0.2",
-    "gatsby-source-contentful": "^2.0.1-beta.2",
-    "gatsby-transformer-remark": "^2.1.1-beta.1",
-    "gatsby-transformer-sharp": "^1.6.27",
-    "gatsby-transformer-sqip": "^0.0.11",
+    "gatsby-remark-images-contentful": "^2.0.8",
+    "gatsby-source-contentful": "^2.0.29",
+    "gatsby-source-filesystem": "^2.0.20",
+    "gatsby-transformer-json": "^2.1.8",
+    "gatsby-transformer-remark": "^2.2.5",
+    "gatsby-transformer-sharp": "^2.1.13",
+    "gatsby-transformer-sqip": "^2.0.16",
+    "husky": "^2.2.0",
     "lodash": "^4.17.10",
-    "mobx": "^5.0.2",
-    "mobx-react": "^5.2.3",
+    "mkdirp": "^0.5.1",
     "mousetrap": "^1.6.2",
-    "polished": "^1.9.2",
+    "polished": "^3.0.0",
+    "progress": "^2.0.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
     "react-modal": "^3.4.5",
-    "react-transition-group": "^2.3.1",
-    "styled-components": "^3.3.2",
-    "uuid": "^3.3.2"
+    "react-spring": "^8.0.7",
+    "request": "^2.88.0",
+    "styled-components": "^4.1.3"
   },
   "keywords": [
     "gatsby"
@@ -43,7 +46,8 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "format": "prettier --write 'src/**/*.js'",
+    "format": "prettier --write src/**/*.{js,jsx}",
+    "scrape": "node scrape.js hannahswaimco",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -51,6 +55,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/cwgw/hannahswaim.co"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run format"
+    }
   }
 }

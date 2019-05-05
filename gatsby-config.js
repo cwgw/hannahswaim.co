@@ -6,6 +6,7 @@ try {
   contentfulConfig = {
     spaceId: process.env.CONTENTFUL_SPACE_ID,
     accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
+    environment: process.env.CONTENTFUL_ENV,
   }
 } finally {
   const { spaceId, accessToken } = contentfulConfig
@@ -27,10 +28,17 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'instagramPosts',
+        path: `${__dirname}/data/`,
+      },
+    },
+    {
       resolve: 'gatsby-plugin-manifest',
       options: {
         name: "hannah m. swaim",
-        short_name: "hannah m. swaim",
+        short_name: "hannah swaim",
         start_url: "/",
         background_color: "#ffffff",
         theme_color: "#b86e5c",
@@ -39,7 +47,14 @@ module.exports = {
       },
     },
     'gatsby-plugin-offline',
-    'gatsby-plugin-sharp',
+    {
+      resolve: 'gatsby-plugin-sharp',
+      options: {
+        useMozJpeg: true,
+        stripMetadata: true,
+        defaultQuality: 85,
+      },
+    },
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-styled-components',
@@ -66,8 +81,7 @@ module.exports = {
       },
     },
     'gatsby-transformer-sharp',
-    'gatsby-transformer-sqip',
-    'gatsby-image',
+    'gatsby-transformer-json',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,

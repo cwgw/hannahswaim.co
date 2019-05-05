@@ -1,202 +1,270 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { StaticQuery, graphql } from 'gatsby'
+import GatsbyImage from 'gatsby-image'
 import { transparentize } from 'polished'
+import { useSpring, animated } from 'react-spring'
 
-import spacing from 'utils/spacing'
-import media from 'utils/media'
-import fonts from 'utils/fonts'
-import { colors, ease } from 'utils/constants'
+import { spacing, fontSizes, rem } from 'style/sizing'
+import { colors } from 'style/constants'
+import { sansSerif } from 'style/fonts'
 
 import Row from 'components/Row'
 import Icon from 'components/Icon'
+import Box from 'components/Box'
+import Flex from 'components/Flex'
+import Link from 'components/Link'
+import Button from 'components/Button'
+import { StandardGrid } from 'components/Grid'
 
 const propTypes = {
-  edges: PropTypes.array,
+  posts: PropTypes.number,
+  localPosts: PropTypes.shape({
+    edges: PropTypes.array
+  }).isRequired,
+  profile: PropTypes.object,
 }
 
-const defaultProps = {}
+const defaultProps = {
+  posts: 6,
+}
 
-const Link = styled.a`
-  display: block;
-  margin-right: ${spacing(2)};
-  flex: 1;
-  color: ${colors.white};
+const Container = styled(StandardGrid)`
+  color: ${colors.brand[3]};
   position: relative;
+  z-index: 0;
 
-  &:last-child {
-    margin-right: 0;
+  &:before {
+    content: '';
+    border: 2px solid ${colors.brand[4]};
+    grid-column: contentStart / contentEnd;
+    grid-row: 2;
+    user-select: none;
+    pointer-events: none;
   }
-
-  ${media.min.lg`
-    &:hover,
-    &:focus {
-
-      &:before,
-      &:after {
-        opacity: 1;
-      }
-
-      &:after {
-        transform: translate(-50%,-50%);
-      }
-    }
-
-    &:focus {
-      outline: none;
-
-      &:before {
-        border-color: ${colors.white};
-      }
-    }
-
-    &:before,
-    &:after {
-      position: absolute;
-      z-index: 1;
-      opacity: 0;
-      transition: opacity 175ms ${ease};
-    }
-
-    &:before {
-      left: ${spacing(-3)};
-      right: ${spacing(-3)};
-      top: ${spacing(-3)};
-      bottom: ${spacing(-3)};
-      background-color: ${transparentize(0.5, colors.gray[1])};
-      border: 1px solid transparent;
-      content: '';
-    }
-
-    &:after {
-      top: 50%;
-      left: 50%;
-      text-align: center;
-      content: 'View on Instagram';
-      transform: translate3d(-50%,calc(-50% + ${spacing(0)}),0);
-      transition: transform 175ms ${ease} 100ms,
-                  opacity 350ms ${ease} 0ms;
-    }
-  `}
 `
 
-const Caption = styled.span`
+const TextContainer = styled(Box)`
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+`
+
+const StyledLink = styled(Link)`
+  color: ${colors.brand[4]};
+`
+
+const ItemCover = animated(styled.p`
   position: absolute;
+  top: 0;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
+  flex-flow: column nowrap;
   align-items: center;
-  padding: ${spacing(-1)};
-  margin: ${spacing(-3)};
-  z-index: 1;
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+  background: ${transparentize(0.5, colors.gray[3])};
+  color: ${colors.white};
+`)
 
-  & > span {
-    display: inline-block;
-    padding-right: ${spacing(2)};
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: ${fonts.sansSerif};
-    font-size: ${spacing(-1)};
-  }
-`
-
-const ImageWrapper = styled.span`
-  display: block;
-  width: 100%;
-  padding-bottom: 100%;
-  overflow: hidden;
+const StyledItem = styled(Box)`
   position: relative;
+
+  &:before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    border-radius: ${spacing('xs')};
+    box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
+  }
 `
 
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  object-fit: cover;
-  object-position: center center;
-`
+const AnimatedIcon = animated(Icon)
 
-class Instagram extends React.Component {
+const Item = ({
+  id,
+  url,
+  image: {
+    childImageSharp: {
+      fluid,
+    },
+  },
+  ...props
+}) => {
+  const [ { o, s }, set ] = useSpring(() => ({
+    o: 0,
+    s: 1.1,
+    config: (key) => key === 's'
+      ? {
+        tension: 540,
+        friction: 16,
+      }
+      : {
+        tension: 320,
+        friction: 36,
+      }
+  }));
+  const show = useCallback(() => set({ o: 1, s: 1 }));
+  const hide = useCallback(() => set({ o: 0, s: 1.1 }));
+  const translate = s.interpolate(s => `scale3d(${s}, ${s}, 1)`);
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      posts: [],
-    }
-  }
-
-  componentDidMount () {
-    this.props.edges.forEach(({url}) => {
-      fetch(`https://api.instagram.com/oembed?url=${url}&omitscript=true`, {method: 'get'})
-        .then(response => response.json())
-        .then(data => {
-          this.setState((prevState) => ({
-            posts: [...prevState.posts, {post_url: url, ...data} ]
-          }))
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    })
-  }
-
-  render () {
-    const posts = this.state.posts.map(({media_id, thumbnail_url, thumbnail_width, thumbnail_height, post_url, title}) => (
-      <Link
-        key={media_id}
-        flex={thumbnail_width / thumbnail_height}
-        rel="noopener nofollow"
-        target="_blank"
-        href={post_url}
-        title="View on Instagram"
+  return (
+    <StyledItem
+      as={Link}
+      to={url}
+      onFocus={show}
+      onBlur={hide}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      {...props}
       >
-        <ImageWrapper>
-          <Image
-            src={thumbnail_url}
-            alt={title}
-          />
-        </ImageWrapper>
-        <Caption>
-          <span>{title}</span>
-          <Icon
-            type="instagram"
-            inline
-            style={{
-              width: spacing(3),
-              height: spacing(3),
-              flex: '0 0 auto',
-            }}
-          />
-        </Caption>
-      </Link>
-    ))
-
-    return (
-      <React.Fragment>
-        {posts ? (
-          <Row
-            itemHeight="300px"
-            aspectRatio={this.state.posts.length}
-            overflow
+      <GatsbyImage
+        fluid={fluid}
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: spacing('xs'),
+        }}
+      />
+      <ItemCover
+        style={{
+          opacity: o,
+          borderRadius: spacing('xs'),
+        }}
+        >
+        <AnimatedIcon
+          type="instagram"
+          inline
+          style={{
+            fontSize: rem(fontSizes.lead),
+            transform: translate,
+          }}
+        />
+        <animated.span
+          style={{
+            transform: translate,
+          }}
           >
-            {posts}
-          </Row>
-        ) : (
-          <div>
-            Loading…
-          </div>
-        )}
-      </React.Fragment>
+          {'View on Instagram'}
+        </animated.span>
+      </ItemCover>
+    </StyledItem>
+  )
+}
+
+const Instagram = ({
+  id,
+  posts: limit,
+  localPosts: posts,
+  profile,
+  ...props
+}) => {
+    const images = posts.edges.slice(0, limit).map(({ node }) => node);
+    const username = `@${new URL(profile.url).pathname.replace(/\//g,'')}`;
+    return (
+      <Container {...props} >
+        <TextContainer
+          gridColumn="contentStart / contentEnd"
+          marginBottom="xs"
+          >
+          <Button
+            to={profile.url}
+            >
+            <Icon
+              type="instagram"
+              title="Instagram"
+              inline
+              style={{
+                fontSize: rem(fontSizes.lead),
+                marginRight: spacing('xxs'),
+                lineHeight: 1,
+                verticalAlign: 'text-bottom',
+              }}
+            />
+            <span>
+              {username}
+            </span>
+          </Button>
+          <StyledLink
+            to={profile.url}
+            style={{
+              marginLeft: 'auto',
+            }}
+            >
+            {'See more →'}
+          </StyledLink>
+        </TextContainer>
+        <Row
+          items={images}
+          gap={'md'}
+          isCentered
+          gridColumn="bleedStart / bleedEnd"
+          gridRow="2"
+          height={300}
+          paddingY={'md'}
+          >
+          {images && images.map((node) => (
+            <Item
+              key={node.id}
+              {...node}
+            />
+          ))}
+        </Row>
+      </Container>
     )
-  }
 }
 
 Instagram.propTypes = propTypes
 
 Instagram.defaultProps = defaultProps
 
-export default Instagram
+export default (props) => (
+  <StaticQuery
+    query={graphql`
+      query Instagram {
+        localPosts: allInstagramPostsJson (
+          sort: {fields: time, order: DESC}
+          limit: 8
+        ) {
+          edges {
+            node {
+              id
+              url
+              image {
+                childImageSharp {
+                  fluid(maxWidth: 300) {
+                    aspectRatio
+                    ...GatsbyImageSharpFluid_withWebp
+                  }
+                }
+              }
+            }
+          }
+        }
+        profile: contentfulSocialMediaLink (service: {eq: "Instagram"}) {
+          id
+          service
+          url
+        }
+      }
+    `}
+    render={data => <Instagram {...props} {...data} />}
+  />
+)
+
+export const pageQuery = graphql`
+  fragment PageInstagram on ContentfulPageInstagram {
+    id
+    posts
+  }
+`

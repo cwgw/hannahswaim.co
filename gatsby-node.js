@@ -4,13 +4,22 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-const Promise = require('bluebird')
+// const Promise = require('bluebird')
 const path = require('path');
 
+const artPieceSlugs = new Map([]);
+
 const makeArtPieceSlug = ({title, date, media, contentful_id}) => {
-  let str = [title, date, ...media, contentful_id].join('-')
+  let str = [title, date, ...media].join('-')
   // let str = `${title}-${date}-${media.join('-')}-${contentful_id}`
-  return str.replace(/[\s|#]+/g, '-').toLowerCase()
+  let slug = str.replace(/[\s|#]+/g, '-').toLowerCase();
+  if (artPieceSlugs.has(slug)) {
+    let i = artPieceSlugs.get(slug) + 1;
+    artPieceSlugs.set(slug, i);
+    return `${slug}-${i}`
+  }
+  artPieceSlugs.set(slug, 1);
+  return slug;
 }
 
 exports.onCreateWebpackConfig = ({ stage, actions }) => {
@@ -27,8 +36,13 @@ exports.onCreateNode = (args) => {
 
   if (/ContentfulArtPiece/.test(node.internal.type) && typeof node.slug === `undefined` ) {
     // This is pretty fragile.
-    // It equires that all properties are set and truthy, and does no type checking.
+    // It requires that all properties are set and truthy, and does no type checking.
     // Also, the date is expected to be in ISO 8601 format, with leading four-digit year
+
+    if (!node.date || !Array.isArray(node.media)) {
+      return;
+    }
+
     const slug = `/artwork/${makeArtPieceSlug({...node, date: node.date.slice(0,4)})}/`
 
     createNodeField({
@@ -90,8 +104,8 @@ exports.createPages = ({ graphql, actions }) => {
 
         artwork.forEach(({node}, index) => {
 
-          const next = index + 1 < artwork.length ? artwork[index + 1].node.fields.slug : null
-          const prev = index - 1 >= 0 ? artwork[index - 1].node.fields.slug : null
+          const next = index + 1 < artwork.length ? artwork[index + 1].node.fields.slug : artwork[0].node.fields.slug;
+          const prev = index - 1 >= 0 ? artwork[index - 1].node.fields.slug : artwork[artwork.length - 1].node.fields.slug;
 
           createPage({
             path: node.fields.slug,

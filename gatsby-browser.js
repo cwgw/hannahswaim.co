@@ -1,32 +1,16 @@
-import React from 'react'
-import { Router } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+import _get from 'lodash/get'
 
-import { isSet, hasDeep } from 'utils/helpers'
+import { breakpoints, modalBreakpoint } from 'style/constants'
+import WrapPage from './wrap-page'
 
-import UIStore from 'stores/UIStore';
+export const wrapPageElement = WrapPage
 
-export const replaceRouterComponent = ({ history }) => {
-  const ConnectedRouterWrapper = ({ children }) => (
-    <Provider UIStore={UIStore}>
-      <Router history={history}>
-        {children}
-      </Router>
-    </Provider>
-  );
-
-  return ConnectedRouterWrapper
+export const shouldUpdateScroll = ({routerProps}) => {
+  const { origin, enableModal } = _get(routerProps, 'location.state') || {}
+  const canHaveModal = typeof window !== 'undefined' && window.innerWidth >= breakpoints.get(modalBreakpoint);
+  return !((enableModal || origin === 'modal') && canHaveModal)
 }
 
-export const onRouteUpdate = ({ location }) => {
-  UIStore.updateViewportDimensions()
-  UIStore.closeNav()
-}
-
-export const shouldUpdateScroll = ({prevRouterProps}) => {
-  if (hasDeep(prevRouterProps, 'history.location.state') && isSet(prevRouterProps.history.location.state)) {
-    return !!!(prevRouterProps.history.location.state.origin === 'modal' || prevRouterProps.history.location.state.enableModal)
-  }
-
-  return true
+export const onInitialClientRender = () => {
+  window.___HMS_INITIAL_RENDER_COMPLETE = true
 }
