@@ -1,35 +1,35 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { StaticQuery, graphql } from 'gatsby'
-import GatsbyImage from 'gatsby-image'
-import { transparentize } from 'polished'
-import { useSpring, animated } from 'react-spring'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { StaticQuery, graphql } from 'gatsby';
+import GatsbyImage from 'gatsby-image';
+import { transparentize } from 'polished';
+import { useSpring, animated } from 'react-spring';
 
-import { spacing, fontSizes, rem } from 'style/sizing'
-import { colors, navBreakpoint } from 'style/constants'
-import { sansSerif } from 'style/fonts'
+import { spacing, fontSizes, rem } from 'style/sizing';
+import { colors, navBreakpoint } from 'style/constants';
+import { sansSerif } from 'style/fonts';
 import { UIContext } from 'context/UI';
 
-import Row from 'components/Row'
-import Icon from 'components/Icon'
-import Box from 'components/Box'
-import Flex from 'components/Flex'
-import Link from 'components/Link'
-import Button from 'components/Button'
-import { StandardGrid } from 'components/Grid'
+import Row from 'components/Row';
+import Icon from 'components/Icon';
+import Box from 'components/Box';
+import Flex from 'components/Flex';
+import Link from 'components/Link';
+import Button from 'components/Button';
+import { StandardGrid } from 'components/Grid';
 
 const propTypes = {
   posts: PropTypes.number,
   localPosts: PropTypes.shape({
-    edges: PropTypes.array
+    edges: PropTypes.array,
   }).isRequired,
   profile: PropTypes.object,
-}
+};
 
 const defaultProps = {
   posts: 6,
-}
+};
 
 const Container = styled(StandardGrid)`
   color: ${colors.brand[3]};
@@ -44,7 +44,7 @@ const Container = styled(StandardGrid)`
     user-select: none;
     pointer-events: none;
   }
-`
+`;
 
 const TextContainer = styled(Box)`
   position: relative;
@@ -52,11 +52,11 @@ const TextContainer = styled(Box)`
   display: flex;
   flex-flow: row wrap;
   align-items: baseline;
-`
+`;
 
 const StyledLink = styled(Link)`
   color: ${colors.brand[4]};
-`
+`;
 
 const ItemCover = animated(styled.p`
   position: absolute;
@@ -72,7 +72,7 @@ const ItemCover = animated(styled.p`
   text-align: center;
   background: ${transparentize(0.5, colors.gray[3])};
   color: ${colors.white};
-`)
+`);
 
 const StyledItem = styled(Box)`
   position: relative;
@@ -88,33 +88,32 @@ const StyledItem = styled(Box)`
     border-radius: ${spacing('xs')};
     box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
   }
-`
+`;
 
-const AnimatedIcon = animated(Icon)
+const AnimatedIcon = animated(Icon);
 
 const Item = ({
   id,
   url,
   image: {
-    childImageSharp: {
-      fluid,
-    },
+    childImageSharp: { fluid },
   },
   ...props
 }) => {
   const { isViewport } = React.useContext(UIContext);
-  const [ { o, s }, set ] = useSpring(() => ({
+  const [{ o, s }, set] = useSpring(() => ({
     o: 0,
     s: 1.1,
-    config: (key) => key === 's'
-      ? {
-        tension: 540,
-        friction: 16,
-      }
-      : {
-        tension: 320,
-        friction: 36,
-      }
+    config: key =>
+      key === 's'
+        ? {
+            tension: 540,
+            friction: 16,
+          }
+        : {
+            tension: 320,
+            friction: 36,
+          },
   }));
   const show = React.useCallback(() => {
     if (isViewport[navBreakpoint]) {
@@ -137,7 +136,7 @@ const Item = ({
       onMouseEnter={show}
       onMouseLeave={hide}
       {...props}
-      >
+    >
       <GatsbyImage
         fluid={fluid}
         style={{
@@ -151,7 +150,7 @@ const Item = ({
           opacity: o,
           borderRadius: spacing('xs'),
         }}
-        >
+      >
         <AnimatedIcon
           type="instagram"
           inline
@@ -164,13 +163,13 @@ const Item = ({
           style={{
             transform: translate,
           }}
-          >
+        >
           {'View on Instagram'}
         </animated.span>
       </ItemCover>
     </StyledItem>
-  )
-}
+  );
+};
 
 const Instagram = ({
   id,
@@ -179,71 +178,59 @@ const Instagram = ({
   profile,
   ...props
 }) => {
-    const images = posts.edges.slice(0, limit).map(({ node }) => node);
-    const username = `@${new URL(profile.url).pathname.replace(/\//g,'')}`;
-    return (
-      <Container {...props} >
-        <TextContainer
-          gridColumn="contentStart / contentEnd"
-          marginBottom="xs"
-          >
-          <Button
-            to={profile.url}
-            >
-            <Icon
-              type="instagram"
-              title="Instagram"
-              inline
-              style={{
-                fontSize: rem(fontSizes.lead),
-                marginRight: spacing('xxs'),
-                lineHeight: 1,
-                verticalAlign: 'text-bottom',
-              }}
-            />
-            <span>
-              {username}
-            </span>
-          </Button>
-          <StyledLink
-            to={profile.url}
+  const images = posts.edges.slice(0, limit).map(({ node }) => node);
+  const username = `@${new URL(profile.url).pathname.replace(/\//g, '')}`;
+  return (
+    <Container {...props}>
+      <TextContainer gridColumn="contentStart / contentEnd" marginBottom="xs">
+        <Button to={profile.url}>
+          <Icon
+            type="instagram"
+            title="Instagram"
+            inline
             style={{
-              marginLeft: 'auto',
+              fontSize: rem(fontSizes.lead),
+              marginRight: spacing('xxs'),
+              lineHeight: 1,
+              verticalAlign: 'text-bottom',
             }}
-            >
-            {'See more →'}
-          </StyledLink>
-        </TextContainer>
-        <Row
-          items={images}
-          gap={'md'}
-          isCentered
-          gridColumn="bleedStart / bleedEnd"
-          gridRow="2"
-          height={300}
-          paddingY={'md'}
-          >
-          {images && images.map((node) => (
-            <Item
-              key={node.id}
-              {...node}
-            />
-          ))}
-        </Row>
-      </Container>
-    )
-}
+          />
+          <span>{username}</span>
+        </Button>
+        <StyledLink
+          to={profile.url}
+          style={{
+            marginLeft: 'auto',
+          }}
+        >
+          {'See more →'}
+        </StyledLink>
+      </TextContainer>
+      <Row
+        items={images}
+        gap={'md'}
+        isCentered
+        gridColumn="bleedStart / bleedEnd"
+        gridRow="2"
+        height={300}
+        paddingY={'md'}
+      >
+        {images && images.map(node => <Item key={node.id} {...node} />)}
+      </Row>
+    </Container>
+  );
+};
 
-Instagram.propTypes = propTypes
+Instagram.propTypes = propTypes;
 
-Instagram.defaultProps = defaultProps
+Instagram.defaultProps = defaultProps;
 
-export default (props) => (
+export default props => (
   <StaticQuery
     query={graphql`
       query Instagram {
-        localPosts: allInstagramPostsJson (
-          sort: {fields: time, order: DESC}
+        localPosts: allInstagramPostsJson(
+          sort: { fields: time, order: DESC }
           limit: 8
         ) {
           edges {
@@ -261,7 +248,7 @@ export default (props) => (
             }
           }
         }
-        profile: contentfulSocialMediaLink (service: {eq: "Instagram"}) {
+        profile: contentfulSocialMediaLink(service: { eq: "Instagram" }) {
           id
           service
           url
@@ -270,11 +257,11 @@ export default (props) => (
     `}
     render={data => <Instagram {...props} {...data} />}
   />
-)
+);
 
 export const pageQuery = graphql`
   fragment PageInstagram on ContentfulPageInstagram {
     id
     posts
   }
-`
+`;

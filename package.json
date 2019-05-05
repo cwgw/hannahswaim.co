@@ -46,7 +46,7 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "format": "prettier --write src/**/*.{js,jsx}",
+    "format": "prettier --write 'src/**/*.js'",
     "scrape": "node scrape.js hannahswaimco",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

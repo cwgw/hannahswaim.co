@@ -1,9 +1,9 @@
-import ContentfulPageArtworkGallery from './components/Gallery'
-import ContentfulPageHero from './components/Hero'
-import ContentfulPageInstagram from './components/Instagram'
-import ContentfulPageSingleImage from './components/SingleImage'
-import ContentfulPageText from './components/Text'
-import ContentfulPageFeature from './components/Feature'
+import ContentfulPageArtworkGallery from './components/Gallery';
+import ContentfulPageHero from './components/Hero';
+import ContentfulPageInstagram from './components/Instagram';
+import ContentfulPageSingleImage from './components/SingleImage';
+import ContentfulPageText from './components/Text';
+import ContentfulPageFeature from './components/Feature';
 
 export {
   ContentfulPageArtworkGallery,
@@ -12,4 +12,4 @@ export {
   ContentfulPageInstagram,
   ContentfulPageSingleImage,
   ContentfulPageText,
-}
+};

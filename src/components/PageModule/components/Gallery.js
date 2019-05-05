@@ -1,26 +1,23 @@
-import React from 'react'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import { graphql } from 'gatsby'
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { graphql } from 'gatsby';
 
-import { colors } from 'style/constants'
+import { colors } from 'style/constants';
 import { spacing } from 'style/sizing';
 
-import Box from 'components/Box'
-import ImageWall from 'components/ImageWall'
-import Piece from 'components/Piece'
+import Box from 'components/Box';
+import ImageWall from 'components/ImageWall';
+import Piece from 'components/Piece';
 
-import Text from './Text'
+import Text from './Text';
 
 const propTypes = {
   artwork: PropTypes.array.isRequired,
-  location: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ])
-}
+  location: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+};
 
-const defaultProps = {}
+const defaultProps = {};
 
 const StyledText = styled(Text)`
   & h2 {
@@ -28,42 +25,35 @@ const StyledText = styled(Text)`
     display: inline-block;
     border-bottom: 2px solid ${colors.brand[4]};
   }
-`
+`;
 
-const Gallery = ({
-  location,
-  artwork,
-  text,
-  id,
-  ...props
-}) => {
-
+const Gallery = ({ location, artwork, text, id, ...props }) => {
   const edges = artwork
     .slice()
-    .sort((a,b) => {
-      return b.date - a.date
+    .sort((a, b) => {
+      return b.date - a.date;
     })
-    .map((item) => {
+    .map(item => {
       return {
         node: {
           ...item,
-          date: item.date.slice(0,4)
-        }
-      }
-    })
+          date: item.date.slice(0, 4),
+        },
+      };
+    });
 
-  const siblings = edges.map(({node}) => node.fields.slug)
+  const siblings = edges.map(({ node }) => node.fields.slug);
 
   return (
-    <Box {...props} >
-      {text && text.childMarkdownRemark && (
-        <StyledText text={text} />
-      )}
+    <Box {...props}>
+      {text && text.childMarkdownRemark && <StyledText text={text} />}
       <ImageWall
-        items={edges.map(({node}) => node)}
-        childAspectRatioResolver={({images}) => (images[0] && images[0].fluid && images[0].fluid.aspectRatio) || 1}
-        >
-        {edges.map(({node}, index) => (
+        items={edges.map(({ node }) => node)}
+        childAspectRatioResolver={({ images }) =>
+          (images[0] && images[0].fluid && images[0].fluid.aspectRatio) || 1
+        }
+      >
+        {edges.map(({ node }, index) => (
           <Piece
             key={node.id}
             location={location}
@@ -74,14 +64,14 @@ const Gallery = ({
         ))}
       </ImageWall>
     </Box>
-  )
-}
+  );
+};
 
-Gallery.propTypes = propTypes
+Gallery.propTypes = propTypes;
 
-Gallery.defaultProps = defaultProps
+Gallery.defaultProps = defaultProps;
 
-export default Gallery
+export default Gallery;
 
 export const pageQuery = graphql`
   fragment PageArtwork on ContentfulPageArtworkGallery {
@@ -114,4 +104,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
