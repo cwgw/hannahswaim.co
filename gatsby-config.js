@@ -24,6 +24,7 @@ module.exports = {
     siteTitle: 'hannah m. swaim',
     siteTitleSeparator: ' | ',
     siteUrl: 'https://hannahswaim.co',
+    siteDescription: 'Website and portfolio of fiber artist Hannah M. Swaim',
   },
   plugins: [
     {
@@ -84,6 +85,14 @@ module.exports = {
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
+    },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-122813170-1",
+        head: false,
+        anonymize: true,
+      },
     },
   ],
 }
