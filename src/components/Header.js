@@ -36,6 +36,12 @@ const Nav = styled(Box)`
   padding: ${spacing('md')};
   white-space: nowrap;
   overflow: scroll;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
 
   ${media.min[navBreakpoint]`
     padding-left: 0;
@@ -47,7 +53,7 @@ const NavLink = styled(Button)`
   min-width: ${spacing('xl')};
   margin: 0 1px;
   background: ${colors.white};
-  
+
   &.MenuItem--active,
   &.MenuItem--active:hover,
   &.MenuItem--active:focus {
@@ -62,7 +68,7 @@ const NavLink = styled(Button)`
     content: '';
   }
 `;
-  
+
 const Nameplate = styled(Button)`
   margin: 0 1px;
 `;
