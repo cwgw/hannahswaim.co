@@ -15,7 +15,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  columnWidth: 270,
+  columnWidth: 320,
   gap: 'md',
   minColumns: 2,
 };
