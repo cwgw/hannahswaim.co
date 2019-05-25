@@ -29,7 +29,7 @@ const PageTemplate = ({
           }}
           paddingTop={
             index === 0 && __typename !== 'ContentfulPageHero'
-              ? { lg: 10 }
+              ? { lg: 11 }
               : null
           }
           location={location}

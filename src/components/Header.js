@@ -26,6 +26,7 @@ const Wrapper = styled(StandardGrid)`
   width: 100%;
   position: relative;
   z-index: 10;
+  margin: ${spacing('md')} 0;
 
   ${media.min.lg`
     position: absolute;
@@ -33,7 +34,6 @@ const Wrapper = styled(StandardGrid)`
 `;
 
 const Nav = styled(Box)`
-  padding: ${spacing('md')};
   white-space: nowrap;
   overflow: scroll;
   overflow: -moz-scrollbars-none;
@@ -49,6 +49,29 @@ const Nav = styled(Box)`
   `}
 `;
 
+const List = styled.ul`
+  margin: 0 ${spacing('md')};
+  padding: 0;
+  list-style: none;
+  white-space: nowrap;
+
+  &:after {
+    width: ${spacing('md')};
+    display: inline-block;
+    content: '';
+  }
+
+  ${media.min.sm`
+    margin: 0;
+    display: contents;
+  `}
+`;
+
+const ListItem = styled.li`
+  display: inline-block;
+  display: contents;
+`;
+
 const NavLink = styled(Button)`
   min-width: ${spacing('xl')};
   margin: 0 1px;
@@ -60,12 +83,6 @@ const NavLink = styled(Button)`
     background: none;
     color: ${colors.brand[2]};
     border-color: transparent;
-  }
-
-  &:last-child:after {
-    display: inline-block;
-    width: ${spacing('md')};
-    content: '';
   }
 `;
 
@@ -81,27 +98,32 @@ const Header = ({ siteTitle, menuItems }) => {
         as="nav"
         gridColumn={{
           base: 'bleedStart / bleedEnd',
-          [navBreakpoint]: 'contentStart / contentEnd',
+          sm: 'contentStart / contentEnd',
         }}
         role="navigation"
       >
-        <Nameplate to={'/'} title="Home">
-          {siteTitle}
-        </Nameplate>
-        {menuItems.map(({ id, slug, url, service, title, __typename }) => (
-          <NavLink
-            key={id}
-            to={url || '/' + slug}
-            title={title || service}
-            activeClassName="MenuItem--active"
-          >
-            {__typename === 'ContentfulSocialMediaLink' ? (
-              <Icon type={service} inline />
-            ) : (
-              title
-            )}
-          </NavLink>
-        ))}
+        <List>
+          <ListItem>
+            <Nameplate to={'/'} title="Home">
+              {isViewport.xs ? siteTitle : acronymize(siteTitle)}
+            </Nameplate>
+          </ListItem>
+          {menuItems.map(({ id, slug, url, service, title, __typename }) => (
+            <ListItem key={id}>
+              <NavLink
+                to={url || '/' + slug}
+                title={service}
+                activeClassName="MenuItem--active"
+              >
+                {__typename === 'ContentfulSocialMediaLink' ? (
+                  <Icon type={service} inline />
+                ) : (
+                  title
+                )}
+              </NavLink>
+            </ListItem>
+          ))}
+        </List>
       </Nav>
     </Wrapper>
   );
