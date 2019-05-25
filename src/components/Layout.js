@@ -31,7 +31,7 @@ const Main = styled.main`
   flex: 1;
 `;
 
-const Layout = ({ children, location }) => {
+const Layout = ({ children, location, ...props }) => {
   const { isViewport } = React.useContext(UIContext);
   const isInitialRender = React.useRef(
     typeof window !== 'undefined' && !!!window.___IS_INITIAL_RENDER_COMPLETE
@@ -60,8 +60,8 @@ const Layout = ({ children, location }) => {
 
   const {
     menu: { menuItems },
-    socialMedia,
     site: { siteMetadata },
+    socialMedia,
   } = useStaticQuery(
     graphql`
       query Layout {
