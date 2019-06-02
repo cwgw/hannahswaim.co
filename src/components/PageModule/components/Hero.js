@@ -151,7 +151,7 @@ export const pageQuery = graphql`
       }
     }
     image {
-      fluid(maxHeight: 720, quality: 90) {
+      fluid(maxWidth: 900, quality: 90) {
         aspectRatio
         ...GatsbyContentfulFluid_withWebp
       }
