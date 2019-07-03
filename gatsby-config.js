@@ -27,11 +27,13 @@ module.exports = {
     description: 'Website and portfolio of fiber artist Hannah M. Swaim',
   },
   plugins: [
+    'gatsby-plugin-catch-links',
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: `gatsby-plugin-google-analytics`,
       options: {
-        name: 'instagramPosts',
-        path: `${__dirname}/data/`,
+        trackingId: "UA-122813170-1",
+        head: false,
+        anonymize: true,
       },
     },
     {
@@ -47,6 +49,8 @@ module.exports = {
       },
     },
     'gatsby-plugin-offline',
+    'gatsby-plugin-netlify',
+    'gatsby-plugin-react-helmet',
     {
       resolve: 'gatsby-plugin-sharp',
       options: {
@@ -55,10 +59,20 @@ module.exports = {
         defaultQuality: 85,
       },
     },
-    'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',
+    {
+      resolve: 'gatsby-source-contentful',
+      options: contentfulConfig,
+    },
     'gatsby-plugin-styled-components',
-    'gatsby-plugin-catch-links',
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'instagramPosts',
+        path: `${__dirname}/data/`,
+      },
+    },
+    'gatsby-transformer-json',
     {
       resolve: 'gatsby-transformer-remark',
       options: {
@@ -81,18 +95,5 @@ module.exports = {
       },
     },
     'gatsby-transformer-sharp',
-    'gatsby-transformer-json',
-    {
-      resolve: 'gatsby-source-contentful',
-      options: contentfulConfig,
-    },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: "UA-122813170-1",
-        head: false,
-        anonymize: true,
-      },
-    },
   ],
 }
