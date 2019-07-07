@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { Location } from '@reach/router';
 
+import useParallax from 'hooks/useParallax';
 import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import { colors } from 'style/constants';
 
@@ -20,7 +21,6 @@ const AnimatedContainer = animated(styled.div`
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transform-origin: center top;
 `);
 
 const Svg = styled.svg.attrs({
@@ -35,25 +35,28 @@ const Svg = styled.svg.attrs({
 `;
 
 const Background = ({ colors: [color1, color2, color3], location }) => {
-  const [{ y }, setY] = useSpring(() => ({ y: 0 }));
-  const ref = React.useRef(null);
+  const [{ y }, setY] = useSpring(() => ({
+    y: 0,
+    config: {
+      precision: 0.1,
+    },
+  }));
+  // const ref = React.useRef(null);
+
+  const ref = useParallax(y => {
+    setY({ y: y * 100 });
+  });
 
   // const isHome = location.pathname === '/';
-  const isHome = true;
+  // const isHome = true;
 
-  useIntersectionObserver(y => {
-    setY({ y });
-  }, ref);
+  // useIntersectionObserver(y => {
+  //   setY({ y });
+  // }, ref);
 
-  let y1 = y.interpolate(
-    y => `translate3d(0, ${isHome ? (y - 0.5) * 30 : 0}%, 0) scale3d(1, 1, 1)`
-  );
-  let y2 = y.interpolate(
-    y => `translate3d(0, ${isHome ? (y - 0.5) * 60 : 0}%, 0) scale3d(1, 1, 1)`
-  );
-  let opacity = y
-    .interpolate([0, 0.5, 1], [1, 1, 0])
-    .interpolate(o => (isHome ? o : 0));
+  let y1 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 2})`);
+  let y2 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 3})`);
+  let opacity = y.interpolate([0, 50, 100], [1, 1, 0]);
 
   return (
     <Wrapper>

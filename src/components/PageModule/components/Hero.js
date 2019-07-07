@@ -6,7 +6,8 @@ import GatsbyImage from 'gatsby-image';
 import { transparentize } from 'polished';
 import { useSpring, animated } from 'react-spring';
 
-import useIntersectionObserver from 'hooks/useIntersectionObserver';
+import useParallax from 'hooks/useParallax';
+// import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import { style as fontStyle } from 'style/fonts';
 import { spacing } from 'style/sizing';
 import { media } from 'style/layout';
@@ -82,11 +83,15 @@ const Hero = ({
   ...props
 }) => {
   const [{ y }, setY] = useSpring(() => ({ y: 0 }));
-  const ref = React.useRef();
+  // const ref = React.useRef();
 
-  useIntersectionObserver(y => {
+  // useIntersectionObserver(y => {
+  //   setY({ y });
+  // }, ref);
+
+  const ref = useParallax(y => {
     setY({ y });
-  }, ref);
+  });
 
   const transform = y.interpolate(
     y => `translate3d(0, ${(y - 0.5) * y * -10}%, 0) scale3d(1, 1, 1)`
