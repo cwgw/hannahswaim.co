@@ -1,8 +1,12 @@
 import React from 'react';
+import throttle from 'lodash/throttle';
 
 let io;
+let isInstantiated = false;
 const listeners = new WeakMap();
+const animationQueue = new Set([]);
 const rootMargin = 100;
+let pageYOffset = null;
 
 function getIO() {
   if (
@@ -19,20 +23,20 @@ function getIO() {
             if (entry.isIntersecting || entry.intersectionRatio > 0) {
               listeners.set(entry.target, {
                 cb,
-                data: {
+                entry: {
                   range:
                     entry.rootBounds.height + entry.boundingClientRect.height,
                   center:
-                    window.pageYOffset +
+                    pageYOffset +
                     entry.boundingClientRect.top +
                     rootMargin -
                     entry.rootBounds.height,
-                  y: null,
                 },
               });
-              step(entry.target);
+              animationQueue.add(entry.target);
+              animate();
             } else {
-              stop(entry.target);
+              animationQueue.delete(entry.target);
             }
           }
         });
@@ -44,44 +48,45 @@ function getIO() {
   return io;
 }
 
+const animate = throttle(
+  () => {
+    if (!animationQueue.size) return;
+    pageYOffset = window.pageYOffset;
+    animationQueue.forEach(callAnimation);
+  },
+  1000 / 30,
+  { leading: true, trailing: true }
+);
+
 const listenToIntersections = (el, cb) => {
   const observer = getIO();
 
   if (observer) {
+    if (!isInstantiated) {
+      window.addEventListener('scroll', animate);
+      isInstantiated = true;
+    }
+
     observer.observe(el);
-    listeners.set(el, {
-      cb,
-      rafID: null,
-      data: {},
-    });
+    listeners.set(el, { cb, entry: {} });
   }
 
   return () => {
     observer.unobserve(el);
     listeners.delete(el);
+
+    if (!listeners.size) {
+      window.removeEventListener('scroll', animate);
+      isInstantiated = false;
+    }
   };
 };
 
-function step(el) {
-  const { cb, data } = listeners.get(el);
-  let y = (window.pageYOffset - data.center) / data.range;
-  if (data.y !== y) {
-    data.y = y;
-    cb(y, { ref: el });
-  }
-  listeners.set(el, { cb, data, rafID });
-  let rafID = window.requestAnimationFrame(() => {
-    step(el);
-  });
-}
-
-function stop(el) {
-  const { cb, data, rafID } = listeners.get(el);
-  if (rafID) {
-    window.cancelAnimationFrame(rafID);
-    listeners.set(el, { cb, data, rafID: null });
-  }
-}
+const callAnimation = el => {
+  const { cb, entry } = listeners.get(el);
+  const y = (pageYOffset - entry.center) / entry.range;
+  cb(y, { ref: entry.target });
+};
 
 const useParallax = cb => {
   if (typeof window === 'undefined') return null;

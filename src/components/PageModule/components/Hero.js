@@ -7,7 +7,6 @@ import { transparentize } from 'polished';
 import { useSpring, animated } from 'react-spring';
 
 import useParallax from 'hooks/useParallax';
-// import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import { style as fontStyle } from 'style/fonts';
 import { spacing } from 'style/sizing';
 import { media } from 'style/layout';
@@ -43,6 +42,7 @@ const Figure = animated(styled(Box)`
   margin-bottom: ${spacing('lg')};
   box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
   transform-style: preserve-3d;
+  will-change: transform;
 
   ${media.min.md`
     max-height: 500px;
@@ -82,19 +82,19 @@ const Hero = ({
   text: { childMarkdownRemark },
   ...props
 }) => {
-  const [{ y }, setY] = useSpring(() => ({ y: 0 }));
-  // const ref = React.useRef();
-
-  // useIntersectionObserver(y => {
-  //   setY({ y });
-  // }, ref);
+  const [{ y }, setY] = useSpring(() => ({
+    y: 0,
+    config: {
+      precision: 0.1,
+    },
+  }));
 
   const ref = useParallax(y => {
-    setY({ y });
+    setY({ y: y * 100 });
   });
 
   const transform = y.interpolate(
-    y => `translate3d(0, ${(y - 0.5) * y * -10}%, 0) scale3d(1, 1, 1)`
+    y => `matrix(1, 0, 0, 1, 0, ${50 / 2 - y / 2})`
   );
 
   return (
