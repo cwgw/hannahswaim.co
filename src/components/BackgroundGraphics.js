@@ -1,10 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
-import { Location } from '@reach/router';
 
 import useParallax from 'hooks/useParallax';
-import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import { colors } from 'style/constants';
 
 const defaultProps = {
@@ -21,12 +19,10 @@ const AnimatedContainer = animated(styled.div`
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  will-change: transform, opacity;
 `);
 
-const Svg = styled.svg.attrs({
-  preserveAspectRatio: 'none',
-  'aria-hidden': true,
-})`
+const Svg = styled.svg`
   position: absolute;
   display: block;
   width: calc(200px + 30vw);
@@ -34,25 +30,17 @@ const Svg = styled.svg.attrs({
   overflow: visible;
 `;
 
-const Background = ({ colors: [color1, color2, color3], location }) => {
+const Background = ({ colors: [color1, color2, color3] }) => {
   const [{ y }, setY] = useSpring(() => ({
     y: 0,
     config: {
       precision: 0.1,
     },
   }));
-  // const ref = React.useRef(null);
 
   const ref = useParallax(y => {
     setY({ y: y * 100 });
   });
-
-  // const isHome = location.pathname === '/';
-  // const isHome = true;
-
-  // useIntersectionObserver(y => {
-  //   setY({ y });
-  // }, ref);
 
   let y1 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 2})`);
   let y2 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 3})`);
@@ -60,12 +48,8 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
 
   return (
     <Wrapper>
-      <Svg preserveAspectRatio="none" ref={ref}>
+      <Svg preserveAspectRatio="none" aria-hidden="true" ref={ref}>
         <defs>
-          <lineargradient id="gradient" gradientTransform="rotate(90)">
-            <stop offset="0%" stopColor={color1} />
-            <stop offset="100%" stopColor={color2} />
-          </lineargradient>
           <pattern
             id="squiggle-1"
             width="48"
@@ -75,7 +59,6 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
             <path
               fill="none"
               stroke={color2 || color1}
-              // stroke="url(#gradient)"
               strokeWidth="1"
               d="M 0,0 C 4 0, 4 1, 8 1 S 12 0, 16 0"
               transform="translate(0 1) scale(3)"
@@ -92,7 +75,6 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
             <path
               fill="none"
               stroke={color3 || color2 || color1}
-              // stroke="url(#gradient)"
               strokeWidth="1"
               d="M 0,0 C 4 0, 4 1, 8 1 S 12 0, 16 0"
               transform="translate(0 1) scale(3)"
@@ -130,8 +112,4 @@ const Background = ({ colors: [color1, color2, color3], location }) => {
 
 Background.defaultProps = defaultProps;
 
-export default props => (
-  <Location>
-    {({ location }) => <Background location={location} {...props} />}
-  </Location>
-);
+export default Background;
