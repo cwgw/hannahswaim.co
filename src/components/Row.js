@@ -1,33 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import debounce from 'lodash/debounce';
-import isNil from 'lodash/isNil';
 
+import { UIContext } from 'context/UI';
+import { breakpoints } from 'style/constants';
 import { spacing } from 'style/sizing';
 import { px } from 'style/helpers';
 
 import Box from 'components/Box';
 
 const propTypes = {
-  as: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   getAspectRatio: PropTypes.func,
-  items: PropTypes.array.isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   isCentered: PropTypes.bool,
+  items: PropTypes.array.isRequired,
   more: PropTypes.string,
 };
 
 const defaultProps = {
-  as: null,
   gap: null,
   getAspectRatio: getAspectRatio,
   height: 180,
   isCentered: false,
-  innerProps: {
-    marginX: 'md',
-  },
   more: 'scroll →',
 };
 
@@ -62,63 +57,57 @@ const Scroller = styled.div`
   }
 `;
 
-const Inner = styled.div`
+const Inner = styled.ul`
   position: relative;
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
   padding-top: ${spacing(9)};
   padding-bottom: ${spacing(9)};
+  margin: 0;
   box-sizing: content-box;
   flex: 1;
 
   & > * {
     box-sizing: border-box;
   }
+
+  & > li {
+    list-style: none;
+  }
 `;
 
 const Row = ({
   children,
-  items,
+  gap: _gap,
   getAspectRatio: ar,
   height: _height,
-  innerProps: { innerStyle, ...innerProps },
   isCentered,
-  gap: _gap,
+  items,
   ...props
 }) => {
-  const aspectRatio = items.reduce((sum, o) => sum + ar(o), 0);
+  const { isViewport } = React.useContext(UIContext);
 
-  const [parentHeight, setParentHeight] = React.useState(0);
+  let height;
 
-  const ref = React.useRef();
-
-  const setState = React.useCallback(() => {
-    if (isNil(ref.current)) {
-      return;
+  if (typeof _height === 'object') {
+    height = _height.base ? px(_height.base) : '180px';
+    for (let key of breakpoints.keys()) {
+      if (!isViewport[key]) break;
+      if (_height[key]) {
+        height = px(_height[key]);
+      }
     }
-    const rect = ref.current.parentNode.getBoundingClientRect();
-    setParentHeight(() => rect.height);
-  }, [ref]);
+  } else {
+    height = px(_height);
+  }
 
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setState();
-    const debouncedSetState = debounce(setState, 50, { trailing: true });
-    window.addEventListener('resize', debouncedSetState);
-    return () => {
-      window.removeEventListener('resize', debouncedSetState);
-    };
-  }, [ref]);
-
+  const aspectRatio = items.reduce((sum, o) => sum + ar(o), 0);
   const gap = spacing(_gap) || 0;
-  const height =
-    isNil(_height) || _height === 'auto' ? px(parentHeight) : px(_height);
 
-  const childCount = React.Children.count(children);
   const Children = React.Children.map(children, (child, i) =>
     React.cloneElement(child, {
-      flex: childCount > 1 ? `${ar(items[i])}` : 1,
+      flex: items.length > 1 ? `${ar(items[i])}` : 1,
       marginRight: gap && i < items.length - 1 ? gap : null,
     })
   );
@@ -133,15 +122,13 @@ const Row = ({
     : `calc(${aspectRatio} * ${height})`;
 
   return (
-    <Wrapper ref={ref} {...props}>
+    <Wrapper {...props}>
       <Scroller>
         <Inner
-          {...innerProps}
           style={{
-            ...(innerStyle || {}),
             width,
             height,
-            paddingLeft: isCentered ? paddingLeft : null,
+            paddingLeft: isCentered ? paddingLeft : 0,
             paddingRight: isCentered ? paddingRight : null,
           }}
         >

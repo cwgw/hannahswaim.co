@@ -99,7 +99,7 @@ export const pageQuery = graphql`
         id
         fluid(maxWidth: 480, quality: 90) {
           aspectRatio
-          ...GatsbyContentfulFluid_withWebp
+          ...GatsbyContentfulFluid_withWebp_noBase64
         }
       }
     }

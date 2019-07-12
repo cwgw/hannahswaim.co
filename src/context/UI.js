@@ -1,7 +1,7 @@
 import React from 'react';
 import { em } from 'polished';
 
-import { breakpoints, breakpointKeys } from 'style/constants';
+import { breakpoints } from 'style/constants';
 
 const UIContext = React.createContext({});
 

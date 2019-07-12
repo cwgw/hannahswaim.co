@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GatsbyImage from 'gatsby-image';
 
-import { colors, ease, navBreakpoint } from 'style/constants';
+import { colors, ease } from 'style/constants';
 import { media } from 'style/layout';
 import { spacing } from 'style/sizing';
 import { formatArtTitle, artMetaString } from 'utils/formatting';
@@ -29,7 +29,6 @@ const propTypes = {
     units: PropTypes.string,
   }).isRequired,
   className: PropTypes.string,
-  captionBreakpoint: PropTypes.string,
   siblings: PropTypes.array,
   siblingIndex: PropTypes.number,
   enableModal: PropTypes.bool,
@@ -37,47 +36,28 @@ const propTypes = {
 
 const defaultProps = {
   className: null,
-  captionBreakpoint: 'lg',
   siblings: [],
   siblingIndex: 0,
   style: {},
   enableModal: false,
 };
 
-const StyledLink = styled(Box)`
-  display: block;
-  border-radius: ${spacing('xs')};
-  overflow: hidden;
-
-  & .Piece__Image {
-    background: ${colors.gray[3]};
-  }
-
-  ${media.min[navBreakpoint]`
-    &:hover .Piece__Image picture {
-      transition: opacity 100ms ${ease.out};
-      opacity: 0.5;
-    }
-  `}
-`;
-
-const Piece = ({
-  location,
-  siblings,
-  siblingIndex,
-  id,
-  title,
-  date,
-  media,
-  images,
-  fields: { slug },
-  captionBreakpoint,
-  childContentfulArtPieceDimensionsJsonNode: dimensions,
-  className,
-  ...props
-}) => {
-  return (
-    <StyledLink
+const Piece = styled(
+  ({
+    childContentfulArtPieceDimensionsJsonNode: dimensions,
+    className,
+    date,
+    fields: { slug },
+    id,
+    images,
+    location,
+    media,
+    siblingIndex,
+    siblings,
+    title,
+    ...props
+  }) => (
+    <Box
       to={slug}
       state={{
         enableModal: true,
@@ -98,9 +78,32 @@ const Piece = ({
         }}
         alt={artMetaString({ title, date, dimensions, media })}
       />
-    </StyledLink>
-  );
-};
+    </Box>
+  )
+)`
+  display: block;
+  border-radius: ${spacing('xs')};
+  overflow: hidden;
+  cursor: zoom-in;
+
+  & .Piece__Image {
+    background: ${colors.gray[3]};
+  }
+
+  & .Piece__Image picture {
+    transition: opacity 200ms ${ease.in};
+  }
+
+  &:focus .Piece__Image picture {
+    opacity: 0.5;
+  }
+
+  ${media.min.sm`
+    &:hover .Piece__Image picture {
+      opacity: 0.5;
+    }
+  `}
+`;
 
 Piece.propTypes = propTypes;
 

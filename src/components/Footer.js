@@ -40,6 +40,12 @@ const Wrapper = styled(Box)`
   & > * {
     padding: ${spacing('sm')} ${spacing('md')};
   }
+
+  & ${Icon} {
+    font-size: 2rem;
+    display: block;
+    margin: 0 auto;
+  }
 `;
 
 const Nav = styled.nav`
@@ -73,27 +79,13 @@ const Footer = ({ siteTitle, ...props }) => (
             to="https://www.instagram.com/hannahswaimco/"
             title="follow me on Instagram"
           >
-            <Icon
-              type="instagram"
-              style={{
-                width: '2rem',
-                height: '2rem',
-                margin: '0 auto',
-              }}
-            />
+            <Icon icon="instagram" />
             {'@hannahswaimco'}
           </Link>
         </li>
         <li>
           <Link to="mailto:hannahswaimco@gmail.com" title="send me an email">
-            <Icon
-              type="mail"
-              style={{
-                width: '2rem',
-                height: '2rem',
-                margin: '0 auto',
-              }}
-            />
+            <Icon icon="mail" />
             {'get in touch'}
           </Link>
         </li>

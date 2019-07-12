@@ -76,7 +76,7 @@ const Modal = ({ children, location, isOpen }) => {
           variant="dark"
           textStyle="icon"
         >
-          <Icon type="close" inline />
+          <Icon icon="close" />
         </Close>
         {children}
       </section>
