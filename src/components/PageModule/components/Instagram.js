@@ -4,32 +4,26 @@ import styled from 'styled-components';
 import { StaticQuery, graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
 import { transparentize } from 'polished';
-import { useSpring, animated } from 'react-spring';
 
 import { spacing, fontSizes, rem } from 'style/sizing';
-import { colors, navBreakpoint } from 'style/constants';
-import { sansSerif } from 'style/fonts';
-import { UIContext } from 'context/UI';
+import { media } from 'style/layout';
+import { colors, ease, navBreakpoint } from 'style/constants';
 
 import Row from 'components/Row';
 import Icon from 'components/Icon';
 import Box from 'components/Box';
-import Flex from 'components/Flex';
 import Link from 'components/Link';
 import Button from 'components/Button';
 import { StandardGrid } from 'components/Grid';
 
 const propTypes = {
-  posts: PropTypes.number,
-  localPosts: PropTypes.shape({
+  posts: PropTypes.shape({
     edges: PropTypes.array,
   }).isRequired,
   profile: PropTypes.object,
 };
 
-const defaultProps = {
-  posts: 6,
-};
+const defaultProps = {};
 
 const Container = styled(StandardGrid)`
   color: ${colors.brand[3]};
@@ -52,120 +46,135 @@ const TextContainer = styled(Box)`
   display: flex;
   flex-flow: row wrap;
   align-items: baseline;
+
+  ${Icon} {
+    font-size: ${rem(fontSizes.lead)};
+  }
 `;
 
-const StyledLink = styled(Link)`
+const ProfileLink = styled(Link)`
+  margin-left: auto;
   color: ${colors.brand[4]};
+
+  ${media.max.sm`
+    display: none;
+  `}
 `;
 
-const Cover = animated(styled.p`
+const ListItem = styled(Box)`
+  position: relative;
+`;
+
+const ItemLink = styled(Link)`
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  border-radius: ${spacing('xs')};
+  overflow: hidden;
+  color: ${colors.white};
+`;
+
+const Overlay = styled.p`
+  display: flex;
+  width: 100%;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   margin: 0;
-  text-align: center;
   background: ${transparentize(0.5, colors.gray[3])};
-  color: ${colors.white};
-`);
+  opacity: 0;
+  transition: 200ms opacity ${ease.in};
 
-const StyledItem = styled(Box)`
-  position: relative;
-
-  &:before {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: '';
-    border-radius: ${spacing('xs')};
-    box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
+  & span,
+  & ${Icon} {
+    transform: matrix(1.1, 0, 0, 1.1, 0, 0);
+    transition: 300ms transform ${ease.in};
+    transform-style: preserve-3d;
+    margin-bottom: ${spacing('xxs')};
   }
 
   & ${Icon} {
-    font-size: ${fontSizes.lead};
+    font-size: ${rem(fontSizes.lead)};
+  }
+
+  ${ItemLink}:hover &,
+  ${ItemLink}:focus & {
+    opacity: 1;
+
+    & span,
+    & ${Icon} {
+      transform: matrix(1, 0, 0, 1, 0, 0);
+    }
   }
 `;
 
-const Item = ({
-  className,
-  id,
-  image: {
-    childImageSharp: { fluid },
-  },
-  url,
-  ...props
-}) => (
-  <StyledItem as={Link} to={url} className={className} {...props}>
-    <GatsbyImage
-      fluid={fluid}
-      style={{
-        width: '100%',
-        height: '100%',
-        borderRadius: spacing('xs'),
-      }}
-    />
-    <Cover>
-      <Icon icon="instagram" />
-      <span>View on Instagram </span>
-    </Cover>
-  </StyledItem>
-);
-
-const Instagram = ({
-  id,
-  posts: limit,
-  localPosts: posts,
-  profile,
-  ...props
-}) => {
-  const { isViewport } = React.useContext(UIContext);
-  const images = posts.edges.slice(0, limit).map(({ node }) => node);
+const Instagram = ({ id, posts, profile, ...props }) => {
   const username = `@${new URL(profile.url).pathname.replace(/\//g, '')}`;
+
+  const images = posts.edges.map(
+    ({
+      node: {
+        className,
+        id,
+        image: {
+          childImageSharp: { fluid },
+        },
+        url,
+      },
+    }) => (
+      <ListItem as="li" className={className} key={id}>
+        <GatsbyImage
+          fluid={fluid}
+          style={{
+            width: '100%',
+            height: '0',
+            paddingBottom: '100%',
+            boxShadow: `0px 3px 36px 2px ${transparentize(
+              0.8,
+              colors.coolBlack
+            )}`,
+            borderRadius: spacing('xs'),
+          }}
+        />
+        <ItemLink to={url}>
+          <Overlay>
+            <Icon icon="instagram" />
+            <span>View on Instagram </span>
+          </Overlay>
+        </ItemLink>
+      </ListItem>
+    )
+  );
+
   return (
     <Container {...props}>
-      <TextContainer gridColumn="contentStart / contentEnd" marginBottom="xs">
+      <TextContainer gridColumn="contentStart / contentEnd">
         <Button to={profile.url}>
-          <Icon
-            icon="instagram"
-            title="Instagram"
-            style={{
-              fontSize: rem(fontSizes.lead),
-              marginRight: spacing('xxs'),
-              lineHeight: 1,
-              verticalAlign: 'text-bottom',
-            }}
-          />
-          <span>{username}</span>
+          <Icon icon="instagram" />
+          &ensp;
+          {username}
         </Button>
-        {isViewport[navBreakpoint] && (
-          <StyledLink
-            to={profile.url}
-            style={{
-              marginLeft: 'auto',
-            }}
-          >
-            {'See more →'}
-          </StyledLink>
-        )}
+        <ProfileLink to={profile.url}>{'See more →'}</ProfileLink>
       </TextContainer>
       <Row
         items={images}
+        getAspectRatio={() => 1}
         gap={'md'}
         isCentered
         gridColumn="bleedStart / bleedEnd"
         gridRow="2"
-        height={isViewport[navBreakpoint] ? 300 : 210}
+        height={{
+          base: 200,
+          sm: 300,
+        }}
         paddingY={'md'}
       >
-        {images && images.map(node => <Item key={node.id} {...node} />)}
+        {images}
       </Row>
     </Container>
   );
@@ -179,7 +188,7 @@ export default props => (
   <StaticQuery
     query={graphql`
       query Instagram {
-        localPosts: allInstagramPostsJson(
+        posts: allInstagramPostsJson(
           sort: { fields: time, order: DESC }
           limit: 8
         ) {
