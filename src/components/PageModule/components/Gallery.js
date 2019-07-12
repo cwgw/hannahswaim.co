@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
+import get from 'lodash/get';
 
 import { colors } from 'style/constants';
 import { spacing } from 'style/sizing';
@@ -49,9 +50,7 @@ const Gallery = ({ location, artwork, text, id, ...props }) => {
       {text && text.childMarkdownRemark && <StyledText text={text} />}
       <ImageWall
         items={edges.map(({ node }) => node)}
-        childAspectRatioResolver={({ images }) =>
-          (images[0] && images[0].fluid && images[0].fluid.aspectRatio) || 1
-        }
+        getAspectRatio={node => get(node, 'images[0].fluid.aspectRatio', 1)}
       >
         {edges.map(({ node }, index) => (
           <Piece
