@@ -172,8 +172,6 @@ const Instagram = ({ id, location, ...props }) => {
     )
   );
 
-  console.log(props);
-
   return (
     <Wrapper {...props}>
       <TextContainer gridColumn="contentStart / contentEnd">
