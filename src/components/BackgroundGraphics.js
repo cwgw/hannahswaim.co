@@ -12,23 +12,28 @@ const defaultProps = {
 const Wrapper = styled.div`
   user-select: none;
   pointer-events: none;
+  overflow: hidden;
+
+  & svg {
+    position: absolute;
+    display: block;
+    min-height: 100vh;
+  }
 `;
 
-const AnimatedContainer = animated(styled.div`
+const Container = animated(styled.div`
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: calc(200px + 30vw);
+  height: calc(40vh + 40vw);
   transform-style: preserve-3d;
   will-change: transform, opacity;
-`);
 
-const Svg = styled.svg`
-  position: absolute;
-  display: block;
-  width: calc(200px + 30vw);
-  height: 100%;
-  overflow: visible;
-`;
+  & svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+`);
 
 const Background = ({ colors: [color1, color2, color3] }) => {
   const [{ y }, setY] = useSpring(() => ({
@@ -42,13 +47,13 @@ const Background = ({ colors: [color1, color2, color3] }) => {
     setY({ y: y * 100 });
   });
 
-  let y1 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 2})`);
-  let y2 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 3})`);
-  let opacity = y.interpolate([0, 50, 100], [1, 1, 0]);
+  const transform1 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 2})`);
+  const transform2 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 3})`);
+  const opacity = y.interpolate([0, 50, 100], [1, 1, 0]);
 
   return (
     <Wrapper>
-      <Svg preserveAspectRatio="none" aria-hidden="true" ref={ref}>
+      <svg aria-hidden="true" preserveAspectRatio="none" ref={ref}>
         <defs>
           <pattern
             id="squiggle-1"
@@ -82,30 +87,30 @@ const Background = ({ colors: [color1, color2, color3] }) => {
             />
           </pattern>
         </defs>
-      </Svg>
-      <AnimatedContainer
+      </svg>
+      <Container
         style={{
-          transform: y1,
+          transform: transform1,
           opacity,
           zIndex: -2,
         }}
       >
-        <Svg>
+        <svg>
           <circle cx="30%" r="105%" fill={color1} />
           <circle cx="20%" r="100%" fill="url(#squiggle-2)" />
-        </Svg>
-      </AnimatedContainer>
-      <AnimatedContainer
+        </svg>
+      </Container>
+      <Container
         style={{
-          transform: y2,
+          transform: transform2,
           opacity,
           zIndex: -1,
         }}
       >
-        <Svg>
+        <svg>
           <circle cx="25%" r="100%" fill="url(#squiggle-1)" />
-        </Svg>
-      </AnimatedContainer>
+        </svg>
+      </Container>
     </Wrapper>
   );
 };

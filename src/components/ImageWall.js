@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
-import isNil from 'lodash/isNil';
 
 import { spacing } from 'style/sizing';
-import { px, pxValue } from 'style/helpers';
+import { pxValue } from 'style/helpers';
 
 import { Grid, StandardGrid } from 'components/Grid';
 
@@ -23,7 +22,7 @@ const defaultProps = {
 // masonry-styles image layout using css grid
 // @see https://medium.com/@andybarefoot/a-masonry-style-layout-using-css-grid-8c663d355ebb
 const ImageWall = ({
-  childAspectRatioResolver,
+  getAspectRatio,
   children,
   columnWidth,
   gap,
@@ -32,25 +31,29 @@ const ImageWall = ({
   ...props
 }) => {
   const [containerWidth, setContainerWidth] = React.useState(0);
-  const container = React.useRef();
-
-  const setState = React.useCallback(() => {
-    if (isNil(container.current)) return;
-    const rect = container.current.getBoundingClientRect();
-    setContainerWidth(() => rect.width);
-  }, [container]);
+  const [ref, setRef] = React.useState(null);
 
   React.useEffect(() => {
-    if (window === 'undefined') return;
-    setState();
-    const debouncedSetState = debounce(setState, 50, { trailing: true });
-    window.addEventListener('resize', debouncedSetState);
-    return () => {
-      window.removeEventListener('resize', debouncedSetState);
-    };
-  }, [container]);
+    if (ref) {
+      const resizeHandler = debounce(
+        () => {
+          setContainerWidth(ref.clientWidth);
+        },
+        250,
+        { trailing: true }
+      );
 
-  const rowBaseHeight = Math.ceil(columnWidth / 5);
+      resizeHandler();
+      window.addEventListener('resize', resizeHandler);
+
+      return () => {
+        window.removeEventListener('resize', resizeHandler);
+      };
+    }
+  }, [ref]);
+
+  const rowBaseHeight = 48;
+
   let columnWidthActual = columnWidth;
   let gapActual = pxValue(spacing(gap));
 
@@ -67,7 +70,7 @@ const ImageWall = ({
   }
 
   const Children = React.Children.map(children, (child, i) => {
-    const itemHeight = columnWidthActual / childAspectRatioResolver(items[i]);
+    const itemHeight = columnWidthActual / getAspectRatio(items[i]);
     return React.cloneElement(child, {
       gridRowEnd: `span ${Math.ceil(
         (itemHeight + gapActual) / (rowBaseHeight + gapActual)
@@ -84,7 +87,7 @@ const ImageWall = ({
         gridColumn="bleedStart / bleedEnd"
         gridTemplateColumns={`repeat(auto-fill, minmax(${columnWidthActual}px, 1fr))`}
         marginX="md"
-        ref={container}
+        ref={setRef}
       >
         {Children}
       </Grid>

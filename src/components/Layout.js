@@ -20,9 +20,12 @@ const propTypes = {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
-  flex-flow: column nowrap;
+  width: 100vw;
   min-height: 100vh;
+  flex-flow: column nowrap;
+  overflow: hidden;
 `;
 
 const Main = styled.main`
@@ -100,20 +103,18 @@ const Layout = ({ children, location, ...props }) => {
   );
 
   return (
-    <React.Fragment>
-      <GlobalStyle />
-      <Background />
+    <Wrapper>
       <Head
         location={location}
         siteMetadata={siteMetadata}
         socialMedia={socialMedia}
       />
-      <Wrapper>
-        <Header siteTitle={siteMetadata.siteTitle} menuItems={menuItems} />
-        <Main role="main">{children}</Main>
-        <Footer siteTitle={siteMetadata.siteTitle} />
-      </Wrapper>
-    </React.Fragment>
+      <GlobalStyle />
+      <Background />
+      <Header siteTitle={siteMetadata.siteTitle} menuItems={menuItems} />
+      <Main role="main">{children}</Main>
+      <Footer siteTitle={siteMetadata.siteTitle} />
+    </Wrapper>
   );
 };
 
