@@ -1,13 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { StaticQuery, graphql } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
 import { transparentize } from 'polished';
 
 import { spacing, fontSizes, rem } from 'style/sizing';
 import { media } from 'style/layout';
-import { colors, ease, navBreakpoint } from 'style/constants';
+import { colors, ease } from 'style/constants';
 
 import Row from 'components/Row';
 import Icon from 'components/Icon';
@@ -16,16 +15,7 @@ import Link from 'components/Link';
 import Button from 'components/Button';
 import { StandardGrid } from 'components/Grid';
 
-const propTypes = {
-  posts: PropTypes.shape({
-    edges: PropTypes.array,
-  }).isRequired,
-  profile: PropTypes.object,
-};
-
-const defaultProps = {};
-
-const Container = styled(StandardGrid)`
+const Wrapper = styled(StandardGrid)`
   color: ${colors.brand[3]};
   position: relative;
   z-index: 0;
@@ -113,7 +103,38 @@ const Overlay = styled.p`
   }
 `;
 
-const Instagram = ({ id, posts, profile, ...props }) => {
+const Instagram = ({ id, location, ...props }) => {
+  const { posts, profile } = useStaticQuery(graphql`
+    query Instagram {
+      posts: allInstagramPostsJson(
+        sort: { fields: time, order: DESC }
+        limit: 8
+      ) {
+        edges {
+          node {
+            id
+            url
+            image {
+              childImageSharp {
+                fluid(maxWidth: 300) {
+                  aspectRatio
+                  ...GatsbyImageSharpFluid_withWebp_noBase64
+                }
+              }
+            }
+          }
+        }
+      }
+      profile: contentfulSocialMediaLink(service: { eq: "Instagram" }) {
+        id
+        service
+        url
+      }
+    }
+  `);
+
+  if (!posts) return null;
+
   const username = `@${new URL(profile.url).pathname.replace(/\//g, '')}`;
 
   const images = posts.edges.map(
@@ -151,8 +172,10 @@ const Instagram = ({ id, posts, profile, ...props }) => {
     )
   );
 
+  console.log(props);
+
   return (
-    <Container {...props}>
+    <Wrapper {...props}>
       <TextContainer gridColumn="contentStart / contentEnd">
         <Button to={profile.url}>
           <Icon icon="instagram" />
@@ -176,51 +199,14 @@ const Instagram = ({ id, posts, profile, ...props }) => {
       >
         {images}
       </Row>
-    </Container>
+    </Wrapper>
   );
 };
 
-Instagram.propTypes = propTypes;
-
-Instagram.defaultProps = defaultProps;
-
-export default props => (
-  <StaticQuery
-    query={graphql`
-      query Instagram {
-        posts: allInstagramPostsJson(
-          sort: { fields: time, order: DESC }
-          limit: 8
-        ) {
-          edges {
-            node {
-              id
-              url
-              image {
-                childImageSharp {
-                  fluid(maxWidth: 300) {
-                    aspectRatio
-                    ...GatsbyImageSharpFluid_withWebp_noBase64
-                  }
-                }
-              }
-            }
-          }
-        }
-        profile: contentfulSocialMediaLink(service: { eq: "Instagram" }) {
-          id
-          service
-          url
-        }
-      }
-    `}
-    render={data => <Instagram {...props} {...data} />}
-  />
-);
+export default Instagram;
 
 export const pageQuery = graphql`
   fragment PageInstagram on ContentfulPageInstagram {
     id
-    posts
   }
 `;
