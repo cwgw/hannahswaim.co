@@ -79,18 +79,22 @@ const ArtPieceDetails = ({
   const [ref, setRef] = React.useState();
   React.useEffect(() => {
     if (ref) {
-      const resizeHandler = debounce(() => {
-        setHeight(ref.clientHeight);
-      }, 67, { trailing: true });
+      const resizeHandler = debounce(
+        () => {
+          setHeight(ref.clientHeight);
+        },
+        67,
+        { trailing: true }
+      );
       resizeHandler();
       window.addEventListener('resize', resizeHandler);
 
       return () => {
         window.removeEventListener('resize', resizeHandler);
-      }
+      };
     }
   }, [ref]);
-  
+
   if (isModalEnabled) {
     return (
       <React.Fragment>
@@ -116,10 +120,7 @@ const ArtPieceDetails = ({
               }}
               ref={setRef}
             >
-              <Row
-                items={images}
-                height={height}
-              >
+              <Row items={images} height={height}>
                 {images.map(({ id, fluid, fixed }) => (
                   <Box key={id} as="figure" margin="0">
                     <GatsbyImage fluid={fluid} fixed={fixed} />
