@@ -15,7 +15,7 @@ const propTypes = {
 const defaultProps = {
   className: null,
   icons: icons,
-  label: PropTypes.string,
+  label: null,
   style: {},
 };
 
@@ -59,7 +59,6 @@ const Icon = styled(({ className, icon, icons, label, style }) => {
   width: 1em;
   height: 1em;
   top: 0.166666666em;
-
   ${({ style }) => style}
 `;
 
