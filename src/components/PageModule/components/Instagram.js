@@ -58,7 +58,7 @@ const StyledLink = styled(Link)`
   color: ${colors.brand[4]};
 `;
 
-const ItemCover = animated(styled.p`
+const Cover = animated(styled.p`
   position: absolute;
   top: 0;
   right: 0;
@@ -88,88 +88,36 @@ const StyledItem = styled(Box)`
     border-radius: ${spacing('xs')};
     box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
   }
+
+  & ${Icon} {
+    font-size: ${fontSizes.lead};
+  }
 `;
 
-const AnimatedIcon = animated(Icon);
-
 const Item = ({
+  className,
   id,
-  url,
   image: {
     childImageSharp: { fluid },
   },
+  url,
   ...props
-}) => {
-  const { isViewport } = React.useContext(UIContext);
-  const [{ o, s }, set] = useSpring(() => ({
-    o: 0,
-    s: 1.1,
-    config: key =>
-      key === 's'
-        ? {
-            tension: 540,
-            friction: 16,
-          }
-        : {
-            tension: 320,
-            friction: 36,
-          },
-  }));
-  const show = React.useCallback(() => {
-    if (isViewport[navBreakpoint]) {
-      set({ o: 1, s: 1 });
-    }
-  }, [isViewport]);
-  const hide = React.useCallback(() => {
-    if (isViewport[navBreakpoint]) {
-      set({ o: 0, s: 1.1 });
-    }
-  }, [isViewport]);
-  const translate = s.interpolate(s => `scale3d(${s}, ${s}, 1)`);
-
-  return (
-    <StyledItem
-      as={Link}
-      to={url}
-      onFocus={show}
-      onBlur={hide}
-      onMouseEnter={show}
-      onMouseLeave={hide}
-      {...props}
-    >
-      <GatsbyImage
-        fluid={fluid}
-        style={{
-          width: '100%',
-          height: '100%',
-          borderRadius: spacing('xs'),
-        }}
-      />
-      <ItemCover
-        style={{
-          opacity: o,
-          borderRadius: spacing('xs'),
-        }}
-      >
-        <AnimatedIcon
-          type="instagram"
-          inline
-          style={{
-            fontSize: rem(fontSizes.lead),
-            transform: translate,
-          }}
-        />
-        <animated.span
-          style={{
-            transform: translate,
-          }}
-        >
-          {'View on Instagram'}
-        </animated.span>
-      </ItemCover>
-    </StyledItem>
-  );
-};
+}) => (
+  <StyledItem as={Link} to={url} className={className} {...props}>
+    <GatsbyImage
+      fluid={fluid}
+      style={{
+        width: '100%',
+        height: '100%',
+        borderRadius: spacing('xs'),
+      }}
+    />
+    <Cover>
+      <Icon icon="instagram" />
+      <span>View on Instagram </span>
+    </Cover>
+  </StyledItem>
+);
 
 const Instagram = ({
   id,
@@ -186,9 +134,8 @@ const Instagram = ({
       <TextContainer gridColumn="contentStart / contentEnd" marginBottom="xs">
         <Button to={profile.url}>
           <Icon
-            type="instagram"
+            icon="instagram"
             title="Instagram"
-            inline
             style={{
               fontSize: rem(fontSizes.lead),
               marginRight: spacing('xxs'),
@@ -244,7 +191,7 @@ export default props => (
                 childImageSharp {
                   fluid(maxWidth: 300) {
                     aspectRatio
-                    ...GatsbyImageSharpFluid_withWebp
+                    ...GatsbyImageSharpFluid_withWebp_noBase64
                   }
                 }
               }

@@ -130,7 +130,7 @@ const PostNavigation = ({ children, location, ...props }) => {
             variant={isModal ? 'dark' : 'outline'}
             textStyle="icon"
           >
-            <Icon inline type="previous" />
+            <Icon icon="previous" />
             {!isModal && <span>previous</span>}
           </NavItem>
         </li>
@@ -144,7 +144,7 @@ const PostNavigation = ({ children, location, ...props }) => {
             textStyle="icon"
           >
             {!isModal && <span>next</span>}
-            <Icon inline type="next" />
+            <Icon icon="next" />
           </NavItem>
         </li>
       </List>

@@ -116,7 +116,7 @@ const Header = ({ siteTitle, menuItems }) => {
                 activeClassName="MenuItem--active"
               >
                 {__typename === 'ContentfulSocialMediaLink' ? (
-                  <Icon type={service} inline />
+                  <Icon icon={service.toLowerCase()} />
                 ) : (
                   title
                 )}
