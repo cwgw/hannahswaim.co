@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
 import get from 'lodash/get';
+import debounce from 'lodash/debounce';
 
 import { spacing } from 'style/sizing';
 import { media } from 'style/layout';
@@ -12,7 +13,6 @@ import { modalBreakpoint } from 'style/constants';
 import ArtPieceMeta from 'components/ArtPieceMeta';
 import Box from 'components/Box';
 import Row from 'components/Row';
-// import Row from 'components/AltRow';
 import { StandardGrid } from 'components/Grid';
 import PostNavigation from 'components/PostNavigation';
 
@@ -40,7 +40,7 @@ const Container = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  padding: ${spacing(11)};
+  padding: ${spacing(8)} ${spacing(11)};
   height: 100vh;
   box-sizing: border-box;
 `;
@@ -50,7 +50,7 @@ const Wrapper = styled.div`
   max-width: 100%;
   overflow: hidden;
   justify-content: center;
-  align-items: stretcj;
+  align-items: stretch;
   height: 100%;
   margin: 0 auto;
   transition: width 300ms linear;
@@ -75,6 +75,22 @@ const ArtPieceDetails = ({
   isModalEnabled,
   childContentfulArtPieceDimensionsJsonNode: dimensions,
 }) => {
+  const [height, setHeight] = React.useState(0);
+  const [ref, setRef] = React.useState();
+  React.useEffect(() => {
+    if (ref) {
+      const resizeHandler = debounce(() => {
+        setHeight(ref.clientHeight);
+      }, 67, { trailing: true });
+      resizeHandler();
+      window.addEventListener('resize', resizeHandler);
+
+      return () => {
+        window.removeEventListener('resize', resizeHandler);
+      }
+    }
+  }, [ref]);
+  
   if (isModalEnabled) {
     return (
       <React.Fragment>
@@ -96,10 +112,14 @@ const ArtPieceDetails = ({
             <div
               style={{
                 height: '100%',
-                // flex: 1,
+                flex: 1,
               }}
+              ref={setRef}
             >
-              <Row items={images} height="auto">
+              <Row
+                items={images}
+                height={height}
+              >
                 {images.map(({ id, fluid, fixed }) => (
                   <Box key={id} as="figure" margin="0">
                     <GatsbyImage fluid={fluid} fixed={fixed} />
