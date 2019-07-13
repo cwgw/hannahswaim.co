@@ -23,7 +23,7 @@ const Wrapper = styled(Box)`
   background-color: ${colors.brand[6]};
   color: ${colors.brand[4]};
 
-  a {
+  ${Link} {
     display: block;
     padding: ${spacing('sm')} ${spacing('md')};
     color: ${colors.brand[3]};
@@ -31,8 +31,8 @@ const Wrapper = styled(Box)`
     ${type.small}
   }
 
-  a:hover,
-  a:focus {
+  ${Link}:hover,
+  ${Link}:focus {
     background: ${colors.gray[3]};
     color: ${colors.brand[5]};
   }
