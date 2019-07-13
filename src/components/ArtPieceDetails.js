@@ -134,12 +134,8 @@ const ArtPieceDetails = ({
   }
 
   return (
-    <Grid marginBottom={10}>
-      <PostNavigation
-        gridColumn="contentStart / contentEnd"
-        marginTop={{ lg: 10 }}
-        isModal={false}
-      />
+    <Grid marginBottom="xxl" marginTop={{ lg: 'xxl' }}>
+      <PostNavigation col="contentStart / contentEnd" isModal={false} />
       <Meta col="contentStart / contentEnd">
         <ArtPieceMeta
           title={title}
@@ -148,7 +144,7 @@ const ArtPieceDetails = ({
           dimensions={dimensions}
         />
       </Meta>
-      <Box gridColumn="contentStart / contentEnd">
+      <Box col="contentStart / contentEnd">
         {images.map(({ id, fluid, fixed }) => (
           <GatsbyImage
             key={id}

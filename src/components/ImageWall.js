@@ -84,10 +84,10 @@ const ImageWall = ({
   return (
     <Grid {...props}>
       <Box
+        col="bleedStart / bleedEnd"
         display="grid"
         gap={gap}
         gridAutoRows={`${rowBaseHeight}px`}
-        gridColumn="bleedStart / bleedEnd"
         gridTemplateColumns={`repeat(auto-fill, minmax(${columnWidthActual}px, 1fr))`}
         marginX="md"
         ref={setRef}

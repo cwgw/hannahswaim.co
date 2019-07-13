@@ -119,27 +119,23 @@ const Hero = ({
         paddingX="lg"
         paddingY="xl"
         alignSelf="start"
-        gridColumn={{
+        col={{
           base: 'contentStart / contentEnd',
           lg: 'col1Start / col3End',
           xl: 'col1Start / col2End',
         }}
-        gridRow="2"
+        row="2"
         dangerouslySetInnerHTML={{ __html: childMarkdownRemark.html }}
       />
       <Figure
-        gridColumn={{
+        col={{
           base: 'contentStart / contentEnd',
           lg: 'col4Start / bleedEnd',
         }}
-        gridRow={{
-          lg: '1 / span 3',
-        }}
+        row={{ lg: '1 / span 3' }}
         as="figure"
         marginTop="md"
-        style={{
-          transform,
-        }}
+        style={{ transform }}
       >
         <GatsbyImage
           fixed={image.fixed}
@@ -148,9 +144,7 @@ const Hero = ({
             width: '100%',
             height: '100%',
           }}
-          imgStyle={{
-            objectPosition: 'left center',
-          }}
+          imgStyle={{ objectPosition: 'left center' }}
         />
       </Figure>
     </Wrapper>

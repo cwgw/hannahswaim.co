@@ -5,14 +5,13 @@ import styled from 'styled-components';
 import UIContext from 'context/UI';
 import { colors } from 'style/tokens';
 import media from 'style/media-queries';
+import spacing from 'style/spacing';
 import { acronymize } from 'utils/formatting';
 
-import Grid from 'components/Grid';
 import Box from 'components/Box';
 import Button from 'components/Button';
+import Grid from 'components/Grid';
 import Icon from 'components/Icon';
-
-import spacing from 'style/spacing';
 
 const propTypes = {
   siteTitle: PropTypes.string.isRequired,
@@ -98,7 +97,7 @@ const Header = ({ siteTitle, menuItems }) => {
     <Wrapper role="banner" as="header">
       <Nav
         as="nav"
-        gridColumn={{
+        col={{
           base: 'bleedStart / bleedEnd',
           sm: 'contentStart / contentEnd',
         }}
@@ -106,7 +105,7 @@ const Header = ({ siteTitle, menuItems }) => {
       >
         <List>
           <ListItem>
-            <Nameplate to={'/'} title="Home">
+            <Nameplate to={'/'}>
               {isViewport.xs ? siteTitle : acronymize(siteTitle)}
             </Nameplate>
           </ListItem>
@@ -114,7 +113,6 @@ const Header = ({ siteTitle, menuItems }) => {
             <ListItem key={id}>
               <NavLink
                 to={url || '/' + slug}
-                title={service}
                 activeClassName="MenuItem--active"
               >
                 {__typename === 'ContentfulSocialMediaLink' ? (

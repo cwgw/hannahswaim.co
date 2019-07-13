@@ -9,11 +9,7 @@ const SingleImage = ({ id, image, ...props }) => {
   // console.log(props);
   return (
     <Grid {...props}>
-      <Box
-        gridColumn={{
-          base: 'wideStart / col3End',
-        }}
-      >
+      <Box col="wideStart / col3End">
         <GatsbyImage {...image} />
       </Box>
     </Grid>

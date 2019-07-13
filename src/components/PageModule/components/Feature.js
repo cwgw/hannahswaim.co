@@ -79,7 +79,7 @@ const Feature = ({
   return (
     <Wrapper {...props}>
       <Figure
-        gridColumn={{
+        col={{
           base: 'bleedStart / bleedEnd',
           sm: 'contentStart / contentEnd',
           lg: 'contentStart / col3End',
@@ -98,7 +98,7 @@ const Feature = ({
         />
       </Figure>
       <TextBox
-        gridColumn={{
+        col={{
           base: 'contentStart / contentEnd',
           lg: 'col4Start / contentEnd',
         }}

@@ -75,16 +75,13 @@ const Footer = ({ siteTitle, ...props }) => (
     <Nav>
       <List>
         <li>
-          <Link
-            to="https://www.instagram.com/hannahswaimco/"
-            title="follow me on Instagram"
-          >
+          <Link to="https://www.instagram.com/hannahswaimco/">
             <Icon icon="instagram" />
             {'@hannahswaimco'}
           </Link>
         </li>
         <li>
-          <Link to="mailto:hannahswaimco@gmail.com" title="send me an email">
+          <Link to="mailto:hannahswaimco@gmail.com">
             <Icon icon="mail" />
             {'get in touch'}
           </Link>

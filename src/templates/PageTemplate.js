@@ -24,12 +24,12 @@ const PageTemplate = ({
         <Module
           key={content.id}
           marginBottom={{
-            base: 9,
-            lg: 11,
+            base: 'xl',
+            lg: 'xxl',
           }}
-          paddingTop={
+          marginTop={
             index === 0 && __typename !== 'ContentfulPageHero'
-              ? { lg: 11 }
+              ? { lg: 'xxl' }
               : null
           }
           location={location}

@@ -171,7 +171,7 @@ const Instagram = ({ id, location, ...props }) => {
 
   return (
     <Wrapper {...props}>
-      <TextContainer gridColumn="contentStart / contentEnd">
+      <TextContainer col="contentStart / contentEnd">
         <Button to={profile.url}>
           <Icon icon="instagram" />
           &ensp;
@@ -184,8 +184,8 @@ const Instagram = ({ id, location, ...props }) => {
         getAspectRatio={() => 1}
         gap={'md'}
         isCentered
-        gridColumn="bleedStart / bleedEnd"
-        gridRow="2"
+        col="bleedStart / bleedEnd"
+        row="2"
         height={{
           base: 200,
           sm: 300,
