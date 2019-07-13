@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 
-import { spacing } from 'style/sizing';
 import { pxValue } from 'style/helpers';
+
+import spacing from 'style/spacing';
 
 import { Grid, StandardGrid } from 'components/Grid';
 

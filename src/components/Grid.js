@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
-import { spacing } from 'style/sizing';
-import { makeGrid } from 'style/layout';
+import { makeGrid } from 'style/style-props';
 import Box from 'components/Box';
+
+import spacing from 'style/spacing';
 
 const Grid = styled(Box)`
   ${makeGrid}
@@ -10,7 +11,7 @@ const Grid = styled(Box)`
 
 const getColumns = (count = 6) => {
   const templateColumns = [];
-  const colWidth = `minmax(0, ${spacing(12, 'rem')})`;
+  const colWidth = `minmax(0, ${spacing('xxl')})`;
   const gutterWidth = `minmax(0, 1fr)`;
 
   for (let i = 0; i <= count; i++) {

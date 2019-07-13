@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { withPrefix } from 'gatsby';
 
-import { fontFaces } from 'style/fonts';
 import siteIcon from 'images/icon.png';
 
 const propTypes = {
@@ -86,18 +85,6 @@ const Head = ({
       title={title}
       meta={metaTags.map(([name, content]) => ({ name, content }))}
     >
-      <style type="text/css">
-        {fontFaces
-          .map(font =>
-            css({
-              ['@font-face']: {
-                ...font,
-                fontDisplay: 'swap',
-              },
-            })
-          )
-          .join(`\n`)}
-      </style>
       {structuredData.map(data => (
         <script key={data['@type']} type="application/ld+json">
           {JSON.stringify(data)}

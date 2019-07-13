@@ -5,9 +5,10 @@ import { graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
 import { transparentize } from 'polished';
 
-import { spacing } from 'style/sizing';
-import { media } from 'style/layout';
-import { colors } from 'style/constants';
+import { colors } from 'style/tokens';
+import media from 'style/media-queries';
+import spacing from 'style/spacing';
+
 import { StandardGrid } from 'components/Grid';
 import Box from 'components/Box';
 

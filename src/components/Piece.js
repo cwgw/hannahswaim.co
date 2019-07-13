@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GatsbyImage from 'gatsby-image';
 
-import { colors, ease } from 'style/constants';
-import { media } from 'style/layout';
-import { spacing } from 'style/sizing';
+import { colors, ease } from 'style/tokens';
+import media from 'style/media-queries';
+import spacing from 'style/spacing';
 import { formatArtTitle, artMetaString } from 'utils/formatting';
+
 import Link from 'components/Link';
 import Box from 'components/Box';
 

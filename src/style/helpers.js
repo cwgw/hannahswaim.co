@@ -1,8 +1,9 @@
+import { css } from 'styled-components';
 import { stripUnit } from 'polished';
 
-import * as constants from 'style/constants';
+import { rootFontSize } from 'style/tokens';
 
-// units
+// unit conversion
 //
 const unitType = n => {
   const [value, unit] = stripUnit(n, true); // eslint-disable-line no-unused-vars
@@ -24,7 +25,7 @@ const pxValue = (n, throwError = true) => {
       return value;
     case 'em':
     case 'rem':
-      return value * constants.rootFontSize;
+      return value * rootFontSize;
     default:
       if (throwError) {
         throw new Error(`Cannot calculate px value from '${unit}'.`);
@@ -33,12 +34,28 @@ const pxValue = (n, throwError = true) => {
   }
 };
 
+const remValue = n => n / rootFontSize;
+
 const px = (n, throwError = true) => `${pxValue(n, throwError)}px`;
-
-const remValue = n => n / constants.rootFontSize;
-
+const em = n => `${remValue(n)}em`;
 const rem = n => `${remValue(n)}rem`;
 
-const em = n => `${remValue(n)}em`;
+// loop
+//
+const loop = (n, cb) => {
+  const styles = [];
+  let from = 0;
+  if (Array.isArray(n)) {
+    [from, n] = n;
+  }
+  for (let i = from; i < n; i++) {
+    styles.push(
+      css`
+        ${cb(i)}
+      `
+    );
+  }
+  return styles.join(`\n`);
+};
 
-export { em, isEm, isPx, isRem, px, pxValue, rem, remValue };
+export { em, isEm, isPx, isRem, loop, px, pxValue, rem, remValue };

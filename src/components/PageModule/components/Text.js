@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import { graphql } from 'gatsby'
 
-import { spacing } from 'style/sizing';
-import { media } from 'style/layout';
+import spacing from 'style/spacing';
+
+import media from 'style/media-queries';
 import Box from 'components/Box';
 import { StandardGrid } from 'components/Grid';
 

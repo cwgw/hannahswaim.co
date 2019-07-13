@@ -2,10 +2,10 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 
-import { media, mediaQueryString } from 'style/layout';
-import { spacing } from 'style/sizing';
-import { colors, navBreakpoint } from 'style/constants';
-import { style as fontStyle } from 'style/fonts';
+import { colors, hoverBreakpoint } from 'style/tokens';
+import { media, mediaQueryString } from 'style/media-queries';
+import spacing from 'style/spacing';
+import type from 'style/type';
 
 import Link from 'components/Link';
 import Box from 'components/Box';
@@ -24,7 +24,7 @@ const Button = styled(UnstyledButton)`
   vertical-align: middle;
   padding: ${spacing('sm')} ${spacing('md')};
   border: 1px solid currentColor;
-  border-radius: ${spacing(-3)};
+  border-radius: ${spacing('xxs')};
   font-size: inherit;
   cursor: pointer;
   text-decoration: none;
@@ -40,7 +40,7 @@ const Button = styled(UnstyledButton)`
     z-index: 1;
   }
 
-  ${({ textStyle }) => fontStyle[textStyle] || {}}
+  ${({ textStyle }) => type[textStyle] || {}}
 
   ${({ variant }) => {
     switch (variant) {
@@ -49,7 +49,7 @@ const Button = styled(UnstyledButton)`
           background: 'transparent',
           borderColor: transparentize(0.5, colors.brand[4]),
           color: colors.link,
-          [mediaQueryString('min', navBreakpoint)]: {
+          [mediaQueryString('min', hoverBreakpoint)]: {
             ['&:hover, &:focus']: {
               borderColor: colors.link,
               color: colors.link,
@@ -61,7 +61,7 @@ const Button = styled(UnstyledButton)`
           background: colors.gray[0],
           borderColor: colors.gray[1],
           color: colors.gray[5],
-          [mediaQueryString('min', navBreakpoint)]: {
+          [mediaQueryString('min', hoverBreakpoint)]: {
             ['&:hover, &:focus']: {
               background: colors.gray[3],
               borderColor: colors.gray[3],
@@ -74,7 +74,7 @@ const Button = styled(UnstyledButton)`
           background: colors.brand[5],
           borderColor: colors.brand[5],
           color: colors.brand[2],
-          [mediaQueryString('min', navBreakpoint)]: {
+          [mediaQueryString('min', hoverBreakpoint)]: {
             ['&:hover, &:focus']: {
               background: colors.gray[3],
               borderColor: colors.gray[3],

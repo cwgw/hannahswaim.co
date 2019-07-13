@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { sansSerif } from 'style/fonts';
-import { fontSizes } from 'style/sizing';
-import { rem } from 'style/helpers';
+import type from 'style/type';
 import { formatArtMeta } from 'utils/formatting';
 
 const propTypes = {
@@ -16,11 +14,10 @@ const propTypes = {
 
 const Title = styled.span`
   display: block;
-  font-size: ${rem(fontSizes.large)};
+  ${type.h3}
 `;
 
 const Small = styled.small`
-  font-family: ${sansSerif};
   display: block;
 `;
 
