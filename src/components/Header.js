@@ -7,7 +7,7 @@ import { colors } from 'style/tokens';
 import media from 'style/media-queries';
 import { acronymize } from 'utils/formatting';
 
-import { StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
 import Box from 'components/Box';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
@@ -24,7 +24,7 @@ const defaultProps = {
   isAboveHero: false,
 };
 
-const Wrapper = styled(StandardGrid)`
+const Wrapper = styled(Grid)`
   width: 100%;
   position: relative;
   z-index: 10;

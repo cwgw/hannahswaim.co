@@ -1,30 +1,26 @@
 import spacing from 'style/spacing';
 
-const makeGridColumnTemplate = count => {
-  const columns = [];
-  const colWidth = `minmax(0, ${spacing('xl')})`;
+const makeGridColumnTemplate = (count = 6) => {
+  const templateColumns = [];
+  const colWidth = `minmax(0, ${spacing('xxl')})`;
   const gutterWidth = `minmax(0, 1fr)`;
 
   for (let i = 0; i <= count; i++) {
     let line = [];
     if (i < count) line.push(`col${i + 1}Start`);
     if (i > 0) line.push(`col${i}End`);
-    if (i === 0) line.push('contentStart start');
-    if (i === count) line.push('contentEnd end');
-    columns.push(`[${line.join(' ')}]`);
+    if (i === 0) line.push('contentStart');
+    if (i === count) line.push('contentEnd');
+    templateColumns.push(`[${line.join(' ')}]`);
   }
 
   return [
-    '[bleedStart aStart]',
+    '[bleedStart]',
     gutterWidth,
-    '[gutterStart bStart]',
+    templateColumns.join(` ${colWidth} `),
     gutterWidth,
-    columns.join(` ${colWidth} `),
-    gutterWidth,
-    '[gutterEnd bEnd]',
-    gutterWidth,
-    '[bleedEnd aEnd]',
+    '[bleedEnd]',
   ].join(' ');
 };
 
-export { makeGridColumnTemplate };
+export default makeGridColumnTemplate;

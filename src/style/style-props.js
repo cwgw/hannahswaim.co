@@ -163,7 +163,7 @@ const makeGrid = transformProps(gridProps, { display: 'grid' });
 
 // flex
 //
-const flexProps = {
+const flexboxProps = {
   flexDirection: 'flex-direction',
   flexWrap: 'flex-wrap',
   flexFlow: 'flex-flow',
@@ -172,7 +172,7 @@ const flexProps = {
   alignContent: 'align-content',
 };
 
-const makeFlex = transformProps(flexProps, { display: 'flex' });
+const makeFlexbox = transformProps(flexboxProps, { display: 'flex' });
 
 // grid/flex children
 //
@@ -203,4 +203,4 @@ const gridChildProps = {
 
 const makeBox = transformProps({ ...flexChildProps, ...gridChildProps });
 
-export { makeBox, makeFlex, makeGrid, mapPropValuesToBreakpoints, space };
+export { makeBox, makeFlexbox, makeGrid, mapPropValuesToBreakpoints, space };

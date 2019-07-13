@@ -7,7 +7,6 @@ import spacing from 'style/spacing';
 import type from 'style/type';
 
 import Box from 'components/Box';
-import Flex from 'components/Flex';
 import Icon from 'components/Icon';
 import Link from 'components/Link';
 

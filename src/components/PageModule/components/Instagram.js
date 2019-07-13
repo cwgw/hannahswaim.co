@@ -14,9 +14,9 @@ import Icon from 'components/Icon';
 import Box from 'components/Box';
 import Link from 'components/Link';
 import Button from 'components/Button';
-import { StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
 
-const Wrapper = styled(StandardGrid)`
+const Wrapper = styled(Grid)`
   color: ${colors.brand[3]};
   position: relative;
   z-index: 0;

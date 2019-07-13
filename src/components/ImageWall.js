@@ -6,7 +6,8 @@ import { pxValue } from 'style/helpers';
 
 import spacing from 'style/spacing';
 
-import { Grid, StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
+import Box from 'components/Box';
 
 const propTypes = {
   items: PropTypes.array,
@@ -81,8 +82,9 @@ const ImageWall = ({
   });
 
   return (
-    <StandardGrid {...props}>
-      <Grid
+    <Grid {...props}>
+      <Box
+        display="grid"
         gap={gap}
         gridAutoRows={`${rowBaseHeight}px`}
         gridColumn="bleedStart / bleedEnd"
@@ -91,8 +93,8 @@ const ImageWall = ({
         ref={setRef}
       >
         {Children}
-      </Grid>
-    </StandardGrid>
+      </Box>
+    </Grid>
   );
 };
 

@@ -3,8 +3,13 @@ import { createGlobalStyle } from 'styled-components';
 import { colors, fonts } from 'style/tokens';
 import spacing from 'style/spacing';
 import type from 'style/type';
+import makeGridColumnTemplate from 'style/grid';
 
 const GlobalStyle = createGlobalStyle`
+  :root {
+    --standard-grid-columns: ${makeGridColumnTemplate()};
+  }
+
   ${fonts.map(font => ({ '@font-face': font }))}
 
   html {

@@ -12,7 +12,7 @@ import media from 'style/media-queries';
 import spacing from 'style/spacing';
 import type from 'style/type';
 
-import { StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
 import Box from 'components/Box';
 
 const propTypes = {
@@ -29,7 +29,7 @@ const defaultProps = {
   breakpoint: 'lg',
 };
 
-const Wrapper = styled(StandardGrid)`
+const Wrapper = styled(Grid)`
   min-height: ${breakpoints.get('xs')}px;
 
   ${media.min.lg`

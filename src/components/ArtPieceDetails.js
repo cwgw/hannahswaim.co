@@ -12,7 +12,7 @@ import spacing from 'style/spacing';
 import ArtPieceMeta from 'components/ArtPieceMeta';
 import Box from 'components/Box';
 import Row from 'components/Row';
-import { StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
 import PostNavigation from 'components/PostNavigation';
 
 const propTypes = {
@@ -134,7 +134,7 @@ const ArtPieceDetails = ({
   }
 
   return (
-    <StandardGrid marginBottom={10}>
+    <Grid marginBottom={10}>
       <PostNavigation
         gridColumn="contentStart / contentEnd"
         marginTop={{ lg: 10 }}
@@ -160,7 +160,7 @@ const ArtPieceDetails = ({
           />
         ))}
       </Box>
-    </StandardGrid>
+    </Grid>
   );
 };
 

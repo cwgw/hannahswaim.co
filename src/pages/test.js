@@ -1,14 +1,15 @@
 import React from 'react';
-import { StandardGrid } from 'components/Grid';
-import Box from 'components/Box';
 
 import type from 'style/type';
 import spacing from 'style/spacing';
 import { spacingSizes } from 'style/tokens';
 
+import Box from 'components/Box';
+import Grid from 'components/Grid';
+
 const TestPage = () => {
   return (
-    <StandardGrid paddingTop={{ lg: 11 }}>
+    <Grid paddingTop={{ lg: 11 }}>
       <Box col="col1Start / span 6">
         {Object.keys(type)
           .sort()
@@ -73,7 +74,7 @@ const TestPage = () => {
           </p>
         ))}
       </Box>
-    </StandardGrid>
+    </Grid>
   );
 };
 
