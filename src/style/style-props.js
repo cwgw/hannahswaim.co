@@ -1,92 +1,13 @@
-import { css } from 'styled-components';
-import { em } from 'polished';
 import has from 'lodash/has';
 import isNil from 'lodash/isNil';
 import merge from 'lodash/merge';
 import zipObject from 'lodash/zipObject';
 
-import * as constants from 'style/constants';
-import { spacing } from 'style/sizing';
+import { breakpoints } from 'style/tokens';
+import spacing from 'style/spacing';
+import { mediaQueryString } from 'style/media-queries';
 
-import { pxValue } from 'style/helpers';
-
-/**
- * Format a min/max-width string for media queries
- * @param {string}  direction   The query direction. Either 'min' or 'max'.
- * @param {number|string}  n    The value of the width query. Either a
- *                              key of `breakpoints` (i.e. 'sm', 'md'), a
- *                              length string (e.g. '480px', '40em') or a
- *                              number which will be treated as a pixel value.
- */
-const mediaQuery = (direction, n) => {
-  const d = { min: 0, max: 1 }[direction];
-  if (!Number.isInteger(d)) {
-    throw new Error(
-      `Cannot create meaningful media query with '"${direction}"-width'.`
-    );
-  }
-  let bp = n;
-  if (typeof bp === 'string') {
-    bp = constants.breakpoints.has(bp)
-      ? constants.breakpoints.get(bp)
-      : pxValue(bp);
-  }
-  if (!Number.isFinite(bp)) {
-    throw new Error(`Cannot create meaningful media query given '${n}'.`);
-  }
-  return `(${direction}-width: ${em(bp - d, constants.rootFontSize)})`;
-};
-
-const mediaQueryString = (dir, n) => {
-  return `@media ${mediaQuery(dir, n)}`;
-};
-
-/**
- * Returns args inside a 'min-width' media query block
- * @param {string|number} bp    The value of the query string. See `mediaQueryString()`.
- * @param {string|object} args  The media query block content.
- */
-const mediaMin = bp => (...args) =>
-  css`
-    ${mediaQueryString('min', bp)} {
-      ${css(...args)}
-    }
-  `;
-
-/**
- * Returns args inside a 'max-width' media query block
- * @param {string|number} bp    The value of the query string. See `mediaQueryString()`.
- * @param {string|object} args  The media query block content.
- */
-const mediaMax = bp => (...args) =>
-  css`
-    ${mediaQueryString('max', bp)} {
-      ${css(...args)}
-    }
-  `;
-
-/**
- * Set of per-breakpoint media query functions suitable for use in styled components
- *
- * Use like `media.min.lg(...)` or with template literals `media.max.sm`...``
- */
-const media = Array.from(constants.breakpoints.entries())
-  // .sort((a, b) => a[1] - b[1])
-  .reduce(
-    (o, [key, value]) => ({
-      min: {
-        ...(o.min || {}),
-        [key]: mediaMin(value),
-      },
-      max: {
-        ...(o.max || {}),
-        [key]: mediaMax(value),
-      },
-    }),
-    {}
-  );
-
-const breakpointKeys = ['base', ...Array.from(constants.breakpoints.keys())];
+const breakpointKeys = ['base', ...Array.from(breakpoints.keys())];
 
 const mapPropValuesToBreakpoints = (values, getValue = o => o) => {
   // arrays of values get mapped to corresponding breakpoints in order
@@ -99,7 +20,7 @@ const mapPropValuesToBreakpoints = (values, getValue = o => o) => {
   return Object.entries(values).reduce((acc, [key, value]) => {
     const parsedValue = isNil(value)
       ? {}
-      : constants.breakpoints.has(key)
+      : breakpoints.has(key)
       ? { [mediaQueryString('min', key)]: getValue(value) }
       : getValue(value);
 
@@ -128,6 +49,7 @@ const mapPropValuesToBreakpoints = (values, getValue = o => o) => {
  *                                      be returned. Also accepts a function that will
  *                                      receive each original prop name and should
  *                                      return the transformed property name.
+ *
  * @param {object} staticStyles Additional key-value pairs that will be spread into the
  *                              returned object.
  */
@@ -194,26 +116,9 @@ const spaceProps = {
   },
 };
 
-// /**
-//  * Get the padding/margin property key given a prop like `paddingHorizontal`
-//  * @param {string} propName Property to parse (e.g. paddingTop or marginX)
-//  */
-// const getSpacePropKeys = propName => {
-//   // split the propName on capital letters, e.g. ['padding', 'Top']
-//   const [pre, ...post] = propName.split(/(?=[A-Z])/g);
-
-//   // bail early if the given key isn't one of our space properties
-//   if (!has(spaceProps.prefixes, pre)) return null;
-
-//   const prefix = spaceProps.prefixes[pre];
-//   const suffix = spaceProps.suffixes[post[0]] || '';
-
-//   // always returns an array
-//   return Array.isArray(suffix)
-//     ? suffix.map(suf => prefix + suf)
-//     : [prefix + suffix];
-// };
-
+/**
+ * Get the padding/margin property key given a prop like `paddingHorizontal`
+ */
 const space = transformProps(propName => {
   // split the propName on capital letters, e.g. ['padding', 'Top']
   const [pre, ...post] = propName.split(/(?=[A-Z])/g);
@@ -230,7 +135,7 @@ const space = transformProps(propName => {
     : [prefix + suffix];
 });
 
-// Grid
+// grid
 //
 const gridProps = {
   gridTemplateColumns: 'grid-template-columns',
@@ -256,9 +161,9 @@ const gridProps = {
 
 const makeGrid = transformProps(gridProps, { display: 'grid' });
 
-// Flex
+// flex
 //
-const flexProps = {
+const flexboxProps = {
   flexDirection: 'flex-direction',
   flexWrap: 'flex-wrap',
   flexFlow: 'flex-flow',
@@ -267,9 +172,9 @@ const flexProps = {
   alignContent: 'align-content',
 };
 
-const makeFlex = transformProps(flexProps, { display: 'flex' });
+const makeFlexbox = transformProps(flexboxProps, { display: 'flex' });
 
-// Child
+// grid/flex children
 //
 const flexChildProps = {
   order: 'order',
@@ -298,15 +203,4 @@ const gridChildProps = {
 
 const makeBox = transformProps({ ...flexChildProps, ...gridChildProps });
 
-export {
-  makeBox,
-  makeFlex,
-  makeGrid,
-  mapPropValuesToBreakpoints,
-  media,
-  mediaMax,
-  mediaMin,
-  mediaQuery,
-  mediaQueryString,
-  space,
-};
+export { makeBox, makeFlexbox, makeGrid, mapPropValuesToBreakpoints, space };

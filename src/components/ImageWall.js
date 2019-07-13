@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 
-import { spacing } from 'style/sizing';
 import { pxValue } from 'style/helpers';
 
-import { Grid, StandardGrid } from 'components/Grid';
+import spacing from 'style/spacing';
+
+import Grid from 'components/Grid';
+import Box from 'components/Box';
 
 const propTypes = {
   items: PropTypes.array,
@@ -80,8 +82,9 @@ const ImageWall = ({
   });
 
   return (
-    <StandardGrid {...props}>
-      <Grid
+    <Grid {...props}>
+      <Box
+        display="grid"
         gap={gap}
         gridAutoRows={`${rowBaseHeight}px`}
         gridColumn="bleedStart / bleedEnd"
@@ -90,8 +93,8 @@ const ImageWall = ({
         ref={setRef}
       >
         {Children}
-      </Grid>
-    </StandardGrid>
+      </Box>
+    </Grid>
   );
 };
 

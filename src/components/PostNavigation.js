@@ -6,10 +6,10 @@ import { navigate } from 'gatsby';
 
 import { Location } from '@reach/router';
 
-import { rem } from 'style/helpers';
-import { spacing, fontSizes } from 'style/sizing';
-import { colors, modalBreakpoint } from 'style/constants';
 import UIContext from 'context/UI';
+import { colors, modalBreakpoint } from 'style/tokens';
+import spacing from 'style/spacing';
+import type from 'style/type';
 
 import Box from 'components/Box';
 import Button from 'components/Button';
@@ -43,34 +43,35 @@ const List = styled.ul`
   padding: 0;
   list-style: none;
 
-  ${({ isModal }) =>
-    isModal
-      ? `
-    display: contents
-    
-    ${NavItem} {
-      position: fixed;
-      top: 50%;
-      z-index: 10;
-      transform: translate(0, -50%);
+  ${({ isModal }) => {
+    if (isModal) {
+      return `
+        display: contents
+        
+        ${NavItem} {
+          position: fixed;
+          top: 50%;
+          z-index: 10;
+          transform: translate(0, -50%);
+        }
+      `;
     }
-  `
-      : `
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: ${spacing('md')};
-    max-width: 100%;
+    return `
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: ${spacing('md')};
+      max-width: 100%;
 
-    span {
-      margin: 0 ${spacing('xs')};
-    }
-    
-    ${NavItem} {
-      width: 100%;
-      font-size: ${rem(fontSizes.small)};
-      text-transform: uppercase;
-    }
-  `}
+      span {
+        margin: 0 ${spacing('xs')};
+      }
+      
+      ${NavItem} {
+        width: 100%;
+        text-transform: uppercase;
+      }
+    `;
+  }}
 `;
 
 const PostNavigation = ({ children, location, ...props }) => {
@@ -128,7 +129,7 @@ const PostNavigation = ({ children, location, ...props }) => {
             disabled={!prev.pathname}
             onClick={toPrevious}
             variant={isModal ? 'dark' : 'outline'}
-            textStyle="icon"
+            textStyle={isModal ? 'ison' : 'small'}
           >
             <Icon icon="previous" />
             {!isModal && <span>previous</span>}
@@ -141,7 +142,7 @@ const PostNavigation = ({ children, location, ...props }) => {
             disabled={!next.pathname}
             onClick={toNext}
             variant={isModal ? 'dark' : 'outline'}
-            textStyle="icon"
+            textStyle={isModal ? 'ison' : 'small'}
           >
             {!isModal && <span>next</span>}
             <Icon icon="next" />

@@ -5,8 +5,7 @@ import ReactModal from 'react-modal';
 import { navigate } from 'gatsby';
 import { transparentize } from 'polished';
 
-import { style as fontStyle } from 'style/fonts';
-import { colors } from 'style/constants';
+import { colors } from 'style/tokens';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
 

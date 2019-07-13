@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { UIContext } from 'context/UI';
-import { breakpoints } from 'style/constants';
-import { spacing } from 'style/sizing';
+import { breakpoints } from 'style/tokens';
 import { px } from 'style/helpers';
+import spacing from 'style/spacing';
 
 import Box from 'components/Box';
 
@@ -39,7 +39,7 @@ const Wrapper = styled(Box)`
   position: relative;
   z-index: 0;
   overflow: hidden;
-  margin: -${spacing(9)} 0;
+  margin: -${spacing('xl')} 0;
 `;
 
 const Scroller = styled.div`
@@ -62,8 +62,8 @@ const Inner = styled.ul`
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
-  padding-top: ${spacing(9)};
-  padding-bottom: ${spacing(9)};
+  padding-top: ${spacing('xl')};
+  padding-bottom: ${spacing('xl')};
   margin: 0;
   box-sizing: content-box;
   flex: 1;

@@ -4,18 +4,19 @@ import { useStaticQuery, graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
 import { transparentize } from 'polished';
 
-import { spacing, fontSizes, rem } from 'style/sizing';
-import { media } from 'style/layout';
-import { colors, ease } from 'style/constants';
+import { colors, ease } from 'style/tokens';
+import media from 'style/media-queries';
+import spacing from 'style/spacing';
+import type from 'style/type';
 
 import Row from 'components/Row';
 import Icon from 'components/Icon';
 import Box from 'components/Box';
 import Link from 'components/Link';
 import Button from 'components/Button';
-import { StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
 
-const Wrapper = styled(StandardGrid)`
+const Wrapper = styled(Grid)`
   color: ${colors.brand[3]};
   position: relative;
   z-index: 0;
@@ -36,10 +37,6 @@ const TextContainer = styled(Box)`
   display: flex;
   flex-flow: row wrap;
   align-items: baseline;
-
-  ${Icon} {
-    font-size: ${rem(fontSizes.lead)};
-  }
 `;
 
 const ProfileLink = styled(Link)`
@@ -85,11 +82,11 @@ const Overlay = styled.p`
     transform: matrix(1.1, 0, 0, 1.1, 0, 0);
     transition: 300ms transform ${ease.in};
     transform-style: preserve-3d;
-    margin-bottom: ${spacing('xxs')};
+    margin-bottom: ${spacing('xs')};
   }
 
-  & ${Icon} {
-    font-size: ${rem(fontSizes.lead)};
+  ${Icon} {
+    font-size: ${type.hero.fontSize};
   }
 
   ${ItemLink}:hover &,

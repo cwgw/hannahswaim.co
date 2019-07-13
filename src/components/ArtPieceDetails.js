@@ -3,17 +3,16 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
-import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 
-import { spacing } from 'style/sizing';
-import { media } from 'style/layout';
-import { modalBreakpoint } from 'style/constants';
+import media from 'style/media-queries';
+import { modalBreakpoint } from 'style/tokens';
+import spacing from 'style/spacing';
 
 import ArtPieceMeta from 'components/ArtPieceMeta';
 import Box from 'components/Box';
 import Row from 'components/Row';
-import { StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
 import PostNavigation from 'components/PostNavigation';
 
 const propTypes = {
@@ -40,7 +39,7 @@ const Container = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  padding: ${spacing(8)} ${spacing(11)};
+  padding: ${spacing('xl')} ${spacing('xxl')};
   height: 100vh;
   box-sizing: border-box;
 `;
@@ -135,7 +134,7 @@ const ArtPieceDetails = ({
   }
 
   return (
-    <StandardGrid marginBottom={10}>
+    <Grid marginBottom={10}>
       <PostNavigation
         gridColumn="contentStart / contentEnd"
         marginTop={{ lg: 10 }}
@@ -161,7 +160,7 @@ const ArtPieceDetails = ({
           />
         ))}
       </Box>
-    </StandardGrid>
+    </Grid>
   );
 };
 

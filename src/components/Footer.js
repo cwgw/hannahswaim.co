@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { spacing, fontSizes, rem } from 'style/sizing';
-import { colors } from 'style/constants';
+import { colors } from 'style/tokens';
+import spacing from 'style/spacing';
+import type from 'style/type';
 
 import Box from 'components/Box';
-import Flex from 'components/Flex';
 import Icon from 'components/Icon';
 import Link from 'components/Link';
 
@@ -26,9 +26,9 @@ const Wrapper = styled(Box)`
   a {
     display: block;
     padding: ${spacing('sm')} ${spacing('md')};
-    font-size: ${rem(fontSizes.small)};
     color: ${colors.brand[3]};
     border: 1px solid ${colors.brand[5]};
+    ${type.small}
   }
 
   a:hover,
@@ -61,7 +61,7 @@ const List = styled.ul`
     list-style: none;
     display: inline-block;
     flex-grow: 1;
-    max-width: ${spacing(15)};
+    max-width: ${spacing('xxl')};
     flex-basis: 0;
   }
 

@@ -2,15 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { spacing } from 'style/sizing';
-import { media } from 'style/layout';
-import { acronymize } from 'utils/formatting';
-import { colors, navBreakpoint } from 'style/constants';
 import UIContext from 'context/UI';
-import { StandardGrid } from 'components/Grid';
+import { colors } from 'style/tokens';
+import media from 'style/media-queries';
+import { acronymize } from 'utils/formatting';
+
+import Grid from 'components/Grid';
 import Box from 'components/Box';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
+
+import spacing from 'style/spacing';
 
 const propTypes = {
   siteTitle: PropTypes.string.isRequired,
@@ -22,7 +24,7 @@ const defaultProps = {
   isAboveHero: false,
 };
 
-const Wrapper = styled(StandardGrid)`
+const Wrapper = styled(Grid)`
   width: 100%;
   position: relative;
   z-index: 10;
@@ -43,7 +45,7 @@ const Nav = styled(Box)`
     width: 0 !important;
   }
 
-  ${media.min[navBreakpoint]`
+  ${media.min.sm`
     padding-left: 0;
     padding-right: 0;
   `}

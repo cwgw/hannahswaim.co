@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import { graphql } from 'gatsby'
 
-import { spacing } from 'style/sizing';
-import { media } from 'style/layout';
+import spacing from 'style/spacing';
+
+import media from 'style/media-queries';
 import Box from 'components/Box';
-import { StandardGrid } from 'components/Grid';
+import Grid from 'components/Grid';
 
 const propTypes = {
   text: PropTypes.shape({
@@ -26,7 +27,7 @@ const Content = styled(Box)`
 
 const Text = React.forwardRef(
   ({ text: { childMarkdownRemark }, ...props }, ref) => (
-    <StandardGrid {...props} ref={ref}>
+    <Grid {...props} ref={ref}>
       <Content
         col={{
           base: 'contentStart / contentEnd',
@@ -35,7 +36,7 @@ const Text = React.forwardRef(
         dangerouslySetInnerHTML={{ __html: childMarkdownRemark.html }}
         row="1"
       />
-    </StandardGrid>
+    </Grid>
   )
 );
 

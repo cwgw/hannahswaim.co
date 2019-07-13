@@ -1,15 +1,22 @@
 import { createGlobalStyle } from 'styled-components';
 
-import { spacing, fontSizes, lineHeight, rem } from 'style/sizing';
-import { colors } from 'style/constants';
-import * as fonts from 'style/fonts';
+import { colors, fonts } from 'style/tokens';
+import spacing from 'style/spacing';
+import type from 'style/type';
+import makeGridColumnTemplate from 'style/grid';
 
 const GlobalStyle = createGlobalStyle`
+  :root {
+    --standard-grid-columns: ${makeGridColumnTemplate()};
+  }
+
+  ${fonts.map(font => ({ '@font-face': font }))}
+
   html {
     height: auto;
     min-height: auto;
     box-sizing: border-box;
-    ${fonts.style.html}
+    ${type.html}
     -ms-overflow-style: scrollbar;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-overflow-scrolling: touch;
@@ -31,7 +38,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    ${fonts.style.body}
+    ${type.body}
     color: ${colors.body};
     -webkit-overflow-scrolling: touch;
     margin: 0;
@@ -60,24 +67,18 @@ const GlobalStyle = createGlobalStyle`
   pre,
   table,
   ul {
-    margin: 0 0 ${lineHeight(fontSizes.base)}rem;
+    margin: 0 0 ${spacing('default')};
   }
 
-  ${() => {
-    const printHeadingStyles = n =>
-      n > 0
-        ? {
-            [`h${n}`]: {
-              ...(fonts.style[`h${n}`] || {}),
-            },
-            ...printHeadingStyles(n - 1),
-          }
-        : {};
-    return printHeadingStyles(6);
-  }}
+  h1 { ${type.h1} }
+  h2 { ${type.h2} }
+  h3 { ${type.h3} }
+  h4 { ${type.h4} }
+  h5 { ${type.h5} }
+  h6 { ${type.h6} }
 
   small {
-    font-size: ${rem(fontSizes.small)};
+    ${type.small}
   }
 
   .sr-only {

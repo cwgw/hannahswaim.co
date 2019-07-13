@@ -5,7 +5,7 @@ import { PageRenderer, useStaticQuery, graphql } from 'gatsby';
 import get from 'lodash/get';
 
 import UIContext from 'context/UI';
-import { modalBreakpoint } from 'style/constants';
+import { modalBreakpoint } from 'style/tokens';
 
 import GlobalStyle from 'components/GlobalStyle';
 import Background from 'components/BackgroundGraphics';

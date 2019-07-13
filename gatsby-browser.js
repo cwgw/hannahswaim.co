@@ -1,6 +1,6 @@
 import _get from 'lodash/get'
 
-import { breakpoints, modalBreakpoint } from 'style/constants'
+import { breakpoints, modalBreakpoint } from 'style/tokens'
 import WrapPage from './wrap-page'
 
 export const wrapPageElement = WrapPage

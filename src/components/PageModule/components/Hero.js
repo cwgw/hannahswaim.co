@@ -7,11 +7,12 @@ import { transparentize } from 'polished';
 import { useSpring, animated } from 'react-spring';
 
 import useParallax from 'hooks/useParallax';
-import { style as fontStyle } from 'style/fonts';
-import { spacing } from 'style/sizing';
-import { media } from 'style/layout';
-import { colors, breakpoints } from 'style/constants';
-import { StandardGrid } from 'components/Grid';
+import { colors, breakpoints } from 'style/tokens';
+import media from 'style/media-queries';
+import spacing from 'style/spacing';
+import type from 'style/type';
+
+import Grid from 'components/Grid';
 import Box from 'components/Box';
 
 const propTypes = {
@@ -28,7 +29,7 @@ const defaultProps = {
   breakpoint: 'lg',
 };
 
-const Wrapper = styled(StandardGrid)`
+const Wrapper = styled(Grid)`
   min-height: ${breakpoints.get('xs')}px;
 
   ${media.min.lg`
@@ -58,7 +59,6 @@ const Figure = animated(styled(Box)`
 
 const TextBox = styled(Box)`
   position: relative;
-  ${fontStyle.lead}
   border: 2px solid ${colors.brand[4]};
 
   ${media.min.md`
@@ -66,11 +66,27 @@ const TextBox = styled(Box)`
   `}
 
   & > p:first-child {
-    ${fontStyle.hero}
+    ${type.hero}
+  }
+
+  & > *:nth-child(n + 2) {
+    ${type.lead}
   }
 
   & > p:last-child {
     margin-bottom: 0;
+  }
+
+  &:before {
+    position: absolute;
+    top: 0.5rem;
+    left: -0.5rem;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0.5;
+    content: '';
+    z-index: -1;
   }
 `;
 

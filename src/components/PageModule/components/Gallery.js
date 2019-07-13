@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import get from 'lodash/get';
 
-import { colors } from 'style/constants';
-import { spacing } from 'style/sizing';
+import { colors } from 'style/tokens';
 
 import Box from 'components/Box';
 import ImageWall from 'components/ImageWall';
