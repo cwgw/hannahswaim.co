@@ -20,7 +20,16 @@ const defaultProps = {
   isModalEnabled: false,
 };
 
-const ArtPieceTemplate = ({ data: { artPiece }, isModalEnabled, location }) => {
+const ArtPieceTemplate = ({
+  data: {
+    artPiece,
+    site: {
+      siteMetadata: { siteUrl },
+    },
+  },
+  isModalEnabled,
+  location,
+}) => {
   const { title, media, dimensions } = formatArtMeta(artPiece);
   let image = get(
     artPiece,
@@ -28,7 +37,7 @@ const ArtPieceTemplate = ({ data: { artPiece }, isModalEnabled, location }) => {
     null
   );
   if (image) {
-    image = `${location.origin}${image}`;
+    image = `${siteUrl}${image}`;
   }
 
   return (
@@ -37,8 +46,8 @@ const ArtPieceTemplate = ({ data: { artPiece }, isModalEnabled, location }) => {
         meta={meta({
           description: `${title}. ${media} ${dimensions}`,
           image,
-          location,
           title,
+          url: `${siteUrl}${location.pathname}`,
         })}
       />
       <ArtPieceDetails isModalEnabled={isModalEnabled} {...artPiece} />
@@ -57,6 +66,11 @@ export const pageQuery = graphql`
     artPiece: contentfulArtPiece(contentful_id: { eq: $id }) {
       node_locale
       ...ArtPieceDetailsFragment
+    }
+    site {
+      siteMetadata {
+        siteUrl
+      }
     }
   }
 `;

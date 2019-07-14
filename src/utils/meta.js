@@ -1,4 +1,4 @@
-const meta = ({ description, image, location, title }) => {
+const meta = ({ description, image, url, title }) => {
   let tags = [];
   if (title) {
     tags = tags.concat([
@@ -24,8 +24,8 @@ const meta = ({ description, image, location, title }) => {
       tags.push({ property: 'og:image:alt', content: description });
     }
   }
-  if (location) {
-    tags.push({ property: 'og:url', content: location.pathname });
+  if (url) {
+    tags.push({ property: 'og:url', content: url });
   }
   return tags;
 };

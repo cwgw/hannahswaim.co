@@ -64,9 +64,9 @@ const Head = ({
         ...meta({
           title: name,
           description,
-          image,
+          image: `${siteUrl}${image}`,
+          url: `${siteUrl}${location.pathname}`,
         }),
-        { property: 'og:url', content: location.pathname },
         { property: 'og:site_name', content: name },
       ]}
     >

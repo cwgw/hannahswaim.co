@@ -24,7 +24,6 @@ module.exports = {
     short_name: 'hannah swaim',
     description: 'Website and portfolio of fiber artist Hannah M. Swaim',
     siteUrl: 'https://hannahswaim.co',
-    title: 'hannahswaim.co',
   },
   plugins: [
     'gatsby-plugin-catch-links',
