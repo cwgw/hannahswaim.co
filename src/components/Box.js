@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { space, makeBox, makeFlexbox, makeGrid } from 'style/style-props';
 

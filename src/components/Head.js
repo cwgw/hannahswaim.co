@@ -1,8 +1,6 @@
 import React from 'react';
-import { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { withPrefix } from 'gatsby';
 
 import { meta } from 'utils/meta';
 
