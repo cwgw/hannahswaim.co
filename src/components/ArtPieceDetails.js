@@ -165,8 +165,18 @@ export const artPieceDetailsFragments = graphql`
         aspectRatio
         ...GatsbyContentfulFluid_withWebp
       }
-      thumbnail: resize(width: 1200, height: 1200, quality: 90, toFormat: JPG) {
-        src
+      thumbnail: localFile {
+        childImageSharp {
+          resize(
+            width: 1200
+            height: 1200
+            quality: 90
+            toFormat: JPG
+            cropFocus: ATTENTION
+          ) {
+            src
+          }
+        }
       }
     }
   }
