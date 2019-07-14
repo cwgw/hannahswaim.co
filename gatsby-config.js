@@ -1,20 +1,20 @@
 let contentfulConfig;
 
 try {
-  contentfulConfig = require('./.contentful')
+  contentfulConfig = require('./.contentful');
 } catch (_) {
   contentfulConfig = {
     spaceId: process.env.CONTENTFUL_SPACE_ID,
     accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
     environment: process.env.CONTENTFUL_ENV,
-  }
+  };
 } finally {
-  const { spaceId, accessToken } = contentfulConfig
+  const { spaceId, accessToken } = contentfulConfig;
 
   if (!spaceId || !accessToken) {
     throw new Error(
       'Contentful spaceId and the delivery token must be provided.'
-    )
+    );
   }
 }
 
@@ -31,7 +31,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: "UA-122813170-1",
+        trackingId: 'UA-122813170-1',
         head: false,
         anonymize: true,
       },
@@ -90,10 +90,10 @@ module.exports = {
             },
           },
           {
-            resolve: "gatsby-remark-external-links",
+            resolve: 'gatsby-remark-external-links',
             options: {
-              target: "_blank",
-              rel: "noopener noreferrer",
+              target: '_blank',
+              rel: 'noopener noreferrer',
             },
           },
         ],
@@ -101,4 +101,4 @@ module.exports = {
     },
     'gatsby-transformer-sharp',
   ],
-}
+};
