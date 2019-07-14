@@ -50,10 +50,6 @@ const Head = ({
       '@type': 'Person',
       familyName: 'Swaim',
       givenName: 'Hannah',
-      hasOccupation: {
-        '@type': 'Occupation',
-        name: 'Artist',
-      },
       url: siteUrl,
       sameAs: socialMedia.edges.map(({ node }) => node.url),
     },
