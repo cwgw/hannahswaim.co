@@ -1,4 +1,4 @@
-let contentfulConfig
+let contentfulConfig;
 
 try {
   contentfulConfig = require('./.contentful')
@@ -13,7 +13,7 @@ try {
 
   if (!spaceId || !accessToken) {
     throw new Error(
-      'Contentful spaceId and the delivery token need to be provided.'
+      'Contentful spaceId and the delivery token must be provided.'
     )
   }
 }
@@ -64,7 +64,10 @@ module.exports = {
     'gatsby-plugin-sitemap',
     {
       resolve: 'gatsby-source-contentful',
-      options: contentfulConfig,
+      options: {
+        ...contentfulConfig,
+        downloadLocal: true,
+      },
     },
     'gatsby-plugin-styled-components',
     {

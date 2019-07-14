@@ -22,13 +22,21 @@ const defaultProps = {
 
 const ArtPieceTemplate = ({ data: { artPiece }, isModalEnabled, location }) => {
   const { title, media, dimensions } = formatArtMeta(artPiece);
+  let image = get(
+    artPiece,
+    'images[0].thumbnail.childImageSharp.resize.src',
+    null
+  );
+  if (image) {
+    image = `${location.origin}${image}`;
+  }
 
   return (
     <React.Fragment>
       <Helmet
         meta={meta({
           description: `${title}. ${media} ${dimensions}`,
-          image: get(artPiece, 'images[0].thumbnail.src', null),
+          image,
           location,
           title,
         })}
