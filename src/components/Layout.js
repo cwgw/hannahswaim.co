@@ -34,7 +34,7 @@ const Main = styled.main`
   flex: 1;
 `;
 
-const Layout = ({ children, location, ...props }) => {
+const Layout = ({ children, location }) => {
   const { isViewport } = React.useContext(UIContext);
   const isInitialRender = React.useRef(
     typeof window !== 'undefined' && !!!window.___IS_INITIAL_RENDER_COMPLETE
@@ -70,10 +70,10 @@ const Layout = ({ children, location, ...props }) => {
       query Layout {
         site {
           siteMetadata {
-            siteTitle
-            siteTitleSeparator
-            siteUrl
             description
+            name
+            short_name
+            siteUrl
           }
         }
         socialMedia: allContentfulSocialMediaLink {
@@ -111,9 +111,9 @@ const Layout = ({ children, location, ...props }) => {
       />
       <GlobalStyle />
       <Background />
-      <Header siteTitle={siteMetadata.siteTitle} menuItems={menuItems} />
+      <Header siteName={siteMetadata.name} menuItems={menuItems} />
       <Main role="main">{children}</Main>
-      <Footer siteTitle={siteMetadata.siteTitle} />
+      <Footer siteName={siteMetadata.name} />
     </Wrapper>
   );
 };

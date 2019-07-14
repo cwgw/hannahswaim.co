@@ -11,7 +11,7 @@ import Icon from 'components/Icon';
 import Link from 'components/Link';
 
 const propTypes = {
-  siteTitle: PropTypes.string,
+  siteName: PropTypes.string,
 };
 
 const defaultProps = {
@@ -70,7 +70,7 @@ const List = styled.ul`
   }
 `;
 
-const Footer = ({ siteTitle, ...props }) => (
+const Footer = ({ siteName, ...props }) => (
   <Wrapper {...props}>
     <Nav>
       <List>
@@ -88,7 +88,7 @@ const Footer = ({ siteTitle, ...props }) => (
         </li>
       </List>
     </Nav>
-    <p>{siteTitle}</p>
+    <p>{siteName}</p>
   </Wrapper>
 );
 

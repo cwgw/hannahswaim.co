@@ -20,11 +20,11 @@ try {
 
 module.exports = {
   siteMetadata: {
-    siteName: 'hannahswaim.co',
-    siteTitle: 'hannah m. swaim',
-    siteTitleSeparator: ' | ',
-    siteUrl: 'https://hannahswaim.co',
+    name: 'hannah m. swaim',
+    short_name: 'hannah swaim',
     description: 'Website and portfolio of fiber artist Hannah M. Swaim',
+    siteUrl: 'https://hannahswaim.co',
+    title: 'hannahswaim.co',
   },
   plugins: [
     'gatsby-plugin-catch-links',
@@ -39,13 +39,15 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: "hannah m. swaim",
-        short_name: "hannah swaim",
-        start_url: "/",
-        background_color: "#ffffff",
-        theme_color: "#b86e5c",
-        display: "minimal-ui",
-        icon: "src/images/icon.png",
+        background_color: '#ffffff',
+        description: 'Website and portfolio of fiber artist Hannah M. Swaim',
+        display: 'standalone',
+        icon: 'src/images/icon.png',
+        lang: 'en',
+        name: 'hannah m. swaim',
+        short_name: 'hannah swaim',
+        start_url: '/',
+        theme_color: '#b86e5c',
       },
     },
     'gatsby-plugin-offline',

@@ -21,7 +21,7 @@ const propTypes = {
   date: PropTypes.string.isRequired,
   media: PropTypes.array.isRequired,
   images: PropTypes.array.isRequired,
-  childContentfulArtPieceDimensionsJsonNode: PropTypes.shape({
+  dimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,
     depth: PropTypes.number,
@@ -66,14 +66,7 @@ const Meta = styled(Box)`
   width: 100%;
 `;
 
-const ArtPieceDetails = ({
-  title,
-  date,
-  media,
-  images,
-  isModalEnabled,
-  childContentfulArtPieceDimensionsJsonNode: dimensions,
-}) => {
+const ArtPieceDetails = ({ images, isModalEnabled, ...pieceMeta }) => {
   const [height, setHeight] = React.useState(0);
   const [ref, setRef] = React.useState();
   React.useEffect(() => {
@@ -105,12 +98,7 @@ const ArtPieceDetails = ({
             }}
           >
             <Meta>
-              <ArtPieceMeta
-                title={title}
-                date={date}
-                media={media}
-                dimensions={dimensions}
-              />
+              <ArtPieceMeta {...pieceMeta} />
             </Meta>
             <div
               style={{
@@ -137,12 +125,7 @@ const ArtPieceDetails = ({
     <Grid marginBottom="xxl" marginTop={{ lg: 'xxl' }}>
       <PostNavigation col="contentStart / contentEnd" isModal={false} />
       <Meta col="contentStart / contentEnd">
-        <ArtPieceMeta
-          title={title}
-          date={date}
-          media={media}
-          dimensions={dimensions}
-        />
+        <ArtPieceMeta {...pieceMeta} />
       </Meta>
       <Box col="contentStart / contentEnd">
         {images.map(({ id, fluid, fixed }) => (
@@ -150,9 +133,7 @@ const ArtPieceDetails = ({
             key={id}
             fixed={fixed}
             fluid={fluid}
-            style={{
-              marginBottom: spacing('md'),
-            }}
+            style={{ marginBottom: spacing('md') }}
           />
         ))}
       </Box>
@@ -169,7 +150,7 @@ export default ArtPieceDetails;
 export const artPieceDetailsFragments = graphql`
   fragment ArtPieceDetailsFragment on ContentfulArtPiece {
     id
-    childContentfulArtPieceDimensionsJsonNode {
+    dimensions: childContentfulArtPieceDimensionsJsonNode {
       height
       width
       depth
@@ -183,6 +164,9 @@ export const artPieceDetailsFragments = graphql`
       fluid(maxWidth: 576, quality: 90) {
         aspectRatio
         ...GatsbyContentfulFluid_withWebp
+      }
+      thumbnail: resize(width: 1200, height: 1200, quality: 90, toFormat: JPG) {
+        src
       }
     }
   }

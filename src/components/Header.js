@@ -14,7 +14,7 @@ import Grid from 'components/Grid';
 import Icon from 'components/Icon';
 
 const propTypes = {
-  siteTitle: PropTypes.string.isRequired,
+  siteName: PropTypes.string.isRequired,
   pages: PropTypes.array,
 };
 
@@ -91,7 +91,7 @@ const Nameplate = styled(Button)`
   margin: 0 1px;
 `;
 
-const Header = ({ siteTitle, menuItems }) => {
+const Header = ({ siteName, menuItems }) => {
   const { isViewport } = React.useContext(UIContext);
   return (
     <Wrapper role="banner" as="header">
@@ -106,7 +106,7 @@ const Header = ({ siteTitle, menuItems }) => {
         <List>
           <ListItem>
             <Nameplate to={'/'}>
-              {isViewport.xs ? siteTitle : acronymize(siteTitle)}
+              {isViewport.xs ? siteName : acronymize(siteName)}
             </Nameplate>
           </ListItem>
           {menuItems.map(({ id, slug, url, service, title, __typename }) => (

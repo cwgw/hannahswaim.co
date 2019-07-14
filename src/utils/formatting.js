@@ -1,9 +1,9 @@
 import _upperFirst from 'lodash/upperFirst';
 
-export const acronymize = str =>
+const acronymize = str =>
   str.split(/\s+/).reduce((acc, val) => acc + val.charAt(0), '');
 
-export const formatArtMedia = media => {
+const formatArtMedia = media => {
   const mediaArray = Array.isArray(media)
     ? media
     : typeof media === 'string'
@@ -31,7 +31,7 @@ export const formatArtMedia = media => {
   }, '');
 };
 
-export const formatArtDimensions = ({ height, width, depth, units }) => {
+const formatArtDimensions = ({ height, width, depth, units }) => {
   if (!(height && width)) {
     return '';
   }
@@ -40,11 +40,11 @@ export const formatArtDimensions = ({ height, width, depth, units }) => {
     : `${height} × ${width} ${units}.`;
 };
 
-export const formatArtTitle = ({ title, date }) => {
+const formatArtTitle = ({ title, date }) => {
   return date ? `${title}, ${date}` : title;
 };
 
-export const formatArtMeta = ({ title, date, media, dimensions }) => {
+const formatArtMeta = ({ title, date, media, dimensions }) => {
   return {
     title: formatArtTitle({ title, date }),
     media: formatArtMedia(media),
@@ -52,7 +52,16 @@ export const formatArtMeta = ({ title, date, media, dimensions }) => {
   };
 };
 
-export const artMetaString = ({ title, date, media, dimensions }) => {
+const artMetaString = ({ title, date, media, dimensions }) => {
   const meta = formatArtMeta({ title, date, media, dimensions });
   return [meta.title + '.', meta.media, meta.dimensions].join(' ');
+};
+
+export {
+  acronymize,
+  artMetaString,
+  formatArtDimensions,
+  formatArtMedia,
+  formatArtMeta,
+  formatArtTitle,
 };

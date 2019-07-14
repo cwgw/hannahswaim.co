@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { withPrefix } from 'gatsby';
 
-import siteIcon from 'images/icon.png';
+import { meta } from 'utils/meta';
+
+import image from 'images/icon.png';
 
 const propTypes = {
   location: PropTypes.object.isRequired,
@@ -34,46 +36,26 @@ const defaultProps = {
 };
 
 const Head = ({
-  pageTitle,
-  siteMetadata: {
-    siteName,
-    siteTitle,
-    siteTitleSeparator,
-    description: siteDescription,
-    siteUrl,
-  },
-  image,
-  description,
+  siteMetadata: { description, name, short_name, siteUrl },
   location,
-  locale,
   socialMedia,
 }) => {
-  const title = pageTitle
-    ? pageTitle + siteTitleSeparator + siteTitle
-    : siteTitle;
-
-  const metaTags = [
-    ['description', description || siteDescription],
-    ['twitter:card', 'summary'],
-    ['og:type', 'website'],
-    ['og:title', title],
-    ['og:url', location.pathname || siteUrl],
-    ['og:image', image || withPrefix(siteIcon)],
-    ['og:description', description || siteDescription],
-    ['og:site_name', siteName],
-    ['og:locale', locale.replace(/-+/, '_')],
-  ];
-
   const structuredData = [
     {
       '@context': 'http://schema.org',
       '@type': 'Website',
       url: siteUrl,
-      image: withPrefix(siteIcon),
+      image: image,
     },
     {
       '@context': 'http://schema.org',
       '@type': 'Person',
+      familyName: 'Swaim',
+      givenName: 'Hannah',
+      hasOccupation: {
+        '@type': 'Occupation',
+        name: 'Artist',
+      },
       url: siteUrl,
       sameAs: socialMedia.edges.map(({ node }) => node.url),
     },
@@ -81,9 +63,18 @@ const Head = ({
 
   return (
     <Helmet
-      htmlAttributes={{ lang: locale }}
-      title={title}
-      meta={metaTags.map(([name, content]) => ({ name, content }))}
+      htmlAttributes={{ lang: 'en-US' }}
+      titleTemplate={`%s | ${short_name}`}
+      defaultTitle={name}
+      meta={[
+        ...meta({
+          title: name,
+          description,
+          image,
+        }),
+        { property: 'og:url', content: location.pathname },
+        { property: 'og:site_name', content: name },
+      ]}
     >
       {structuredData.map(data => (
         <script key={data['@type']} type="application/ld+json">
