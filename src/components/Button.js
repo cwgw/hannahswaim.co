@@ -3,13 +3,12 @@ import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 
 import { colors, hoverBreakpoint } from 'style/tokens';
-import { media, mediaQueryString } from 'style/media-queries';
+import { mediaQueryString } from 'style/media-queries';
 import spacing from 'style/spacing';
 import type from 'style/type';
 
 import Link from 'components/Link';
 import Box from 'components/Box';
-import { toColorString } from 'polished';
 
 const UnstyledButton = ({ to, className, ...props }) =>
   to ? (
@@ -50,7 +49,7 @@ const Button = styled(UnstyledButton)`
           borderColor: transparentize(0.5, colors.brand[4]),
           color: colors.link,
           [mediaQueryString('min', hoverBreakpoint)]: {
-            ['&:hover, &:focus']: {
+            '&:hover, &:focus': {
               borderColor: colors.link,
               color: colors.link,
             },
@@ -62,7 +61,7 @@ const Button = styled(UnstyledButton)`
           borderColor: colors.gray[1],
           color: colors.gray[5],
           [mediaQueryString('min', hoverBreakpoint)]: {
-            ['&:hover, &:focus']: {
+            '&:hover, &:focus': {
               background: colors.gray[3],
               borderColor: colors.gray[3],
               color: colors.brand[5],
@@ -75,7 +74,7 @@ const Button = styled(UnstyledButton)`
           borderColor: colors.brand[5],
           color: colors.brand[2],
           [mediaQueryString('min', hoverBreakpoint)]: {
-            ['&:hover, &:focus']: {
+            '&:hover, &:focus': {
               background: colors.gray[3],
               borderColor: colors.gray[3],
               color: colors.brand[5],

@@ -7,9 +7,8 @@ import { navigate } from 'gatsby';
 import { Location } from '@reach/router';
 
 import UIContext from 'context/UI';
-import { colors, modalBreakpoint } from 'style/tokens';
+import { modalBreakpoint } from 'style/tokens';
 import spacing from 'style/spacing';
-import type from 'style/type';
 
 import Box from 'components/Box';
 import Button from 'components/Button';
