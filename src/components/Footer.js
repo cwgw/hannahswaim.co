@@ -11,7 +11,7 @@ import Icon from 'components/Icon';
 import Link from 'components/Link';
 
 const propTypes = {
-  siteTitle: PropTypes.string,
+  siteName: PropTypes.string,
 };
 
 const defaultProps = {
@@ -23,7 +23,7 @@ const Wrapper = styled(Box)`
   background-color: ${colors.brand[6]};
   color: ${colors.brand[4]};
 
-  a {
+  ${Link} {
     display: block;
     padding: ${spacing('sm')} ${spacing('md')};
     color: ${colors.brand[3]};
@@ -31,8 +31,8 @@ const Wrapper = styled(Box)`
     ${type.small}
   }
 
-  a:hover,
-  a:focus {
+  ${Link}:hover,
+  ${Link}:focus {
     background: ${colors.gray[3]};
     color: ${colors.brand[5]};
   }
@@ -70,28 +70,25 @@ const List = styled.ul`
   }
 `;
 
-const Footer = ({ siteTitle, ...props }) => (
+const Footer = ({ siteName, ...props }) => (
   <Wrapper {...props}>
     <Nav>
       <List>
         <li>
-          <Link
-            to="https://www.instagram.com/hannahswaimco/"
-            title="follow me on Instagram"
-          >
+          <Link to="https://www.instagram.com/hannahswaimco/">
             <Icon icon="instagram" />
             {'@hannahswaimco'}
           </Link>
         </li>
         <li>
-          <Link to="mailto:hannahswaimco@gmail.com" title="send me an email">
+          <Link to="mailto:hannahswaimco@gmail.com">
             <Icon icon="mail" />
             {'get in touch'}
           </Link>
         </li>
       </List>
     </Nav>
-    <p>{siteTitle}</p>
+    <p>{siteName}</p>
   </Wrapper>
 );
 

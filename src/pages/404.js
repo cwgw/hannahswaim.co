@@ -4,8 +4,8 @@ import Grid from 'components/Grid';
 import Box from 'components/Box';
 
 const NotFoundPage = () => (
-  <Grid>
-    <Box gridColumn="contentStart / contentEnd">
+  <Grid marginTop={{ lg: 'xxl' }}>
+    <Box col="contentStart / contentEnd">
       <h1>404: NOT FOUND</h1>
       <p>You just hit a route that doesn&#39;t exist.</p>
     </Box>

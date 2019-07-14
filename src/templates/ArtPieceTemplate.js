@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
+import { Helmet } from 'react-helmet';
+import get from 'lodash/get';
+
+import { meta } from 'utils/meta';
+import { formatArtMeta } from 'utils/formatting';
 
 import ArtPieceDetails from 'components/ArtPieceDetails';
 
@@ -15,9 +20,23 @@ const defaultProps = {
   isModalEnabled: false,
 };
 
-const ArtPieceTemplate = ({ data: { artPiece }, isModalEnabled }) => (
-  <ArtPieceDetails isModalEnabled={isModalEnabled} {...artPiece} />
-);
+const ArtPieceTemplate = ({ data: { artPiece }, isModalEnabled, location }) => {
+  const { title, media, dimensions } = formatArtMeta(artPiece);
+
+  return (
+    <React.Fragment>
+      <Helmet
+        meta={meta({
+          description: `${title}. ${media} ${dimensions}`,
+          image: get(artPiece, 'images[0].thumbnail.src', null),
+          location,
+          title,
+        })}
+      />
+      <ArtPieceDetails isModalEnabled={isModalEnabled} {...artPiece} />
+    </React.Fragment>
+  );
+};
 
 ArtPieceTemplate.propTypes = propTypes;
 

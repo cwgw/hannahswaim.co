@@ -5,17 +5,16 @@ import styled from 'styled-components';
 import UIContext from 'context/UI';
 import { colors } from 'style/tokens';
 import media from 'style/media-queries';
+import spacing from 'style/spacing';
 import { acronymize } from 'utils/formatting';
 
-import Grid from 'components/Grid';
 import Box from 'components/Box';
 import Button from 'components/Button';
+import Grid from 'components/Grid';
 import Icon from 'components/Icon';
 
-import spacing from 'style/spacing';
-
 const propTypes = {
-  siteTitle: PropTypes.string.isRequired,
+  siteName: PropTypes.string.isRequired,
   pages: PropTypes.array,
 };
 
@@ -92,13 +91,13 @@ const Nameplate = styled(Button)`
   margin: 0 1px;
 `;
 
-const Header = ({ siteTitle, menuItems }) => {
+const Header = ({ siteName, menuItems }) => {
   const { isViewport } = React.useContext(UIContext);
   return (
     <Wrapper role="banner" as="header">
       <Nav
         as="nav"
-        gridColumn={{
+        col={{
           base: 'bleedStart / bleedEnd',
           sm: 'contentStart / contentEnd',
         }}
@@ -106,15 +105,14 @@ const Header = ({ siteTitle, menuItems }) => {
       >
         <List>
           <ListItem>
-            <Nameplate to={'/'} title="Home">
-              {isViewport.xs ? siteTitle : acronymize(siteTitle)}
+            <Nameplate to={'/'}>
+              {isViewport.xs ? siteName : acronymize(siteName)}
             </Nameplate>
           </ListItem>
           {menuItems.map(({ id, slug, url, service, title, __typename }) => (
             <ListItem key={id}>
               <NavLink
                 to={url || '/' + slug}
-                title={service}
                 activeClassName="MenuItem--active"
               >
                 {__typename === 'ContentfulSocialMediaLink' ? (
