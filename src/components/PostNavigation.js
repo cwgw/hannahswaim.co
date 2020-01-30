@@ -96,27 +96,33 @@ const PostNavigation = ({ children, location, ...props }) => {
     },
   };
 
-  const toNext = React.useCallback(e => {
-    if (e) e.stopPropagation();
-    if (!next.pathname) return;
-    navigate(next.pathname, { state: next.state });
-  });
+  const toNext = React.useCallback(
+    e => {
+      if (e) e.stopPropagation();
+      if (!next.pathname) return;
+      navigate(next.pathname, { state: next.state });
+    },
+    [next]
+  );
 
-  const toPrevious = React.useCallback(e => {
-    if (e) e.stopPropagation();
-    if (!prev.pathname) return;
-    navigate(prev.pathname, { state: prev.state });
-  });
+  const toPrev = React.useCallback(
+    e => {
+      if (e) e.stopPropagation();
+      if (!prev.pathname) return;
+      navigate(prev.pathname, { state: prev.state });
+    },
+    [prev]
+  );
 
   React.useEffect(() => {
-    mousetrap.bind('left', toPrevious);
+    mousetrap.bind('left', toPrev);
     mousetrap.bind('right', toNext);
 
     return () => {
       mousetrap.unbind('left');
       mousetrap.unbind('right');
     };
-  }, [location]);
+  }, [toNext, toPrev]);
 
   return (
     <Box as="nav" {...props}>
@@ -126,7 +132,7 @@ const PostNavigation = ({ children, location, ...props }) => {
             aria-label="Previous"
             direction="prev"
             disabled={!prev.pathname}
-            onClick={toPrevious}
+            onClick={toPrev}
             variant={isModal ? 'dark' : 'outline'}
             textStyle={isModal ? 'ison' : 'small'}
           >

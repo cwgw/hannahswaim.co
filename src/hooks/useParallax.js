@@ -95,7 +95,7 @@ const useParallax = cb => {
     if (ref) {
       listenToIntersections(ref, cb);
     }
-  }, [ref]);
+  }, [ref, cb]);
 
   if (
     typeof window === 'undefined' ||
