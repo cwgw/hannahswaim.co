@@ -89,16 +89,20 @@ const callAnimation = el => {
 };
 
 const useParallax = cb => {
-  if (typeof window === 'undefined') return null;
-  if (typeof window.IntersectionObserver !== 'function') return null;
-
   const [ref, setRef] = React.useState(null);
 
   React.useLayoutEffect(() => {
     if (ref) {
       listenToIntersections(ref, cb);
     }
-  }, [ref]);
+  }, [ref, cb]);
+
+  if (
+    typeof window === 'undefined' ||
+    typeof window.IntersectionObserver !== 'function'
+  ) {
+    return null;
+  }
 
   return setRef;
 };

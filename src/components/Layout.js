@@ -44,23 +44,6 @@ const Layout = ({ children, location }) => {
     get(location, 'state.enableModal', false) &&
     isViewport[modalBreakpoint];
 
-  if (isModalEnabled) {
-    return (
-      <React.Fragment>
-        <PageRenderer
-          location={{
-            pathname: get(location, 'state.origin', location.pathname),
-          }}
-        />
-        <Modal isOpen={isModalEnabled} location={location}>
-          {React.Children.map(children, child =>
-            React.cloneElement(child, { isModalEnabled })
-          )}
-        </Modal>
-      </React.Fragment>
-    );
-  }
-
   const {
     menu: { menuItems },
     site: { siteMetadata },
@@ -101,6 +84,23 @@ const Layout = ({ children, location }) => {
       }
     `
   );
+
+  if (isModalEnabled) {
+    return (
+      <React.Fragment>
+        <PageRenderer
+          location={{
+            pathname: get(location, 'state.origin', location.pathname),
+          }}
+        />
+        <Modal isOpen={isModalEnabled} location={location}>
+          {React.Children.map(children, child =>
+            React.cloneElement(child, { isModalEnabled })
+          )}
+        </Modal>
+      </React.Fragment>
+    );
+  }
 
   return (
     <Wrapper>

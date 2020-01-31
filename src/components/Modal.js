@@ -37,7 +37,7 @@ const Modal = ({ children, location, isOpen }) => {
   const closeModal = React.useCallback(() => {
     let state = { origin: 'modal' };
     navigate(location.state.origin, { state });
-  });
+  }, [location]);
 
   return (
     <ReactModal
@@ -68,7 +68,7 @@ const Modal = ({ children, location, isOpen }) => {
         },
       }}
     >
-      <section onClick={closeModal}>
+      <section>
         <Close
           aria-label="Close Modal"
           onClick={closeModal}
