@@ -42,35 +42,30 @@ const List = styled.ul`
   padding: 0;
   list-style: none;
 
-  ${({ isModal }) => {
-    if (isModal) {
-      return `
-        display: contents
-        
-        ${NavItem} {
-          position: fixed;
-          top: 50%;
-          z-index: 10;
-          transform: translate(0, -50%);
+  ${({ isModal }) =>
+    isModal
+      ? {
+          display: 'contents',
+          [NavItem]: {
+            position: 'fixed',
+            top: '50%',
+            zIndex: '10',
+            transform: 'translate(0, -50%)',
+          },
         }
-      `;
-    }
-    return `
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: ${spacing('md')};
-      max-width: 100%;
-
-      span {
-        margin: 0 ${spacing('xs')};
-      }
-      
-      ${NavItem} {
-        width: 100%;
-        text-transform: uppercase;
-      }
-    `;
-  }}
+      : {
+          display: 'grid',
+          gridTemplateColumns: `1fr 1fr`,
+          gap: spacing('md'),
+          maxWidth: '100%',
+          span: {
+            margin: `0 ${spacing('xs')}`,
+          },
+          [NavItem]: {
+            width: '100%',
+            textTransform: 'uppercase',
+          },
+        }}
 `;
 
 const PostNavigation = ({ children, location, ...props }) => {
@@ -134,7 +129,7 @@ const PostNavigation = ({ children, location, ...props }) => {
             disabled={!prev.pathname}
             onClick={toPrev}
             variant={isModal ? 'dark' : 'outline'}
-            textStyle={isModal ? 'ison' : 'small'}
+            textStyle={isModal ? 'icon' : 'small'}
           >
             <Icon icon="previous" />
             {!isModal && <span>previous</span>}
@@ -147,7 +142,7 @@ const PostNavigation = ({ children, location, ...props }) => {
             disabled={!next.pathname}
             onClick={toNext}
             variant={isModal ? 'dark' : 'outline'}
-            textStyle={isModal ? 'ison' : 'small'}
+            textStyle={isModal ? 'icon' : 'small'}
           >
             {!isModal && <span>next</span>}
             <Icon icon="next" />
