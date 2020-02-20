@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { UIContext } from 'context/UI';
-import { breakpoints } from 'style/tokens';
 import { px } from 'style/helpers';
 import spacing from 'style/spacing';
 
@@ -12,7 +10,7 @@ import Box from 'components/Box';
 const propTypes = {
   gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   getAspectRatio: PropTypes.func,
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
   isCentered: PropTypes.bool,
   items: PropTypes.array.isRequired,
   more: PropTypes.string,
@@ -86,21 +84,7 @@ const Row = ({
   items,
   ...props
 }) => {
-  const { isViewport } = React.useContext(UIContext);
-
-  let height;
-
-  if (typeof _height === 'object') {
-    height = _height.base ? px(_height.base) : '180px';
-    for (let key of breakpoints.keys()) {
-      if (!isViewport[key]) break;
-      if (_height[key]) {
-        height = px(_height[key]);
-      }
-    }
-  } else {
-    height = px(_height);
-  }
+  const height = Array.isArray(_height) ? px(_height[0]) : px(_height);
 
   const aspectRatio = items.reduce((sum, o) => sum + ar(o), 0);
   const gap = spacing(_gap) || 0;

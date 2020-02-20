@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import UIContext from 'context/UI';
 import { colors } from 'style/tokens';
 import media from 'style/media-queries';
 import spacing from 'style/spacing';
-import { acronymize } from 'utils/formatting';
+// import { acronymize } from 'utils/formatting';
 
 import Box from 'components/Box';
 import Button from 'components/Button';
@@ -92,7 +91,6 @@ const Nameplate = styled(Button)`
 `;
 
 const Header = ({ siteName, menuItems }) => {
-  const { isViewport } = React.useContext(UIContext);
   return (
     <Wrapper role="banner" as="header">
       <Nav
@@ -106,7 +104,8 @@ const Header = ({ siteName, menuItems }) => {
         <List>
           <ListItem>
             <Nameplate to={'/'}>
-              {isViewport.xs ? siteName : acronymize(siteName)}
+              {siteName}
+              {/* acronymize(siteName) */}
             </Nameplate>
           </ListItem>
           {menuItems.map(({ id, slug, url, service, title, __typename }) => (

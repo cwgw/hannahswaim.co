@@ -6,8 +6,6 @@ import { navigate } from 'gatsby';
 
 import { Location } from '@reach/router';
 
-import UIContext from 'context/UI';
-import { modalBreakpoint } from 'style/tokens';
 import spacing from 'style/spacing';
 
 import Box from 'components/Box';
@@ -69,11 +67,11 @@ const List = styled.ul`
 `;
 
 const PostNavigation = ({ children, location, ...props }) => {
-  const { isViewport } = React.useContext(UIContext);
-
   const { siblings = [], index = 0, enableModal } = location.state || {};
 
-  const isModal = enableModal && isViewport[modalBreakpoint];
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 576;
+
+  const isModal = enableModal && isDesktop;
 
   const next = {
     pathname: index + 1 < siblings.length ? siblings[index + 1] : siblings[0],

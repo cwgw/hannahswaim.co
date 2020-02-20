@@ -186,10 +186,7 @@ const Instagram = ({ id, location, ...props }) => {
         isCentered
         col="bleedStart / bleedEnd"
         row="2"
-        height={{
-          base: 200,
-          sm: 300,
-        }}
+        height={[200, 300]}
         paddingY={'md'}
       >
         {images}

@@ -4,9 +4,6 @@ import styled from 'styled-components';
 import { PageRenderer, useStaticQuery, graphql } from 'gatsby';
 import get from 'lodash/get';
 
-import UIContext from 'context/UI';
-import { modalBreakpoint } from 'style/tokens';
-
 import GlobalStyle from 'components/GlobalStyle';
 import Background from 'components/BackgroundGraphics';
 import Head from 'components/Head';
@@ -35,14 +32,12 @@ const Main = styled.main`
 `;
 
 const Layout = ({ children, location }) => {
-  const { isViewport } = React.useContext(UIContext);
   const isInitialRender = React.useRef(
     typeof window !== 'undefined' && !!!window.___IS_INITIAL_RENDER_COMPLETE
   );
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 576;
   const isModalEnabled =
-    isInitialRender &&
-    get(location, 'state.enableModal', false) &&
-    isViewport[modalBreakpoint];
+    isInitialRender && get(location, 'state.enableModal', false) && isDesktop;
 
   const {
     menu: { menuItems },
