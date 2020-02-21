@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import mousetrap from 'mousetrap';
 import { navigate } from 'gatsby';
-
 import { Location } from '@reach/router';
-
-import UIContext from 'context/UI';
-import { modalBreakpoint } from 'style/tokens';
-import spacing from 'style/spacing';
+import css from '@styled-system/css';
 
 import Box from 'components/Box';
 import Button from 'components/Button';
@@ -20,60 +16,66 @@ const propTypes = {
 
 const defaultProps = {};
 
-const NavItem = styled(Button)`
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  ${({ direction }) =>
-    ({
-      prev: {
-        left: 0,
-        textAlign: 'left',
-      },
-      next: {
+const NavItem = styled(Button)(
+  {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  props => {
+    if (props.direction === 'next') {
+      return {
         right: 0,
         textAlign: 'right',
+      };
+    }
+    return {
+      left: 0,
+      textAlign: 'left',
+    };
+  }
+);
+
+const List = styled('ul')(
+  {
+    margin: 0,
+    padding: 0,
+    listStyle: 'none',
+  },
+  props => {
+    if (props.isModal) {
+      return {
+        display: 'contents',
+        [NavItem]: {
+          position: 'fixed',
+          top: '50%',
+          zIndex: '10',
+          transform: 'translate(0, -50%)',
+        },
+      };
+    }
+    return css({
+      display: 'grid',
+      gridTemplateColumns: `1fr 1fr`,
+      gap: 'md',
+      maxWidth: '100%',
+      span: {
+        marginY: 0,
+        marginX: 'xs',
       },
-    }[direction])}
-`;
-
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  ${({ isModal }) =>
-    isModal
-      ? {
-          display: 'contents',
-          [NavItem]: {
-            position: 'fixed',
-            top: '50%',
-            zIndex: '10',
-            transform: 'translate(0, -50%)',
-          },
-        }
-      : {
-          display: 'grid',
-          gridTemplateColumns: `1fr 1fr`,
-          gap: spacing('md'),
-          maxWidth: '100%',
-          span: {
-            margin: `0 ${spacing('xs')}`,
-          },
-          [NavItem]: {
-            width: '100%',
-            textTransform: 'uppercase',
-          },
-        }}
-`;
+      [NavItem]: {
+        width: '100%',
+        textTransform: 'uppercase',
+      },
+    })(props);
+  }
+);
 
 const PostNavigation = ({ children, location, ...props }) => {
-  const { isViewport } = React.useContext(UIContext);
-
   const { siblings = [], index = 0, enableModal } = location.state || {};
 
-  const isModal = enableModal && isViewport[modalBreakpoint];
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 576;
+
+  const isModal = enableModal && isDesktop;
 
   const next = {
     pathname: index + 1 < siblings.length ? siblings[index + 1] : siblings[0],

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import css from '@styled-system/css';
 
-import type from 'style/type';
+import { type } from 'style/shared';
 import { formatArtMeta } from 'utils/formatting';
 
 const propTypes = {
@@ -12,14 +13,16 @@ const propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const Title = styled.span`
-  display: block;
-  ${type.h3}
-`;
+const Title = styled('span')(
+  css({
+    display: 'block',
+    ...type.h3,
+  })
+);
 
-const Small = styled.small`
-  display: block;
-`;
+const Small = styled('small')({
+  display: 'block',
+});
 
 const ArtPieceMeta = props => {
   const { dimensions, media, title } = formatArtMeta(props);

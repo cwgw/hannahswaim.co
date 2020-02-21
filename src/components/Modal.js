@@ -9,12 +9,12 @@ import { colors } from 'style/tokens';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
 
-const Close = styled(Button)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1000;
-`;
+const Close = styled(Button)({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  zIndex: 1000,
+});
 
 const propTypes = {
   isOpen: PropTypes.bool,

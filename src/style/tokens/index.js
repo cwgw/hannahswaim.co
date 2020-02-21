@@ -1,24 +1,20 @@
-import { breakpoints, modalBreakpoint, hoverBreakpoint } from './breakpoints';
+import { breakpoints, mediaQueries } from './breakpoints';
 import colors from './colors';
-import { fontSizes, fontSizeScale, rootFontSize } from './font-sizes';
-import { sans, serif, fonts } from './fonts';
+import fontSizes from './font-sizes';
+import fonts from './fonts';
+import lineHeights from './line-heights';
 import shadows from './shadows';
-import { spacingScale, spacingSizes } from './spacing';
-import ease from './transitions';
+import space from './space';
+import transitions from './transitions';
 
 export {
   breakpoints,
   colors,
-  ease,
-  fonts,
   fontSizes,
-  fontSizeScale,
-  hoverBreakpoint,
-  modalBreakpoint,
-  rootFontSize,
-  sans,
-  serif,
+  fonts,
+  lineHeights,
+  mediaQueries,
   shadows,
-  spacingScale,
-  spacingSizes,
+  space,
+  transitions,
 };

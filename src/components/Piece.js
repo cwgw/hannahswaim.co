@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GatsbyImage from 'gatsby-image';
+import css from '@styled-system/css';
 
-import { colors, ease } from 'style/tokens';
-import media from 'style/media-queries';
-import spacing from 'style/spacing';
+import { space } from 'style/utils';
 import { formatArtTitle, artMetaString } from 'utils/formatting';
 
 import Link from 'components/Link';
 import Box from 'components/Box';
+import VisuallyHidden from 'components/VisuallyHidden';
 
 const propTypes = {
   location: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
@@ -70,7 +70,7 @@ const Piece = styled(
       as={Link}
       {...props}
     >
-      <span className="sr-only">{formatArtTitle({ title, date })}</span>
+      <VisuallyHidden>{formatArtTitle({ title, date })}</VisuallyHidden>
       <GatsbyImage
         className="Piece__Image"
         fluid={images[0].fluid}
@@ -81,30 +81,27 @@ const Piece = styled(
       />
     </Box>
   )
-)`
-  display: block;
-  border-radius: ${spacing('xs')};
-  overflow: hidden;
-  cursor: zoom-in;
-
-  & .Piece__Image {
-    background: ${colors.gray[3]};
-  }
-
-  & .Piece__Image picture {
-    transition: opacity 200ms ${ease.in};
-  }
-
-  &:focus .Piece__Image picture {
-    opacity: 0.5;
-  }
-
-  ${media.min.sm`
-    &:hover .Piece__Image picture {
-      opacity: 0.5;
-    }
-  `}
-`;
+)(
+  css({
+    display: 'block',
+    borderRadius: space.xs,
+    overflow: 'hidden',
+    cursor: 'zoom-in',
+    '& .Piece__Image': {
+      backgroundColor: 'gray.3',
+    },
+    '& .Piece__Image picture': {
+      transition: 'opacity 200ms',
+      transitionTimingFunction: 'in',
+    },
+    '&:focus .Piece__Image picture': {
+      opacity: 0.5,
+    },
+    '&:hover .Piece__Image picture': {
+      opacity: [1, null, null, 0.5],
+    },
+  })
+);
 
 Piece.propTypes = propTypes;
 

@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import { meta } from 'utils/meta';
 
-import image from 'images/icon.png';
+import image from 'assets/images/icon.png';
 
 const propTypes = {
   location: PropTypes.object.isRequired,

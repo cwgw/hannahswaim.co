@@ -1,41 +1,21 @@
-const rootFontSize = 16;
-
-const fontSizeScale = [
-  0.75, //  0 == 12 px
-  0.875, //  1 == 14 px
-  1, //  2 == 16 px
-  1.125, //  3 == 18 px
-  1.25, //  4 == 20 px
-  1.5, //  5 == 24 px
-  1.75, //  6 == 28 px
-  2, //  7 == 32 px
-  2.25, //  8 == 36 px
-  2.625, //  9 == 42 px
-  3, // 10 == 48 px
-  3.375, // 11 == 54 px
-  3.75, // 12 == 60 px
-  4.25, // 13 == 68 px
-  4.75, // 14 == 76 px
-  5.25, // 15 == 84 px
-  5.75, // 16 == 92 px
+const scale = [
+  12, // 00 = 0.75 rem
+  14, // 01 = 0.875 rem
+  16, // 02 = 1 rem
+  18, // 03 = 1.125 rem
+  20, // 04 = 1.25 rem
+  24, // 05 = 1.5 rem
+  28, // 06 = 1.75 rem
+  32, // 07 = 2 rem
+  36, // 08 = 2.25 rem
+  42, // 09 = 2.625 rem
+  48, // 10 = 3 rem
+  54, // 11 = 3.375 rem
+  60, // 12 = 3.75 rem
+  68, // 13 = 4.25 rem
+  76, // 14 = 4.75 rem
+  84, // 15 = 5.25 rem
+  92, // 16 = 5.75 rem
 ];
 
-const fontSizes = {
-  base: fontSizeScale[2],
-  body: {
-    sm: fontSizeScale[2],
-    lg: fontSizeScale[3],
-  },
-  display: fontSizeScale[8],
-  lead: fontSizeScale[5],
-  small: fontSizeScale[1],
-  h6: fontSizeScale[3],
-  h5: fontSizeScale[4],
-  h4: fontSizeScale[5],
-  h3: fontSizeScale[6],
-  h2: fontSizeScale[8],
-  h1: fontSizeScale[9],
-  icon: fontSizeScale[5],
-};
-
-export { fontSizes, fontSizeScale, rootFontSize };
+export default scale;

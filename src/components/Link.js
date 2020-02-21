@@ -74,7 +74,7 @@ const Link = styled(
       />
     );
   }
-)``;
+)({});
 
 Link.propTypes = propTypes;
 

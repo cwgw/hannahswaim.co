@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import css from '@styled-system/css';
 
-import { UIContext } from 'context/UI';
-import { breakpoints } from 'style/tokens';
-import { px } from 'style/helpers';
-import spacing from 'style/spacing';
+import { space } from 'style/utils';
+import theme from 'style/theme';
 
 import Box from 'components/Box';
 
 const propTypes = {
   gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   getAspectRatio: PropTypes.func,
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
   isCentered: PropTypes.bool,
   items: PropTypes.array.isRequired,
   more: PropTypes.string,
@@ -35,47 +34,48 @@ function getAspectRatio(o) {
   return 1;
 }
 
-const Wrapper = styled(Box)`
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  margin: -${spacing('xl')} 0;
-`;
+const Wrapper = styled(Box)(
+  css({
+    position: 'relative',
+    zIndex: 0,
+    overflow: 'hidden',
+    margin: `-${space.xl}px 0`,
+  })
+);
 
-const Scroller = styled.div`
-  position: relative;
-  z-index: 2;
-  overflow: hidden;
-  overflow-x: scroll;
-  overflow: -moz-scrollbars-none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
+const Scroller = styled('div')({
+  position: 'relative',
+  zIndex: 2,
+  overflow: 'hidden',
+  overflowX: 'scroll',
+  scrollbarWidth: 'none',
+  MsOverflowStyle: 'none',
+  WebkitOverflowScrolling: 'touch',
+  '&::-webkit-scrollbar': {
+    width: '0 !important',
+    height: '0 !important',
+  },
+});
 
-  &::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0 !important;
-  }
-`;
-
-const Inner = styled.ul`
-  position: relative;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-  padding-top: ${spacing('xl')};
-  padding-bottom: ${spacing('xl')};
-  margin: 0;
-  box-sizing: content-box;
-  flex: 1;
-
-  & > * {
-    box-sizing: border-box;
-  }
-
-  & > li {
-    list-style: none;
-  }
-`;
+const Inner = styled('ul')(
+  css({
+    position: 'relative',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'stretch',
+    paddingTop: 'xl',
+    paddingBottom: 'xl',
+    margin: 0,
+    boxSizing: 'content-box',
+    flex: 1,
+    '& > *': {
+      boxSizing: 'border-box',
+    },
+    '& > li': {
+      listStyle: 'none',
+    },
+  })
+);
 
 const Row = ({
   children,
@@ -86,24 +86,11 @@ const Row = ({
   items,
   ...props
 }) => {
-  const { isViewport } = React.useContext(UIContext);
-
-  let height;
-
-  if (typeof _height === 'object') {
-    height = _height.base ? px(_height.base) : '180px';
-    for (let key of breakpoints.keys()) {
-      if (!isViewport[key]) break;
-      if (_height[key]) {
-        height = px(_height[key]);
-      }
-    }
-  } else {
-    height = px(_height);
-  }
+  let height = Array.isArray(_height) ? _height[0] : _height;
+  height = height + 'px';
 
   const aspectRatio = items.reduce((sum, o) => sum + ar(o), 0);
-  const gap = spacing(_gap) || 0;
+  const gap = (theme.space[_gap] || 0) + 'px';
 
   const Children = React.Children.map(children, (child, i) =>
     React.cloneElement(child, {

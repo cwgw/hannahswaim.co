@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
-import { colors } from 'style/tokens';
-import spacing from 'style/spacing';
-import type from 'style/type';
+import css from '@styled-system/css';
 
 import Box from 'components/Box';
 import Icon from 'components/Icon';
-import Link from 'components/Link';
+import Button from 'components/Button';
+import Grid from 'components/Grid';
 
 const propTypes = {
   siteName: PropTypes.string,
@@ -18,76 +16,62 @@ const defaultProps = {
   siteTitle: null,
 };
 
-const Wrapper = styled(Box)`
-  text-align: center;
-  background-color: ${colors.brand[6]};
-  color: ${colors.brand[4]};
+const Wrapper = styled(Box)(
+  css({
+    textAlign: 'center',
+    backgroundColor: 'brand.6',
+    color: 'brand.4',
+    '& > *': {
+      paddingY: 'sm',
+      paddingX: 'md',
+    },
+    [`& ${Icon}`]: {
+      fontSize: '2rem',
+      display: 'block',
+      margin: '0 auto',
+    },
+  })
+);
 
-  ${Link} {
-    display: block;
-    padding: ${spacing('sm')} ${spacing('md')};
-    color: ${colors.brand[3]};
-    border: 1px solid ${colors.brand[5]};
-    ${type.small}
-  }
-
-  ${Link}:hover,
-  ${Link}:focus {
-    background: ${colors.gray[3]};
-    color: ${colors.brand[5]};
-  }
-
-  & > * {
-    padding: ${spacing('sm')} ${spacing('md')};
-  }
-
-  & ${Icon} {
-    font-size: 2rem;
-    display: block;
-    margin: 0 auto;
-  }
-`;
-
-const Nav = styled.nav`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const List = styled.ul`
-  display: contents;
-
-  & li {
-    list-style: none;
-    display: inline-block;
-    flex-grow: 1;
-    max-width: ${spacing('xxl')};
-    flex-basis: 0;
-  }
-
-  & li + li {
-    margin-left: -1px;
-  }
-`;
+const List = styled(Box)(
+  css({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    li: {
+      listStyle: 'none',
+      flexGrow: 1,
+      marginLeft: '1px',
+    },
+    [Button]: {
+      display: 'block',
+    },
+  })
+);
 
 const Footer = ({ siteName, ...props }) => (
   <Wrapper {...props}>
-    <Nav>
-      <List>
+    <Grid as="nav">
+      <List as="ul" col="contentStart / contentEnd">
         <li>
-          <Link to="https://www.instagram.com/hannahswaimco/">
+          <Button
+            to="https://www.instagram.com/hannahswaimco/"
+            variant="outline"
+          >
             <Icon icon="instagram" />
             {'@hannahswaimco'}
-          </Link>
+          </Button>
         </li>
         <li>
-          <Link to="mailto:hannahswaimco@gmail.com">
+          <Button to="mailto:hannahswaimco@gmail.com" variant="outline">
             <Icon icon="mail" />
             {'get in touch'}
-          </Link>
+          </Button>
         </li>
       </List>
-    </Nav>
+    </Grid>
     <p>{siteName}</p>
   </Wrapper>
 );
