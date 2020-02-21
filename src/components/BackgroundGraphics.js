@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 
 import useParallax from 'hooks/useParallax';
-import { colors } from 'style/tokens';
+import { colors } from 'style/theme';
 
 const defaultProps = {
   colors: [colors.brand[6], colors.brand[5]],

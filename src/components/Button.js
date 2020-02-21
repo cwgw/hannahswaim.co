@@ -1,11 +1,9 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { transparentize } from 'polished';
+import styled from 'styled-components';
+import { variant } from 'styled-system';
+import css from '@styled-system/css';
 
-import { colors, hoverBreakpoint } from 'style/tokens';
-import { mediaQueryString } from 'style/media-queries';
-import spacing from 'style/spacing';
-import type from 'style/type';
+import { space, transparentize } from 'style/utils';
 
 import Link from 'components/Link';
 import Box from 'components/Box';
@@ -17,72 +15,66 @@ const UnstyledButton = ({ to, className, ...props }) =>
     <Box className={className} as="button" {...props} />
   );
 
-const Button = styled(UnstyledButton)`
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  padding: ${spacing('sm')} ${spacing('md')};
-  border: 1px solid currentColor;
-  border-radius: ${spacing('xxs')};
-  font-size: inherit;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  white-space: nowrap;
-  user-select: none;
+const variants = variant({
+  variants: {
+    outline: {
+      background: 'transparent',
+      borderColor: transparentize(0.5, 'brand.4'),
+      color: 'link',
+      '&:hover, &:focus': {
+        borderColor: 'link',
+        color: 'link',
+      },
+    },
+    dark: {
+      backgroundColor: 'gray.0',
+      borderColor: 'gray.1',
+      color: 'gray.5',
+      '&:hover, &:focus': {
+        backgroundColor: 'gray.3',
+        borderColor: 'gray.3',
+        color: 'brand.5',
+      },
+    },
+    default: {
+      backgroundColor: 'brand.5',
+      borderColor: 'brand.5',
+      color: 'brand.2',
+      '&:hover, &:focus': {
+        backgroundColor: 'gray.3',
+        borderColor: 'gray.3',
+        color: 'brand.5',
+      },
+    },
+  },
+});
 
-  &:active {
-    transform: translate(0, 2px);
-  }
+const shared = css({
+  position: 'relative',
+  display: 'inline-block',
+  verticalAlign: 'middle',
+  paddingY: 'sm',
+  paddingX: 'md',
+  border: '1px solid currentColor',
+  borderRadius: space.xxs,
+  fontSize: 'inherit',
+  cursor: 'pointer',
+  textDecoration: 'none',
+  textAlign: 'center',
+  whiteSpace: 'nowrap',
+  userSelect: 'none',
+  '&:active': {
+    transform: 'translate(0, 2px)',
+  },
+  '&:focus': {
+    zIndex: 1,
+  },
+});
 
-  &:focus {
-    z-index: 1;
-  }
+const Button = styled(UnstyledButton)(shared, variants);
 
-  ${({ textStyle }) => type[textStyle] || {}}
-
-  ${({ variant }) => {
-    switch (variant) {
-      case 'outline':
-        return css({
-          background: 'transparent',
-          borderColor: transparentize(0.5, colors.brand[4]),
-          color: colors.link,
-          [mediaQueryString('min', hoverBreakpoint)]: {
-            '&:hover, &:focus': {
-              borderColor: colors.link,
-              color: colors.link,
-            },
-          },
-        });
-      case 'dark':
-        return css({
-          background: colors.gray[0],
-          borderColor: colors.gray[1],
-          color: colors.gray[5],
-          [mediaQueryString('min', hoverBreakpoint)]: {
-            '&:hover, &:focus': {
-              background: colors.gray[3],
-              borderColor: colors.gray[3],
-              color: colors.brand[5],
-            },
-          },
-        });
-      default:
-        return css({
-          background: colors.brand[5],
-          borderColor: colors.brand[5],
-          color: colors.brand[2],
-          [mediaQueryString('min', hoverBreakpoint)]: {
-            '&:hover, &:focus': {
-              background: colors.gray[3],
-              borderColor: colors.gray[3],
-              color: colors.brand[5],
-            },
-          },
-        });
-    }
-  }}
-`;
+Button.defaultProps = {
+  variant: 'default',
+};
 
 export default Button;

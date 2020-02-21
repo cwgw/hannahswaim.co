@@ -2,12 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { useStaticQuery, graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
-import { transparentize } from 'polished';
+import css from '@styled-system/css';
 
-import { colors, ease } from 'style/tokens';
-import media from 'style/media-queries';
-import spacing from 'style/spacing';
-import type from 'style/type';
+import { type } from 'style/shared';
+import { space, transparentize } from 'style/utils';
 
 import Row from 'components/Row';
 import Icon from 'components/Icon';
@@ -16,89 +14,89 @@ import Link from 'components/Link';
 import Button from 'components/Button';
 import Grid from 'components/Grid';
 
-const Wrapper = styled(Grid)`
-  color: ${colors.brand[3]};
-  position: relative;
-  z-index: 0;
+const Wrapper = styled(Grid)(
+  css({
+    color: 'brand.3',
+    position: 'relative',
+    zIndex: 0,
+    '&:before': {
+      content: '""',
+      border: '2px solid',
+      borderColor: 'brand.4',
+      gridColumn: 'contentStart / contentEnd',
+      gridRow: 2,
+      userSelect: 'none',
+      pointerEvents: 'none',
+    },
+  })
+);
 
-  &:before {
-    content: '';
-    border: 2px solid ${colors.brand[4]};
-    grid-column: contentStart / contentEnd;
-    grid-row: 2;
-    user-select: none;
-    pointer-events: none;
-  }
-`;
+const TextContainer = styled(Box)({
+  position: 'relative',
+  zIndex: 2,
+  display: 'flex',
+  flexFlow: 'row wrap',
+  alignItems: 'baseline',
+});
 
-const TextContainer = styled(Box)`
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-flow: row wrap;
-  align-items: baseline;
-`;
+const ProfileLink = styled(Link)(
+  css({
+    marginLeft: 'auto',
+    color: 'brand.4',
+    display: ['none', null, 'block'],
+  })
+);
 
-const ProfileLink = styled(Link)`
-  margin-left: auto;
-  color: ${colors.brand[4]};
+const ListItem = styled(Box)({
+  position: 'relative',
+});
 
-  ${media.max.sm`
-    display: none;
-  `}
-`;
+const ItemLink = styled(Link)(
+  css({
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    display: 'flex',
+    alignItems: 'stretch',
+    justifyContent: 'stretch',
+    borderRadius: space.xs,
+    overflow: 'hidden',
+    color: 'white',
+  })
+);
 
-const ListItem = styled(Box)`
-  position: relative;
-`;
-
-const ItemLink = styled(Link)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: stretch;
-  justify-content: stretch;
-  border-radius: ${spacing('xs')};
-  overflow: hidden;
-  color: ${colors.white};
-`;
-
-const Overlay = styled.p`
-  display: flex;
-  width: 100%;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  background: ${transparentize(0.5, colors.gray[3])};
-  opacity: 0;
-  transition: 200ms opacity ${ease.in};
-
-  & span,
-  & ${Icon} {
-    transform: matrix(1.1, 0, 0, 1.1, 0, 0);
-    transition: 300ms transform ${ease.in};
-    transform-style: preserve-3d;
-    margin-bottom: ${spacing('xs')};
-  }
-
-  ${Icon} {
-    font-size: ${type.hero.fontSize};
-  }
-
-  ${ItemLink}:hover &,
-  ${ItemLink}:focus & {
-    opacity: 1;
-
-    & span,
-    & ${Icon} {
-      transform: matrix(1, 0, 0, 1, 0, 0);
-    }
-  }
-`;
+const Overlay = styled('p')(
+  css({
+    display: 'flex',
+    width: '100%',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    backgroundColor: transparentize(0.5, 'gray.3'),
+    opacity: 0,
+    transition: '200ms opacity',
+    transitionTimingFunction: 'in',
+    [`& span, & ${Icon}`]: {
+      transform: 'matrix(1.1, 0, 0, 1.1, 0, 0)',
+      transition: '300ms transform',
+      transitionTimingFunction: 'in',
+      transformStyle: 'preserve-3d',
+      marginBottom: 'xs',
+    },
+    [Icon]: {
+      fontSize: type.hero.fontSize,
+    },
+    [`${ItemLink}:hover &, ${ItemLink}:focus &`]: {
+      opacity: 1,
+      [`& span, & ${Icon}`]: {
+        transform: 'matrix(1, 0, 0, 1, 0, 0)',
+      },
+    },
+  })
+);
 
 const Instagram = ({ id, location, ...props }) => {
   const { posts, profile } = useStaticQuery(graphql`
@@ -148,16 +146,13 @@ const Instagram = ({ id, location, ...props }) => {
       <ListItem as="li" className={className} key={id}>
         <GatsbyImage
           fluid={fluid}
-          style={{
+          css={css({
             width: '100%',
             height: '0',
             paddingBottom: '100%',
-            boxShadow: `0px 3px 36px 2px ${transparentize(
-              0.8,
-              colors.coolBlack
-            )}`,
-            borderRadius: spacing('xs'),
-          }}
+            boxShadow: `0px 3px 36px 2px ${transparentize(0.8, 'coolBlack')}`,
+            borderRadius: space.xs,
+          })}
         />
         <ItemLink to={url}>
           <Overlay>
@@ -186,8 +181,8 @@ const Instagram = ({ id, location, ...props }) => {
         isCentered
         col="bleedStart / bleedEnd"
         row="2"
-        height={[200, 300]}
-        paddingY={'md'}
+        height={300}
+        paddingY="md"
       >
         {images}
       </Row>

@@ -9,17 +9,15 @@ const propTypes = {
   icon: PropTypes.string.isRequired,
   icons: PropTypes.object,
   label: PropTypes.string,
-  style: PropTypes.object,
 };
 
 const defaultProps = {
   className: null,
   icons: icons,
   label: null,
-  style: {},
 };
 
-const Icon = styled(({ className, icon, icons, label, style }) => {
+const Icon = styled(({ className, icon, icons, label }) => {
   if (!icon || !icons[icon]) {
     return null;
   }
@@ -39,7 +37,6 @@ const Icon = styled(({ className, icon, icons, label, style }) => {
 
   return (
     <svg
-      style={style}
       className={className}
       {...aria}
       {...defaultAttributes}
@@ -54,13 +51,12 @@ const Icon = styled(({ className, icon, icons, label, style }) => {
       ))}
     </svg>
   );
-})`
-  display: inline;
-  width: 1em;
-  height: 1em;
-  top: 0.166666666em;
-  ${({ style }) => style}
-`;
+})({
+  display: 'inline',
+  width: '1em',
+  height: '1em',
+  verticalAlign: '-0.125em',
+});
 
 Icon.propTypes = propTypes;
 

@@ -41,7 +41,7 @@ module.exports = {
         background_color: '#ffffff',
         description: 'Website and portfolio of fiber artist Hannah M. Swaim',
         display: 'standalone',
-        icon: 'src/images/icon.png',
+        icon: 'src/assets/images/icon.png',
         lang: 'en',
         name: 'hannah m. swaim',
         short_name: 'hannah swaim',

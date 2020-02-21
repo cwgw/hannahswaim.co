@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
-import { transparentize } from 'polished';
+import css from '@styled-system/css';
 
-import { colors } from 'style/tokens';
-import media from 'style/media-queries';
-import spacing from 'style/spacing';
+import { mediaQueries } from 'style/theme';
+import { transparentize } from 'style/utils';
 
 import Grid from 'components/Grid';
 import Box from 'components/Box';
@@ -26,47 +25,41 @@ const defaultProps = {
   breakpoint: 'lg',
 };
 
-const Wrapper = styled(Grid)`
-  flex: 1;
-  flex-basis: 100%;
-  align-content: center;
-`;
+const Figure = styled(Box)(
+  css({
+    overflow: 'visible',
+    height: '300px',
+    width: '100%',
+    margin: 0,
+    marginBottom: 'lg',
+    boxShadow: props =>
+      `0px 3px 36px 2px ${transparentize(0.8, 'coolBlack')(props)}`,
+    '.Feature__Image': {
+      width: '100%',
+    },
+    [mediaQueries.sm]: {
+      height: '400px',
+    },
+    [mediaQueries.lg]: {
+      direction: 'rtl',
+      maxHeight: 'none',
+      marginBottom: 0,
+      '.Feature__Image': {
+        width: '120%',
+      },
+    },
+  })
+);
 
-const Figure = styled(Box)`
-  overflow: visible;
-  height: 300px;
-  width: 100%;
-  margin-bottom: ${spacing('lg')};
-  box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
-
-  .Feature__Image {
-    width: 100%;
-  }
-
-  ${media.min.sm`
-    height: 400px;
-  `}
-
-  ${media.min.lg`
-    direction: rtl;
-    max-height: none;
-    margin-bottom: 0;
-
-    .Feature__Image {
-      width: 120%;
-    }
-  `}
-`;
-
-const TextBox = styled(Box)`
-  ${media.min.md`
-    padding: 0 0 0 ${spacing('lg')};
-  `}
-
-  & > p:last-child {
-    margin-bottom: 0;
-  }
-`;
+const TextBox = styled(Box)(
+  css({
+    padding: 0,
+    paddingLeft: [0, null, null, null, 'lg'],
+    '& > p:last-child': {
+      marginBottom: 0,
+    },
+  })
+);
 
 const Feature = ({
   breakpoint,
@@ -77,14 +70,15 @@ const Feature = ({
   ...props
 }) => {
   return (
-    <Wrapper {...props}>
+    <Grid {...props} flex="1" alignContent="center">
       <Figure
-        col={{
-          base: 'bleedStart / bleedEnd',
-          sm: 'contentStart / contentEnd',
-          lg: 'contentStart / col3End',
-          // xl: 'contentStart / col3End',
-        }}
+        col={[
+          'bleedStart / bleedEnd',
+          null,
+          'contentStart / contentEnd',
+          null,
+          'contentStart / col3End',
+        ]}
         row={{ lg: '1 / span 3' }}
         as="figure"
       >
@@ -105,7 +99,7 @@ const Feature = ({
         row={{ lg: '2 / span 3' }}
         dangerouslySetInnerHTML={{ __html: childMarkdownRemark.html }}
       />
-    </Wrapper>
+    </Grid>
   );
 };
 

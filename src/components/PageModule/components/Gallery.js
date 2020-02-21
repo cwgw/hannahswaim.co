@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import get from 'lodash/get';
-
-import { colors } from 'style/tokens';
+import css from '@styled-system/css';
 
 import Box from 'components/Box';
 import ImageWall from 'components/ImageWall';
@@ -19,28 +18,33 @@ const propTypes = {
 
 const defaultProps = {};
 
-const StyledText = styled(Text)`
-  & h2 {
-    position: relative;
-    display: inline-block;
-    border-bottom: 2px solid ${colors.brand[4]};
-  }
-`;
+const StyledText = styled(Text)(
+  css({
+    '& h2': {
+      position: 'relative',
+      display: 'inline-block',
+      borderBottom: '2px solid',
+      borderColor: 'brand.4',
+    },
+  })
+);
 
 const Gallery = ({ location, artwork, text, id, ...props }) => {
-  const edges = artwork
-    .slice()
-    .sort((a, b) => {
-      return b.date - a.date;
-    })
-    .map(item => {
-      return {
-        node: {
-          ...item,
-          date: item.date.slice(0, 4),
-        },
-      };
-    });
+  const edges = React.useMemo(() => {
+    return artwork
+      .slice()
+      .sort((a, b) => {
+        return b.date - a.date;
+      })
+      .map(item => {
+        return {
+          node: {
+            ...item,
+            date: item.date.slice(0, 4),
+          },
+        };
+      });
+  }, [artwork]);
 
   const siblings = edges.map(({ node }) => node.fields.slug);
 

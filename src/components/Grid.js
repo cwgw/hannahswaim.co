@@ -1,12 +1,13 @@
 import styled from 'styled-components';
+import { grid } from 'styled-system';
 
 import Box from 'components/Box';
 
-const Grid = styled(Box)``;
+const Grid = styled(Box)(grid);
 
 Grid.defaultProps = {
   display: 'grid',
-  gap: 'md',
+  gridGap: 'md',
   gridTemplateColumns: `var(--standard-grid-columns)`,
 };
 

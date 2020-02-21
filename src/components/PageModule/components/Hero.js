@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
-import { transparentize } from 'polished';
 import { useSpring, animated } from 'react-spring';
+import css from '@styled-system/css';
 
 import useParallax from 'hooks/useParallax';
-import { colors, breakpoints } from 'style/tokens';
-import media from 'style/media-queries';
-import spacing from 'style/spacing';
-import type from 'style/type';
+
+import { type } from 'style/shared';
+import { mediaQueries } from 'style/theme';
+import { transparentize } from 'style/utils';
 
 import Grid from 'components/Grid';
 import Box from 'components/Box';
@@ -26,72 +26,68 @@ const propTypes = {
 
 const defaultProps = {
   alignment: 'left',
-  breakpoint: 'lg',
 };
 
-const Wrapper = styled(Grid)`
-  min-height: ${breakpoints.get('xs')}px;
+const Wrapper = styled(Grid)(
+  css({
+    minHeight: '480px',
+    [mediaQueries.lg]: {
+      height: '80vh',
+    },
+  })
+);
 
-  ${media.min.lg`
-    height: 80vh;
-  `}
-`;
+const Figure = animated(
+  styled(Box)(
+    css({
+      overflow: 'hidden',
+      maxHeight: '400px',
+      marginX: 0,
+      marginBottom: 'lg',
+      marginTop: 'md',
+      boxShadow: props =>
+        `0px 3px 36px 2px ${transparentize(0.8, 'coolBlack')(props)}`,
+      transformStyle: 'preserve-3d',
+      willChange: 'transform',
+      [mediaQueries.md]: {
+        maxHeight: '500px',
+      },
+      [mediaQueries.lg]: {
+        position: 'relative',
+        zIndex: -2,
+        maxHeight: 'none',
+        marginBottom: 0,
+      },
+    })
+  )
+);
 
-const Figure = animated(styled(Box)`
-  overflow: hidden;
-  max-height: 400px;
-  margin-bottom: ${spacing('lg')};
-  box-shadow: 0px 3px 36px 2px ${transparentize(0.8, colors.coolBlack)};
-  transform-style: preserve-3d;
-  will-change: transform;
-
-  ${media.min.md`
-    max-height: 500px;
-  `}
-
-  ${media.min.lg`
-    position: relative;
-    z-index: -2;
-    max-height: none;
-    margin-bottom: 0;
-  `}
-`);
-
-const TextBox = styled(Box)`
-  position: relative;
-  border: 2px solid ${colors.brand[4]};
-
-  ${media.min.md`
-    min-width: 300px;
-  `}
-
-  & > p:first-child {
-    ${type.hero}
-  }
-
-  & > *:nth-child(n + 2) {
-    ${type.lead}
-  }
-
-  & > p:last-child {
-    margin-bottom: 0;
-  }
-
-  &:before {
-    position: absolute;
-    top: 0.5rem;
-    left: -0.5rem;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    opacity: 0.5;
-    content: '';
-    z-index: -1;
-  }
-`;
+const TextBox = styled(Box)(
+  css({
+    position: 'relative',
+    border: '2px solid',
+    borderColor: 'brand.4',
+    padding: 'lg',
+    [mediaQueries.md]: {
+      minWidth: '300px',
+    },
+    '& > p:first-child': type.hero,
+    '& > *:nth-child(n + 2)': type.lead,
+    '&:before': {
+      position: 'absolute',
+      top: 2,
+      left: -2,
+      width: '100%',
+      height: '100%',
+      background: '#fff',
+      opacity: '0.5',
+      content: '""',
+      zIndex: -1,
+    },
+  })
+);
 
 const Hero = ({
-  breakpoint,
   image,
   id,
   location,
@@ -117,7 +113,6 @@ const Hero = ({
     <Wrapper ref={ref} {...props}>
       <TextBox
         paddingX="lg"
-        paddingY="xl"
         alignSelf="start"
         col={{
           base: 'contentStart / contentEnd',

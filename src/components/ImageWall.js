@@ -2,12 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 
-import { pxValue } from 'style/helpers';
-
-import spacing from 'style/spacing';
+import { space } from 'style/theme';
 
 import Grid from 'components/Grid';
-import Box from 'components/Box';
 
 const propTypes = {
   items: PropTypes.array,
@@ -57,7 +54,7 @@ const ImageWall = ({
   const rowBaseHeight = 48;
 
   let columnWidthActual = columnWidth;
-  let gapActual = pxValue(spacing(gap));
+  let gapActual = space[gap];
 
   if (containerWidth > 0) {
     let columnCount = Math.floor(containerWidth / columnWidth);
@@ -73,17 +70,18 @@ const ImageWall = ({
 
   const Children = React.Children.map(children, (child, i) => {
     const itemHeight = columnWidthActual / getAspectRatio(items[i]);
+    const rowEnd = Math.ceil(
+      (itemHeight + gapActual) / (rowBaseHeight + gapActual)
+    );
     return React.cloneElement(child, {
-      gridRowEnd: `span ${Math.ceil(
-        (itemHeight + gapActual) / (rowBaseHeight + gapActual)
-      )}`,
+      rowEnd: `span ${rowEnd}`,
       marginBottom: '0',
     });
   });
 
   return (
     <Grid {...props}>
-      <Box
+      <Grid
         col="bleedStart / bleedEnd"
         display="grid"
         gap={gap}
@@ -93,7 +91,7 @@ const ImageWall = ({
         ref={setRef}
       >
         {Children}
-      </Box>
+      </Grid>
     </Grid>
   );
 };

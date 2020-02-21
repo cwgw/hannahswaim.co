@@ -4,10 +4,7 @@ import styled from 'styled-components';
 import { graphql } from 'gatsby';
 import GatsbyImage from 'gatsby-image';
 import debounce from 'lodash/debounce';
-
-import media from 'style/media-queries';
-import { modalBreakpoint } from 'style/tokens';
-import spacing from 'style/spacing';
+import css from '@styled-system/css';
 
 import ArtPieceMeta from 'components/ArtPieceMeta';
 import Box from 'components/Box';
@@ -34,37 +31,40 @@ const defaultProps = {
   isModalEnabled: false,
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
-  padding: ${spacing('xl')} ${spacing('xxl')};
-  height: 100vh;
-  box-sizing: border-box;
-`;
+const Container = styled('div')(
+  css({
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingY: 'xl',
+    paddingX: 'xxl',
+    height: '100vh',
+    boxSizing: 'border-box',
+  })
+);
 
-const Wrapper = styled.div`
-  display: flex;
-  max-width: 100%;
-  overflow: hidden;
-  justify-content: center;
-  align-items: stretch;
-  height: 100%;
-  margin: 0 auto;
-  transition: width 300ms linear;
-  flex-direction: column;
+const Wrapper = styled('div')(
+  css({
+    display: 'flex',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    height: '100%',
+    margin: '0 auto',
+    transition: 'width 300ms linear',
+    flexDirection: ['column', null, null, 'column-reverse'],
+  })
+);
 
-  ${media.min[modalBreakpoint]`
-    flex-direction: column-reverse;
-  `}
-`;
-
-const Meta = styled(Box)`
-  background: #fff;
-  padding: ${spacing('lg')};
-  width: 100%;
-`;
+const Meta = styled(Box)(
+  css({
+    background: '#fff',
+    padding: 'lg',
+    width: '100%',
+  })
+);
 
 const ArtPieceDetails = ({ images, isModalEnabled, ...pieceMeta }) => {
   const [height, setHeight] = React.useState(0);
@@ -129,12 +129,7 @@ const ArtPieceDetails = ({ images, isModalEnabled, ...pieceMeta }) => {
       </Meta>
       <Box col="contentStart / contentEnd">
         {images.map(({ id, fluid, fixed }) => (
-          <GatsbyImage
-            key={id}
-            fixed={fixed}
-            fluid={fluid}
-            style={{ marginBottom: spacing('md') }}
-          />
+          <GatsbyImage key={id} fixed={fixed} fluid={fluid} />
         ))}
       </Box>
     </Grid>

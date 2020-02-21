@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { PageRenderer, useStaticQuery, graphql } from 'gatsby';
 import get from 'lodash/get';
+
+import theme from 'style/theme';
 
 import GlobalStyle from 'components/GlobalStyle';
 import Background from 'components/BackgroundGraphics';
@@ -16,20 +18,20 @@ const propTypes = {
   location: PropTypes.object.isRequired,
 };
 
-const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  width: 100vw;
-  min-height: 100vh;
-  flex-flow: column nowrap;
-  overflow: hidden;
-`;
+const Wrapper = styled('div')({
+  position: 'relative',
+  display: 'flex',
+  width: '100vw',
+  minHeight: '100vh',
+  flexFlow: 'column nowrap',
+  overflow: 'hidden',
+});
 
-const Main = styled.main`
-  display: flex;
-  flex-flow: column nowrap;
-  flex: 1;
-`;
+const Main = styled('main')({
+  display: 'flex',
+  flexFlow: 'column nowrap',
+  flex: '1',
+});
 
 const Layout = ({ children, location }) => {
   const isInitialRender = React.useRef(
@@ -88,28 +90,32 @@ const Layout = ({ children, location }) => {
             pathname: get(location, 'state.origin', location.pathname),
           }}
         />
-        <Modal isOpen={isModalEnabled} location={location}>
-          {React.Children.map(children, child =>
-            React.cloneElement(child, { isModalEnabled })
-          )}
-        </Modal>
+        <ThemeProvider theme={theme}>
+          <Modal isOpen={isModalEnabled} location={location}>
+            {React.Children.map(children, child =>
+              React.cloneElement(child, { isModalEnabled })
+            )}
+          </Modal>
+        </ThemeProvider>
       </React.Fragment>
     );
   }
 
   return (
-    <Wrapper>
-      <Head
-        location={location}
-        siteMetadata={siteMetadata}
-        socialMedia={socialMedia}
-      />
-      <GlobalStyle />
-      <Background />
-      <Header siteName={siteMetadata.name} menuItems={menuItems} />
-      <Main role="main">{children}</Main>
-      <Footer siteName={siteMetadata.name} />
-    </Wrapper>
+    <ThemeProvider theme={theme}>
+      <Wrapper>
+        <Head
+          location={location}
+          siteMetadata={siteMetadata}
+          socialMedia={socialMedia}
+        />
+        <GlobalStyle />
+        <Background />
+        <Header siteName={siteMetadata.name} menuItems={menuItems} />
+        <Main role="main">{children}</Main>
+        <Footer siteName={siteMetadata.name} />
+      </Wrapper>
+    </ThemeProvider>
   );
 };
 
