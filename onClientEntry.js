@@ -1,8 +1,8 @@
-import Modal from 'react-modal'
+import Modal from 'react-modal';
 
 const onClientEntry = (_args, opts = {}) => {
-  const { appElement = `#___gatsby` } = opts
-  Modal.setAppElement(appElement)
-}
+  const { appElement = `#___gatsby` } = opts;
+  Modal.setAppElement(appElement);
+};
 
-export default onClientEntry
+export default onClientEntry;
