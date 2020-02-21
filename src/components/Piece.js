@@ -86,7 +86,6 @@ const Piece = styled(
     display: 'block',
     borderRadius: space.xs,
     overflow: 'hidden',
-    cursor: 'zoom-in',
     '& .Piece__Image': {
       backgroundColor: 'gray.3',
     },

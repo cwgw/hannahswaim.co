@@ -12,7 +12,4 @@ const onRenderBody = ({ setHeadComponents }) => {
   ]);
 };
 
-export {
-  onRenderBody,
-  wrapPageElement
-}
+export { onRenderBody, wrapPageElement };
