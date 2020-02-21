@@ -52,7 +52,7 @@ const Background = ({ colors: [color1, color2, color3] }) => {
   const opacity = y.interpolate({
     range: [0, 50, 100],
     output: [1, 1, 0],
-    extrapolate: 'clamp',
+    extrapolateLeft: 'clamp',
   });
 
   return (
