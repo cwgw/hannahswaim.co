@@ -6,6 +6,8 @@ import { navigate } from 'gatsby';
 import { Location } from '@reach/router';
 import css from '@styled-system/css';
 
+import ModalRoutingContext from 'context/ModalRoutingContext';
+
 import Box from 'components/Box';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
@@ -71,11 +73,9 @@ const List = styled('ul')(
 );
 
 const PostNavigation = ({ children, location, ...props }) => {
-  const { siblings = [], index = 0, enableModal } = location.state || {};
+  const { siblings = [], index = 0 } = location.state || {};
 
-  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 576;
-
-  const isModal = enableModal && isDesktop;
+  const { modal } = React.useContext(ModalRoutingContext);
 
   const next = {
     pathname: index + 1 < siblings.length ? siblings[index + 1] : siblings[0],
@@ -123,18 +123,18 @@ const PostNavigation = ({ children, location, ...props }) => {
 
   return (
     <Box as="nav" {...props}>
-      <List isModal={isModal}>
+      <List isModal={modal}>
         <li>
           <NavItem
             aria-label="Previous"
             direction="prev"
             disabled={!prev.pathname}
             onClick={toPrev}
-            variant={isModal ? 'dark' : 'outline'}
-            textStyle={isModal ? 'icon' : 'small'}
+            variant={modal ? 'dark' : 'outline'}
+            textStyle={modal ? 'icon' : 'small'}
           >
             <Icon icon="previous" />
-            {!isModal && <span>previous</span>}
+            {!modal && <span>previous</span>}
           </NavItem>
         </li>
         <li>
@@ -143,10 +143,10 @@ const PostNavigation = ({ children, location, ...props }) => {
             direction="next"
             disabled={!next.pathname}
             onClick={toNext}
-            variant={isModal ? 'dark' : 'outline'}
-            textStyle={isModal ? 'icon' : 'small'}
+            variant={modal ? 'dark' : 'outline'}
+            textStyle={modal ? 'icon' : 'small'}
           >
-            {!isModal && <span>next</span>}
+            {!modal && <span>next</span>}
             <Icon icon="next" />
           </NavItem>
         </li>

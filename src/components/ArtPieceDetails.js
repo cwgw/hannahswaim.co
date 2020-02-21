@@ -12,6 +12,8 @@ import Row from 'components/Row';
 import Grid from 'components/Grid';
 import PostNavigation from 'components/PostNavigation';
 
+import ModalRoutingContext from 'context/ModalRoutingContext';
+
 const propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -69,6 +71,8 @@ const Meta = styled(Box)(
 const ArtPieceDetails = ({ images, isModalEnabled, ...pieceMeta }) => {
   const [height, setHeight] = React.useState(0);
   const [ref, setRef] = React.useState();
+  const { modal } = React.useContext(ModalRoutingContext);
+
   React.useEffect(() => {
     if (ref) {
       const resizeHandler = debounce(
@@ -87,7 +91,7 @@ const ArtPieceDetails = ({ images, isModalEnabled, ...pieceMeta }) => {
     }
   }, [ref]);
 
-  if (isModalEnabled) {
+  if (modal) {
     return (
       <React.Fragment>
         <PostNavigation />
