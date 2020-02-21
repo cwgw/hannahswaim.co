@@ -1,9 +1,8 @@
 import React from 'react';
-import WrapPage from './wrap-page';
 
-export const wrapPageElement = WrapPage;
+import wrapPageElement from './wrapPageElement';
 
-export const onRenderBody = ({ setHeadComponents }) => {
+const onRenderBody = ({ setHeadComponents }) => {
   setHeadComponents([
     <link
       rel="dns-prefetch"
@@ -12,3 +11,8 @@ export const onRenderBody = ({ setHeadComponents }) => {
     />,
   ]);
 };
+
+export {
+  onRenderBody,
+  wrapPageElement
+}
