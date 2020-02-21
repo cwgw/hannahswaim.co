@@ -1,21 +1,9 @@
 import React from 'react';
-import Modal from 'react-modal';
-import styled from 'styled-components';
 import get from 'lodash/get';
-import { transparentize } from 'polished';
 
 import ModalRoutingContext from 'context/ModalRoutingContext';
 
-import { colors } from 'style/tokens';
-import Button from 'components/Button';
-import Icon from 'components/Icon';
-
-const Close = styled(Button)({
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  zIndex: 1000,
-});
+import Modal from 'components/Modal';
 
 const withoutPrefix = path => {
   const prefix =
@@ -104,33 +92,9 @@ const ReplaceComponentRenderer = props => {
     <>
       {pageElement}
       <Modal
-        onRequestClose={handleRequestClose}
-        contentRef={node => (contentRef.current = node)}
+        handleRequestClose={handleRequestClose}
+        setContentRef={node => (contentRef.current = node)}
         isOpen={!!isModal}
-        contentLabel="Modal"
-        style={{
-          overlay: {
-            position: `fixed`,
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1000,
-            backgroundColor: transparentize(0.1, colors.gray[0]),
-          },
-          content: {
-            position: `absolute`,
-            border: `none`,
-            background: `none`,
-            padding: 0,
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            overflow: `auto`,
-            WebkitOverflowScrolling: `touch`,
-          },
-        }}
       >
         {modalElement ? (
           <React.Fragment key={props.location.key}>
@@ -142,14 +106,6 @@ const ReplaceComponentRenderer = props => {
                   : '/',
               }}
             >
-              <Close
-                aria-label="Close Modal"
-                onClick={handleRequestClose}
-                variant="dark"
-                textStyle="icon"
-              >
-                <Icon icon="close" />
-              </Close>
               {modalElement}
             </ModalRoutingContext.Provider>
           </React.Fragment>
