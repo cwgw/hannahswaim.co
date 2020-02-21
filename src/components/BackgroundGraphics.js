@@ -9,31 +9,31 @@ const defaultProps = {
   colors: [colors.brand[6], colors.brand[5]],
 };
 
-const Wrapper = styled.div`
-  user-select: none;
-  pointer-events: none;
-  overflow: hidden;
+const Wrapper = styled('div')({
+  userSelect: 'none',
+  pointerEvents: 'none',
+  overflow: 'hidden',
+  '& svg': {
+    position: 'absolute',
+    display: 'block',
+    minHeight: '100vh',
+  },
+});
 
-  & svg {
-    position: absolute;
-    display: block;
-    min-height: 100vh;
-  }
-`;
-
-const Container = animated(styled.div`
-  position: absolute;
-  width: calc(200px + 30vw);
-  height: calc(40vh + 40vw);
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
-
-  & svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-`);
+const Container = animated(
+  styled('div')({
+    position: 'absolute',
+    width: 'calc(200px + 30vw)',
+    height: 'calc(40vh + 40vw)',
+    transformStyle: 'preserve-3d',
+    willChange: 'transform, opacity',
+    '& svg': {
+      width: '100%',
+      height: '100%',
+      overflow: 'visible',
+    },
+  })
+);
 
 const Background = ({ colors: [color1, color2, color3] }) => {
   const [{ y }, setY] = useSpring(() => ({
@@ -49,7 +49,11 @@ const Background = ({ colors: [color1, color2, color3] }) => {
 
   const transform1 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 2})`);
   const transform2 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 3})`);
-  const opacity = y.interpolate([0, 50, 100], [1, 1, 0]);
+  const opacity = y.interpolate({
+    range: [0, 50, 100],
+    output: [1, 1, 0],
+    extrapolate: 'clamp',
+  });
 
   return (
     <Wrapper>
