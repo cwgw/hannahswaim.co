@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@reach/dialog": "^0.8.4",
     "@styled-system/css": "^5.1.5",
     "babel-plugin-styled-components": "^1.5.1",
     "gatsby": "^2.1.4",
