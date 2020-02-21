@@ -72,8 +72,6 @@ const ReplaceComponentRenderer = props => {
   // render modal if props location has modal
   const isModal = !!originPage.current && get(location, 'state.modal', false)
 
-  console.log({isModal, 'state.modal': get(location, 'state.modal', false)})
-
   // the page is the previous path if this is a modal, otherwise it's the current path
   const pageElement = isModal ? (
     React.createElement(originPage.current.pageResources.component, {
