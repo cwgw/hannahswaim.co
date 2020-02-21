@@ -60,8 +60,8 @@ const Piece = styled(
   }) => (
     <Box
       to={slug}
+      asModal={true}
       state={{
-        enableModal: true,
         origin: location.pathname,
         siblings: siblings,
         index: siblingIndex,

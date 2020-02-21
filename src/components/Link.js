@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link as GatsbyLink } from 'gatsby';
 
+import ModalRoutingContext from 'context/ModalRoutingContext';
+
 const propTypes = {
   activeClassName: PropTypes.string,
+  asModal: PropTypes.bool,
   children: PropTypes.node,
   className: PropTypes.string,
   rel: PropTypes.string,
@@ -15,6 +18,7 @@ const propTypes = {
 
 const defaultProps = {
   activeClassName: null,
+  asModal: false,
   children: null,
   className: null,
   rel: 'noreferrer',
@@ -33,14 +37,17 @@ const Link = styled(
     onMouseLeave,
     rel,
     state,
+    asModal,
     style,
     target,
     title,
     to,
   }) => {
-    // test for leading backslash
-    // only matching strings get the GatsbyLink
+    const { closeTo } = React.useContext(ModalRoutingContext);
+
     if (/^\/(?!\/)/.test(to)) {
+      // test for leading backslash
+      // only matching strings get the GatsbyLink
       return (
         <GatsbyLink
           activeClassName={activeClassName}
@@ -49,7 +56,11 @@ const Link = styled(
           onFocus={onFocus}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          state={state}
+          state={{
+            ...state,
+            modal: asModal,
+            noScroll: to === closeTo,
+          }}
           style={style}
           title={title}
           to={to}

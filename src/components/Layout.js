@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
-import { PageRenderer, useStaticQuery, graphql } from 'gatsby';
-import get from 'lodash/get';
+import { useStaticQuery, graphql } from 'gatsby';
 
 import theme from 'style/theme';
 
@@ -11,7 +10,6 @@ import Background from 'components/BackgroundGraphics';
 import Head from 'components/Head';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
-import Modal from 'components/Modal';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
@@ -34,13 +32,6 @@ const Main = styled('main')({
 });
 
 const Layout = ({ children, location }) => {
-  const isInitialRender = React.useRef(
-    typeof window !== 'undefined' && !!!window.___IS_INITIAL_RENDER_COMPLETE
-  );
-  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 576;
-  const isModalEnabled =
-    isInitialRender && get(location, 'state.enableModal', false) && isDesktop;
-
   const {
     menu: { menuItems },
     site: { siteMetadata },
@@ -81,25 +72,6 @@ const Layout = ({ children, location }) => {
       }
     `
   );
-
-  if (isModalEnabled) {
-    return (
-      <React.Fragment>
-        <PageRenderer
-          location={{
-            pathname: get(location, 'state.origin', location.pathname),
-          }}
-        />
-        <ThemeProvider theme={theme}>
-          <Modal isOpen={isModalEnabled} location={location}>
-            {React.Children.map(children, child =>
-              React.cloneElement(child, { isModalEnabled })
-            )}
-          </Modal>
-        </ThemeProvider>
-      </React.Fragment>
-    );
-  }
 
   return (
     <ThemeProvider theme={theme}>
