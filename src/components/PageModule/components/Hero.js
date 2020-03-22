@@ -45,7 +45,7 @@ const Figure = animated(
       marginX: 0,
       marginBottom: 'lg',
       marginTop: 'md',
-      boxShadow: props =>
+      boxShadow: (props) =>
         `0px 3px 36px 2px ${transparentize(0.8, 'coolBlack')(props)}`,
       transformStyle: 'preserve-3d',
       willChange: 'transform',
@@ -101,12 +101,12 @@ const Hero = ({
     },
   }));
 
-  const ref = useParallax(y => {
+  const ref = useParallax((y) => {
     setY({ y: y * 100 });
   });
 
   const transform = y.interpolate(
-    y => `matrix(1, 0, 0, 1, 0, ${50 / 2 - y / 2})`
+    (y) => `matrix(1, 0, 0, 1, 0, ${50 / 2 - y / 2})`
   );
 
   return (

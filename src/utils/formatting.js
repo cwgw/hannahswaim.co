@@ -1,9 +1,9 @@
 import _upperFirst from 'lodash/upperFirst';
 
-const acronymize = str =>
+const acronymize = (str) =>
   str.split(/\s+/).reduce((acc, val) => acc + val.charAt(0), '');
 
-const formatArtMedia = media => {
+const formatArtMedia = (media) => {
   const mediaArray = Array.isArray(media)
     ? media
     : typeof media === 'string'

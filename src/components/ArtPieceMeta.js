@@ -24,7 +24,7 @@ const Small = styled('small')({
   display: 'block',
 });
 
-const ArtPieceMeta = props => {
+const ArtPieceMeta = (props) => {
   const { dimensions, media, title } = formatArtMeta(props);
   return (
     <React.Fragment>

@@ -43,12 +43,12 @@ const Background = ({ colors: [color1, color2, color3] }) => {
     },
   }));
 
-  const ref = useParallax(y => {
+  const ref = useParallax((y) => {
     setY({ y: y * 100 });
   });
 
-  const transform1 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 2})`);
-  const transform2 = y.interpolate(y => `matrix(1, 0, 0, 1, 0, ${y * 3})`);
+  const transform1 = y.interpolate((y) => `matrix(1, 0, 0, 1, 0, ${y * 2})`);
+  const transform2 = y.interpolate((y) => `matrix(1, 0, 0, 1, 0, ${y * 3})`);
   const opacity = y.interpolate({
     range: [0, 50, 100],
     output: [1, 1, 0],
