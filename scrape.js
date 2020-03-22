@@ -21,13 +21,13 @@ node scrape.js INSTAGRAM_USERNAME
 
 const posts = [];
 
-const bail = err => {
+const bail = (err) => {
   console.error(err);
   process.exit(0);
   return false;
 };
 
-const toISO8601 = timestamp => new Date(timestamp * 1000).toJSON();
+const toISO8601 = (timestamp) => new Date(timestamp * 1000).toJSON();
 
 const saveJSON = () =>
   fs.writeFileSync(`./data/instagramPosts.json`, JSON.stringify(posts, ``, 2));
@@ -37,7 +37,7 @@ fs.ensureDirSync('./data/images');
 const getPosts = () => {
   const url = `https://www.instagram.com/${username}/`;
 
-  request(url, function(err, response, body) {
+  request(url, function (err, response, body) {
     if (err) return bail(err);
 
     const $ = cheerio.load(body);
@@ -83,7 +83,7 @@ const getPosts = () => {
                 image: `images/${shortcode}.jpg`,
               }
       )
-      .forEach(item => {
+      .forEach((item) => {
         if (!item) return;
         download(item.media, `./data/images/${item.shortcode}.jpg`);
         posts.push(item);

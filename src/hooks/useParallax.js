@@ -15,8 +15,8 @@ function getIO() {
     window.IntersectionObserver
   ) {
     io = new window.IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
+      (entries) => {
+        entries.forEach((entry) => {
           if (listeners.has(entry.target)) {
             const { cb } = listeners.get(entry.target);
             // Edge doesn't currently support isIntersecting, so also test for an intersectionRatio > 0
@@ -82,13 +82,13 @@ const listenToIntersections = (el, cb) => {
   };
 };
 
-const callAnimation = el => {
+const callAnimation = (el) => {
   const { cb, entry } = listeners.get(el);
   const y = (pageYOffset - entry.center) / entry.range;
   cb(y, { ref: entry.target });
 };
 
-const useParallax = cb => {
+const useParallax = (cb) => {
   const [ref, setRef] = React.useState(null);
 
   React.useLayoutEffect(() => {
