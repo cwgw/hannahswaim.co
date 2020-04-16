@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactModal from 'react-modal';
 import styled from 'styled-components';
-
+import { DialogOverlay, DialogContent } from '@reach/dialog';
 import { transparentize } from 'polished';
 
 import { colors } from 'style/tokens';
@@ -17,22 +16,23 @@ const Close = styled(Button)({
 
 const Modal = ({ handleRequestClose, setContentRef, isOpen, children }) => {
   return (
-    <ReactModal
-      onRequestClose={handleRequestClose}
-      contentRef={setContentRef}
+    <DialogOverlay
+      onDismiss={handleRequestClose}
       isOpen={isOpen}
       contentLabel="Modal"
       style={{
-        overlay: {
-          position: `fixed`,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 1000,
-          backgroundColor: transparentize(0.1, colors.gray[0]),
-        },
-        content: {
+        position: `fixed`,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1000,
+        backgroundColor: transparentize(0.1, colors.gray[0]),
+      }}
+    >
+      <DialogContent
+        ref={setContentRef}
+        style={{
           position: `absolute`,
           border: `none`,
           background: `none`,
@@ -43,19 +43,19 @@ const Modal = ({ handleRequestClose, setContentRef, isOpen, children }) => {
           left: 0,
           overflow: `auto`,
           WebkitOverflowScrolling: `touch`,
-        },
-      }}
-    >
-      <Close
-        aria-label="Close Modal"
-        onClick={handleRequestClose}
-        variant="dark"
-        textStyle="icon"
+        }}
       >
-        <Icon icon="close" />
-      </Close>
-      {children}
-    </ReactModal>
+        <Close
+          aria-label="Close Modal"
+          onClick={handleRequestClose}
+          variant="dark"
+          textStyle="icon"
+        >
+          <Icon icon="close" />
+        </Close>
+        {children}
+      </DialogContent>
+    </DialogOverlay>
   );
 };
 
