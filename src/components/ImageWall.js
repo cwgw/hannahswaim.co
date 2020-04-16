@@ -9,12 +9,12 @@ import Grid from 'components/Grid';
 const propTypes = {
   items: PropTypes.array,
   columnWidth: PropTypes.number,
-  gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  gridGap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 const defaultProps = {
   columnWidth: 320,
-  gap: 'md',
+  gridGap: 'md',
   minColumns: 2,
 };
 
@@ -24,7 +24,7 @@ const ImageWall = ({
   getAspectRatio,
   children,
   columnWidth,
-  gap,
+  gridGap,
   items,
   minColumns,
   ...props
@@ -53,26 +53,23 @@ const ImageWall = ({
 
   const rowBaseHeight = 48;
 
-  let columnWidthActual = columnWidth;
-  let gapActual = space[gap];
+  let col = columnWidth;
+  let gap = space[gridGap];
 
   if (containerWidth > 0) {
-    let columnCount = Math.floor(containerWidth / columnWidth);
-    columnCount = Math.max(
+    let colCount = Math.floor(containerWidth / columnWidth);
+    colCount = Math.max(
       minColumns,
-      containerWidth % columnWidth > gapActual * columnCount - gapActual
-        ? columnCount
-        : columnCount - 1
+      containerWidth % columnWidth > gap * colCount - gap
+        ? colCount
+        : colCount - 1
     );
-    columnWidthActual =
-      (containerWidth - gapActual * columnCount - gapActual) / columnCount;
+    col = (containerWidth - gap * colCount - gap) / colCount;
   }
 
   const Children = React.Children.map(children, (child, i) => {
-    const itemHeight = columnWidthActual / getAspectRatio(items[i]);
-    const rowEnd = Math.ceil(
-      (itemHeight + gapActual) / (rowBaseHeight + gapActual)
-    );
+    const itemHeight = col / getAspectRatio(items[i]);
+    const rowEnd = Math.ceil((itemHeight + gap) / (rowBaseHeight + gap));
     return React.cloneElement(child, {
       rowEnd: `span ${rowEnd}`,
       marginBottom: '0',
@@ -86,7 +83,7 @@ const ImageWall = ({
         display="grid"
         gap={gap}
         gridAutoRows={`${rowBaseHeight}px`}
-        gridTemplateColumns={`repeat(auto-fill, minmax(${columnWidthActual}px, 1fr))`}
+        gridTemplateColumns={`repeat(auto-fill, minmax(${col}px, 1fr))`}
         marginX="md"
         ref={setRef}
       >
