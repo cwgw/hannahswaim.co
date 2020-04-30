@@ -70,7 +70,7 @@ const Head = ({
         { property: 'og:site_name', content: name },
       ]}
     >
-      {structuredData.map(data => (
+      {structuredData.map((data) => (
         <script key={data['@type']} type="application/ld+json">
           {JSON.stringify(data)}
         </script>

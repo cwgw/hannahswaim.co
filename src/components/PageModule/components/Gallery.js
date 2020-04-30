@@ -36,7 +36,7 @@ const Gallery = ({ location, artwork, text, id, ...props }) => {
       .sort((a, b) => {
         return b.date - a.date;
       })
-      .map(item => {
+      .map((item) => {
         return {
           node: {
             ...item,
@@ -53,7 +53,7 @@ const Gallery = ({ location, artwork, text, id, ...props }) => {
       {text && text.childMarkdownRemark && <StyledText text={text} />}
       <ImageWall
         items={edges.map(({ node }) => node)}
-        getAspectRatio={node => get(node, 'images[0].fluid.aspectRatio', 1)}
+        getAspectRatio={(node) => get(node, 'images[0].fluid.aspectRatio', 1)}
       >
         {edges.map(({ node }, index) => (
           <Piece

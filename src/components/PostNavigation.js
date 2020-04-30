@@ -23,7 +23,7 @@ const NavItem = styled(Button)(
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  props => {
+  (props) => {
     if (props.direction === 'next') {
       return {
         right: 0,
@@ -43,7 +43,7 @@ const List = styled('ul')(
     padding: 0,
     listStyle: 'none',
   },
-  props => {
+  (props) => {
     if (props.isModal) {
       return {
         display: 'contents',
@@ -94,7 +94,7 @@ const PostNavigation = ({ children, location, ...props }) => {
   };
 
   const toNext = React.useCallback(
-    e => {
+    (e) => {
       if (e) e.stopPropagation();
       if (!next.pathname) return;
       navigate(next.pathname, { state: next.state });
@@ -103,7 +103,7 @@ const PostNavigation = ({ children, location, ...props }) => {
   );
 
   const toPrev = React.useCallback(
-    e => {
+    (e) => {
       if (e) e.stopPropagation();
       if (!prev.pathname) return;
       navigate(prev.pathname, { state: prev.state });
@@ -159,7 +159,7 @@ PostNavigation.propTypes = propTypes;
 
 PostNavigation.defaultProps = defaultProps;
 
-export default props => (
+export default (props) => (
   <Location>
     {({ location }) => <PostNavigation location={location} {...props} />}
   </Location>

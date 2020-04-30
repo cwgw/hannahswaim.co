@@ -32,7 +32,7 @@ const Figure = styled(Box)(
     width: '100%',
     margin: 0,
     marginBottom: 'lg',
-    boxShadow: props =>
+    boxShadow: (props) =>
       `0px 3px 36px 2px ${transparentize(0.8, 'coolBlack')(props)}`,
     '.Feature__Image': {
       width: '100%',

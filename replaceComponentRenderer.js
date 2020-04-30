@@ -5,14 +5,14 @@ import ModalRoutingContext from 'context/ModalRoutingContext';
 
 import Modal from 'components/Modal';
 
-const withoutPrefix = path => {
+const withoutPrefix = (path) => {
   const prefix =
     typeof __BASE_PATH__ !== `undefined` ? __BASE_PATH__ : __PATH_PREFIX__;
 
   return path.slice(prefix ? prefix.length : 0);
 };
 
-const ReplaceComponentRenderer = props => {
+const ReplaceComponentRenderer = (props) => {
   const pathname = React.useRef();
   const modalPage = React.useRef();
   const originPage = React.useRef();
@@ -93,7 +93,7 @@ const ReplaceComponentRenderer = props => {
       {pageElement}
       <Modal
         handleRequestClose={handleRequestClose}
-        setContentRef={node => (contentRef.current = node)}
+        setContentRef={(node) => (contentRef.current = node)}
         isOpen={!!isModal}
       >
         {modalElement ? (

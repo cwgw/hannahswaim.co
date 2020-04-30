@@ -12,7 +12,7 @@ export const delve = (obj, key, def, p, undef) => {
   return obj === undef ? def : obj;
 };
 
-const getToken = (scale, key) => props => {
+const getToken = (scale, key) => (props) => {
   const theme = delve(props, 'theme', props);
   return get(theme, `${scale}.${key}`);
 };
@@ -22,7 +22,7 @@ const space = Object.keys(theme.space).reduce(
     f[n] = getToken('space', n)({ theme });
     return f;
   },
-  n => (props = theme) => getToken('space', n)(props)
+  (n) => (props = theme) => getToken('space', n)(props)
 );
 
 const color = Object.keys(theme.colors).reduce(
@@ -30,14 +30,14 @@ const color = Object.keys(theme.colors).reduce(
     f[color] = f(color)({ theme });
     return f;
   },
-  color => (props = theme) => getToken('colors', color)(props)
+  (color) => (props = theme) => getToken('colors', color)(props)
 );
 
-const transparentize = (n, c) => props => {
+const transparentize = (n, c) => (props) => {
   return _transparentize(n, color(c)(props));
 };
 
-const mix = (n, color1, color2) => props => {
+const mix = (n, color1, color2) => (props) => {
   return _mix(n, color(color1)(props), color(color2)(props));
 };
 

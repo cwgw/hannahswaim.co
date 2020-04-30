@@ -30,7 +30,7 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
   });
 };
 
-exports.onCreateNode = args => {
+exports.onCreateNode = (args) => {
   const { node, actions, getNode } = args;
   const { createNodeField } = actions;
 
@@ -89,7 +89,7 @@ exports.createPages = ({ graphql, actions }) => {
             }
           }
         }
-      `).then(result => {
+      `).then((result) => {
         if (result.errors) {
           console.log(result.errors);
           reject(result.errors);

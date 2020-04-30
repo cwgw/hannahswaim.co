@@ -97,7 +97,7 @@ const ArtPieceDetails = ({ images, isModalEnabled, ...pieceMeta }) => {
         <PostNavigation />
         <Container>
           <Wrapper
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation();
             }}
           >
