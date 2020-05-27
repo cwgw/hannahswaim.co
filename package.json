@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-default",
-  "description": "Gatsby default starter",
+  "name": "hannahswaim.co",
+  "description": "Portfolio site for artist Hannah Swaim.",
   "version": "1.0.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Charlie Wright <charlie@cwgw.co>",
   "dependencies": {
     "@styled-system/css": "^5.1.5",
     "babel-plugin-styled-components": "^1.5.1",
@@ -50,6 +50,7 @@
     "cheerio": "^1.0.0-rc.3",
     "fs-extra": "^9",
     "husky": "^4",
+    "lint-staged": "^10.2.6",
     "prettier": "^2",
     "request": "^2.88.0"
   },
@@ -59,7 +60,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run format"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.js": [
+      "yarn run format"
+    ]
   }
 }
