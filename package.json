@@ -24,7 +24,7 @@
     "gatsby-transformer-json": "^2.1.8",
     "gatsby-transformer-remark": "^2.2.5",
     "gatsby-transformer-sharp": "^2.1.13",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.19",
     "mousetrap": "^1.6.2",
     "polished": "^3.0.0",
     "react": "^16.4.1",
